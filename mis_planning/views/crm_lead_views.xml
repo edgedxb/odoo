@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="mis_crm_lead_form_view" model="ir.ui.view">
+        <field name="name">mis.crm.lead.form</field>
+        <field name="model">crm.lead</field>
+         <field name="inherit_id" ref="crm.crm_lead_view_form"/>
+        <field name="arch" type="xml">
+
+            <xpath expr="//div[hasclass('oe_button_box')]" position="inside">
+                <field name="planning_id" invisible="1"/>
+
+                <button class="oe_stat_button" name="action_transfer2planning" type="object" icon="fa-pencil-square-o" style="width: 200px;" attrs="{'invisible': [('planning_id', '!=', False)]}">
+
+                        <span class="o_stat_text">Transfer To Planning</span>
+                </button>
+            </xpath>
+
+        </field>
+    </record>
+
+</odoo>
