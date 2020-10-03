@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="mis_planning_slot_form_view" model="ir.ui.view">
+        <field name="name">mis.planning.slot.form</field>
+        <field name="model">planning.slot</field>
+         <field name="inherit_id" ref="planning.planning_view_form"/>
+        <field name="arch" type="xml">
+            <field name="employee_id" position="before">
+                <field name="crm_id"/>
+                <field name="partner_id"/>
+                <field name="revenue"/>
+
+            </field>
+
+        </field>
+    </record>
+
+    <record id="mis_planning_view_calendar" model="ir.ui.view">
+        <field name="name">mis.planning.calendar.form</field>
+        <field name="model">planning.slot</field>
+         <field name="inherit_id" ref="planning.planning_view_calendar"/>
+        <field name="arch" type="xml">
+            <field name="employee_id" position="before">
+                <field name="crm_id"/>
+                <field name="partner_id"/>
+                <field name="revenue"/>
+            </field>
+        </field>
+    </record>
+    <record id="mis_planning_view_graph" model="ir.ui.view">
+        <field name="name">mis.planning.slot.graph</field>
+        <field name="model">planning.slot</field>
+        <field name="inherit_id" ref="planning.planning_view_graph"/>
+        <field name="arch" type="xml">
+            <field name="employee_id" position="before">
+                <field name="crm_id"/>
+                <field name="partner_id"/>
+                <field name="revenue"/>
+            </field>
+         </field>
+    </record>
+
+    <record id="mis_planning_view_form_quickcreate" model="ir.ui.view">
+        <field name="name">mis.planning.slot.form.quickcreate</field>
+        <field name="model">planning.slot</field>
+        <field name="inherit_id" ref="planning.planning_view_form_quickcreate"/>
+        <field name="arch" type="xml">
+             <field name="employee_id" position="before">
+                <field name="crm_id"/>
+                <field name="partner_id"/>
+                <field name="revenue"/>
+            </field>
+        </field>
+    </record>
+
+
+
+</odoo>
