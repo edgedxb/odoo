@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="mis_planning_status_form_view" model="ir.ui.view">
+        <field name="name">mis.planningstatus.form</field>
+        <field name="model">mis.planning.status</field>
+        <field name="arch" type="xml">
+            <group>
+                <field name="name"/>
+                <field name="is_invoice"/>
+            </group>
+        </field>
+    </record>
+</odoo>

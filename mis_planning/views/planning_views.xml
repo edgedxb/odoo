@@ -9,6 +9,13 @@
                 <field name="crm_id"/>
                 <field name="partner_id"/>
                 <field name="revenue"/>
+                 <field name="unit_number"/>
+                <field name="building_name"/>
+                <field name="scope"/>
+                <field name="job_status_id" />
+                <field name="is_invoice" invisible="1"/>
+                <field name="journal_id" attrs="{'invisible': [('is_invoice', '=', False)], 'required': [('is_invoice', '=', True)]}"/>
+                <field name="paid_amount" attrs="{'invisible': [('is_invoice', '=', False)], 'required': [('is_invoice', '=', True)]}"/>
 
             </field>
 
@@ -24,6 +31,14 @@
                 <field name="crm_id"/>
                 <field name="partner_id"/>
                 <field name="revenue"/>
+                 <field name="unit_number"/>
+                <field name="building_name"/>
+                <field name="scope"/>
+                <field name="job_status_id"/>
+
+                <field name="is_invoice" invisible="1"/>
+                <field name="journal_id" attrs="{'invisible': [('is_invoice', '=', False)], 'required': [('is_invoice', '=', True)]}"/>
+                <field name="paid_amount" attrs="{'invisible': [('is_invoice', '=', False)], 'required': [('is_invoice', '=', True)]}"/>
             </field>
         </field>
     </record>
@@ -36,6 +51,15 @@
                 <field name="crm_id"/>
                 <field name="partner_id"/>
                 <field name="revenue"/>
+                <field name="area_id"/>
+                <field name="unit_number"/>
+                <field name="building_name"/>
+                <field name="scope"/>
+                <field name="job_status_id"/>
+                <field name="is_invoice" invisible="1"/>
+                <field name="journal_id" attrs="{'invisible': [('is_invoice', '=', False)], 'required': [('is_invoice', '=', True)]}"/>
+                <field name="paid_amount" attrs="{'invisible': [('is_invoice', '=', False)], 'required': [('is_invoice', '=', True)]}"/>
+
             </field>
          </field>
     </record>
@@ -49,6 +73,13 @@
                 <field name="crm_id"/>
                 <field name="partner_id"/>
                 <field name="revenue"/>
+                  <field name="unit_number"/>
+                <field name="building_name"/>
+                <field name="scope"/>
+                 <field name="job_status_id"/>
+                <field name="is_invoice" invisible="1"/>
+                <field name="journal_id" attrs="{'invisible': [('is_invoice', '=', False)], 'required': [('is_invoice', '=', True)]}"/>
+                <field name="paid_amount" attrs="{'invisible': [('is_invoice', '=', False)], 'required': [('is_invoice', '=', True)]}"/>
             </field>
         </field>
     </record>
