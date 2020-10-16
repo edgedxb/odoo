@@ -6,14 +6,77 @@
          <field name="inherit_id" ref="crm.crm_lead_view_form"/>
         <field name="arch" type="xml">
 
-            <xpath expr="//div[hasclass('oe_button_box')]" position="inside">
+            <!--xpath expr="//div[hasclass('oe_button_box')]" position="inside"-->
+
+             <field name="stage_id" position="replace">
+             <field name="stage_id" widget="statusbar"
+                            options="{'fold_field': 'fold'}"
+                            domain="['|', ('team_id', '=', team_id), ('team_id', '=', False)]"
+                            attrs="{'invisible': ['|', ('active', '=', False), ('type', '=', 'lead')]}"/>
+
+            </field>
+
+
+            <xpath expr="//button[@name='action_set_won_rainbowman']" position="replace">
                 <field name="planning_id" invisible="1"/>
+                <field name="is_won" invisible="1"/>
+                <field name="is_planning" invisible="1"/>
+                 <field name="is_closed" invisible="1"/>
+                <button name="action_send_email"  string="Approval Request"  class="oe_highlight" type="object" attrs="{'invisible': [('stage_id', 'not in', (4,5))]}"/>
 
-                <button class="oe_stat_button" name="action_transfer2planning" type="object" icon="fa-pencil-square-o" style="width: 200px;" attrs="{'invisible': [('planning_id', '!=', False)]}">
-
-                        <span class="o_stat_text">Transfer To Planning</span>
-                </button>
+                <button name="action_set_won_rainbowman" string="Mark Won"
+                            type="object" class="oe_highlight"
+                            attrs="{'invisible': ['|', ('is_closed', '!=', False), ('is_won', '!=', False), ('is_planning','!=', False)]}"/>
+                <button class="oe_highlight" name="action_transfer2planning" type="object" string="Transferred to Planning" style="width: 200px;" attrs="{'invisible': [('is_won', '!=', True)]}"/>
             </xpath>
+             <field name="phone" position="after">
+
+                 <field name="job_startdate" attrs="{'invisible': [('is_won', '=', False)], 'required':[('is_won', '=', True)]}"/>
+                 <field name="job_enddate" attrs="{'invisible': [('is_won', '=', False)], 'required':[('is_won', '=', True)]}"/>
+                 <field name="job_totalhours" attrs="{'invisible': [('is_won', '=', False)]}"/>
+             </field>
+
+            <field name="tag_ids" position="after">
+
+                <field name="planning_id" attrs="{'invisible': [('planning_id', '=', False)]}"/>
+                <field name="job_team_id" attrs="{'required':[('is_won', '=', True)]}"/>
+                <field name="area_id" attrs="{'required':[('is_won', '=', True)]}"/>
+                <field name="unit_number"/>
+                <field name="building_name"/>
+                <field name="scope"/>
+
+
+            </field>
+             <!--field name="user_id" position="before">
+                 <field name="stage_id"/>
+             </field-->
+
+
+        </field>
+    </record>
+
+    <record id="mis_crm_stage_form_view" model="ir.ui.view">
+        <field name="name">mis.crm.stage.form</field>
+        <field name="model">crm.stage</field>
+         <field name="inherit_id" ref="crm.crm_stage_form"/>
+        <field name="arch" type="xml">
+            <field name="fold" position="after">
+                <field name="is_planning"/>
+                <field name="is_closed"/>
+             </field>
+
+        </field>
+    </record>
+
+    <record id="mis_crm_stage_tree_view" model="ir.ui.view">
+        <field name="name">mis.crm.stage.treee</field>
+        <field name="model">crm.stage</field>
+         <field name="inherit_id" ref="crm.crm_stage_tree"/>
+        <field name="arch" type="xml">
+            <field name="is_won" position="after">
+                <field name="is_planning"/>
+                <field name="is_closed"/>
+             </field>
 
         </field>
     </record>
