@@ -16,13 +16,18 @@
 
             </field>
 
-
             <xpath expr="//button[@name='action_set_won_rainbowman']" position="replace">
                 <field name="planning_id" invisible="1"/>
                 <field name="is_won" invisible="1"/>
                 <field name="is_planning" invisible="1"/>
                  <field name="is_closed" invisible="1"/>
-                <button name="action_send_email"  string="Approval Request"  class="oe_highlight" type="object" attrs="{'invisible': [('stage_id', 'not in', (4,5))]}"/>
+                <field name="is_approve_status" invisible="1"/>
+                <field name="is_transfer" invisible="1"/>
+
+                <button name="button_approve" type="object"  string="Approve" class="oe_highlight" attrs="{'invisible': ['|', '|', ('stage_id','not in', (4,5)), ('uid', '!=',2), ('is_approve_status', '!=',1)]}"  groups="account.group_account_manager"/>
+
+                <button name="action_send_email"  string="Approval Request"  class="oe_highlight" type="object" attrs="{'invisible': ['|', '|', ('stage_id', 'not in', (4,5)), ('uid', '=',2), ('is_approve_status', '=',1)]}"/>
+                <button name="popup_planning"  string="Check Planning"  class="oe_highlight" type="object"/>
 
                 <button name="action_set_won_rainbowman" string="Mark Won"
                             type="object" class="oe_highlight"
@@ -31,16 +36,21 @@
             </xpath>
              <field name="phone" position="after">
 
-                 <field name="job_startdate" attrs="{'invisible': [('is_won', '=', False)], 'required':[('is_won', '=', True)]}"/>
-                 <field name="job_enddate" attrs="{'invisible': [('is_won', '=', False)], 'required':[('is_won', '=', True)]}"/>
-                 <field name="job_totalhours" attrs="{'invisible': [('is_won', '=', False)]}"/>
+                 <field name="job_startdate" attrs="{'invisible': [('stage_id', 'not in', (4,5))], 'required':[('is_won', '=', True), ('is_transfer', '=', True)]}"/>
+                 <field name="job_enddate" attrs="{'invisible': [('stage_id', 'not in', (4,5))], 'required':[('is_won', '=', True), ('is_transfer', '=', True)]}"/>
+                 <field name="job_totalhours" attrs="{'invisible': [('stage_id', 'not in', (4,5))]}"/>
              </field>
+            <field name="date_deadline" position="replace"/>
+             <field name="partner_id" position="replace">
+                 <field name="partner_id" required="1"/>
+             </field>
+
 
             <field name="tag_ids" position="after">
 
                 <field name="planning_id" attrs="{'invisible': [('planning_id', '=', False)]}"/>
-                <field name="job_team_id" attrs="{'required':[('is_won', '=', True)]}"/>
-                <field name="area_id" attrs="{'required':[('is_won', '=', True)]}"/>
+                <field name="job_team_id" attrs="{'required':[('is_won', '=', True), ('is_transfer', '=', True)], 'invisible': [('stage_id', 'in', (1,2,3))]}"/>
+                <field name="area_id" attrs="{'required':[('is_won', '=', True), ('is_transfer', '=', True)]}"/>
                 <field name="unit_number"/>
                 <field name="building_name"/>
                 <field name="scope"/>
@@ -48,7 +58,10 @@
 
             </field>
              <!--field name="user_id" position="before">
-                 <field name="stage_id"/>
+                 <button name="previous_stage"  string="Previous"  class="oe_highlight" type="object"/>
+                 <button name="next_stage"  string="Next"  class="oe_highlight" type="object"/>
+                 <br/>
+
              </field-->
 
 

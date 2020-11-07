@@ -51,6 +51,8 @@ class MisPlanning(models.Model):
     journal_id = fields.Many2one('account.journal', domain=[('type', 'in', ('bank','cash'))], string="Payment")
     paid_amount = fields.Float(string='Amount', default=0.0)
     is_invoice = fields.Boolean(string='Is Invoice?', related='job_status_id.is_invoice')
+    payment_id = fields.Many2one('account.payment', string='Payment', readonly=True, store=True)
+
 
     def name_get(self):
         group_by = self.env.context.get('group_by', [])
@@ -73,6 +75,9 @@ class MisPlanning(models.Model):
             # date / time part
             destination_tz = pytz.timezone(self.env.user.tz or 'UTC')
             start_datetime = pytz.utc.localize(slot.start_datetime).astimezone(destination_tz).replace(tzinfo=None)
+
+
+
             end_datetime = pytz.utc.localize(slot.end_datetime).astimezone(destination_tz).replace(tzinfo=None)
             if slot.end_datetime - slot.start_datetime <= timedelta(hours=24):  # shift on a single day
                 name = '%s - %s %s' % (
@@ -138,6 +143,8 @@ class MisPlanning(models.Model):
                     slot.recurrency_id = recurrence
                     slot.recurrency_id._repeat_slot()
                 if slot.paid_amount>0:
+                    if slot.paid_amount>slot.revenue:
+                        raise UserError('Cannot register more payment than revenue!')
                     strname = ''
                     if slot.name:
                         strname = slot.name
@@ -181,7 +188,33 @@ class MisPlanning(models.Model):
 
                         list_of_ids = []
                         postedinvoice = objacmove.post()
+
+
+                        payment_vals = {'payment_date': datetime.now(),
+                                        'partner_id': slot.partner_id.id,
+                                        'invoice_ids': [objacmove.id,],
+                                        'payment_type': 'inbound',
+                                        'amount': self.paid_amount,
+                                        'journal_id': self.journal_id.id,
+                                        'payment_method_id': 1,
+                                        'partner_type': 'customer',
+
+                                     }
+                        objpayment = self.env['account.payment'].create(payment_vals)
+                        objpayment.post()
+
+                        # objpayment = self.env['account.payment'].create({'invoice_ids':[objacmove.id,],
+                        #                                                  'journal_id': self.journal_id.id,
+                        #                                                  'partner_id': slot.partner_id.id,
+                        #                                                  'payment_date':  datetime.now(),
+                        #                                                  'state': 'reconciled',
+                        #                                                  'payment_type': 'inbound',
+                        #                                                  'partner_type': 'customer',
+                        #                                                  'payment_method_id': 1,
+                        #                                                  'amount': self.paid_amount})
                         #postedinvoice.action_invoice_register_payment()
+                        # if objpayment:
+                        #     self.payment_id=objpayment.id
                         list_of_ids.append(objacmove.id)
                         if list_of_ids:
                             imd = self.env['ir.model.data']
@@ -203,4 +236,5 @@ class MisPlanning(models.Model):
                             raise UserError(_('Invoice not generated'))
 
         return result
+
 

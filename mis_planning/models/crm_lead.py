@@ -13,6 +13,7 @@ class MisCrmStage(models.Model):
 
 class MisCRMLead(models.Model):
     _inherit = 'crm.lead'
+    _order ='write_date, priority desc, id desc'
 
     planning_id=fields.Many2one('planning.slot', string='Planning ID', readonly=True, store=True)
     unit_number = fields.Char(string='Unit No')
@@ -24,11 +25,17 @@ class MisCRMLead(models.Model):
     job_team_id = fields.Many2one('planning.role', string='Job Team')
     job_startdate = fields.Datetime(string='Job Start Date')
     job_enddate = fields.Datetime(string='Job End Date')
+    is_approve_status = fields.Integer('Approval Status', default=0)
+    is_transfer = fields.Boolean('Is Transfer', default=False)
+
+
+
     job_totalhours = fields.Float(string='Job Total Hours', default=0, compute='_compute_job_totalhours', store=True)
 
     scope = fields.Text(string='Scope')
 
     def action_transfer2planning(self):
+        self.is_transfer=True
         for rec in self:
             create_vals={
                 'name': rec.name,
@@ -42,6 +49,7 @@ class MisCRMLead(models.Model):
         objstate = self.env['crm.stage'].search([('is_planning', '=', True)])
         for rec in objstate:
             self.stage_id=rec.id
+
         #raise UserError('Transferred to Planning')
     # @api.onchange('job_startdate')
     # def _change_start_date(self):
@@ -59,14 +67,115 @@ class MisCRMLead(models.Model):
                 total_hr=(wktime.job_enddate - wktime.job_startdate).total_seconds()/ 3600
                 wktime.job_totalhours= total_hr
 
+    def popup_planning(self):
+        self.ensure_one()
+
+        return {
+            'name': _('Schedule'),
+            'type': 'ir.actions.act_window',
+            'view_mode': 'gantt',
+            'res_model': 'planning.slot',
+            'target': 'new',
+            'context': {
+                'search_default_group_by_role': True
+            }
+        }
+
+    # def next_stage(self):
+    #     if self.stage_id.id==4:
+    #         self.action_transfer2planning()
+    #         #self.stage_id = self.stage_id.id + 1
+    #
+    #
+    #     elif self.stage_id.id!=6:
+    #         self.stage_id=self.stage_id.id+1
+    #
+    #
+    # def previous_stage(self):
+    #     if self.stage_id.is_closed:
+    #         raise UserError('Access denied!, Closed stage cannot be changed')
+    #     elif self.is_approve!=True:
+    #         raise UserError('Access denied!, Please contact administrator to change the stage')
+    #     elif self.stage_id.is_won or self.stage_id.is_planning:
+    #         if self.user_id.id != 2:
+    #             raise UserError('Access denied!, Please contact administrator to change the stage')
+    #
+    #     if self.stage_id.id!=1:
+    #         self.stage_id=self.stage_id.id-1
+
+    def button_approve(self):
+        self.is_approve_status=3
+        self.ensure_one()
+        ir_model_data = self.env['ir.model.data']
+        try:
+            template_id = ir_model_data.get_object_reference('mis_planning', 'email_template_crm_approved')[1]
+        except ValueError:
+            template_id = False
+        try:
+            compose_form_id = ir_model_data.get_object_reference('mail', 'email_compose_message_wizard_form')[1]
+        except ValueError:
+            compose_form_id = False
+        ctx = dict(self.env.context or {})
+        ctx.update({
+            'default_model': 'crm.lead',
+            'active_model': 'crm.lead',
+            'active_id': self.ids[0],
+            'default_res_id': self.ids[0],
+            'default_use_template': bool(template_id),
+            'default_template_id': template_id,
+            'default_composition_mode': 'comment',
+            'force_email': True,
+        })
+
+        if {'default_template_id', 'default_model', 'default_res_id'} <= ctx.keys():
+            template = self.env['mail.template'].browse(ctx['default_template_id'])
+
+        ctx['model_description'] = _('Approved')
+        self.is_approve_status = 1
+
+        return {
+            'name': _('Compose Email'),
+            'type': 'ir.actions.act_window',
+            'view_mode': 'form',
+            'res_model': 'mail.compose.message',
+            'views': [(compose_form_id, 'form')],
+            'view_id': compose_form_id,
+            'target': 'new',
+            'context': ctx,
+        }
+
+
     def write(self, vals):
 
-        if self.stage_id:
-            if self.stage_id.is_won or self.stage_id.is_planning:
-                if self.user_id.id != 2:
+        #current_stage_id =self.stage_id.id
+
+        if self.stage_id.is_closed:
+            raise UserError('Access denied!, Closed stage cannot be changed')
+
+        if 'stage_id' in vals:
+            nstage_id = self.env['crm.stage'].browse(vals['stage_id'])
+
+            if self.stage_id.id == 4 and nstage_id.id == 5:
+                if self.is_transfer!=True:
+                    raise UserError('Cannot drag and drop, please use transfer to planning button')
+
+            if self.is_approve_status != 3:
+                #if self.stage_id.id > nstage_id.id:
+                if self.stage_id.id > 3 and  nstage_id.id < 4 and self.env.uid != 2:
                     raise UserError('Access denied!, Please contact administrator to change the stage')
-            if self.stage_id.is_closed:
-                raise UserError('Access denied!, Cannot move closed stage lead')
+            if self.stage_id.id!= nstage_id.id:
+                vals.update({'is_approve_status': 0})
+
+
+        #           raise UserError(stage_id.id)
+     #    self.is_transfer = False
+
+        #     raise UserError('Access denied!, Please contact administrator to change the stage')
+        #       if (current_stage_id!=self.stage_id.id and (self.stage_id.is_won or self.stage_id.is_planning) and  self.is_approve_status != 3):
+        #           if self.user_id.id != 2:
+        #               raise UserError('Access denied!, Please contact administrator to change the stage')
+        #           if self.stage_id.is_closed:
+        #               raise UserError('Access denied!, Cannot move closed stage lead')
 
 
         if vals.get('website'):
@@ -91,11 +200,24 @@ class MisCRMLead(models.Model):
 
 
         write_result = super(MisCRMLead, self).write(vals)
+#        raise UserError(str(current_stage_id) + str(self.stage_id.id))
+
+        if self.planning_id:
+            if self.stage_id.id <4:
+                self.planning_id.unlink()
+
+#        self.is_approve_status=0
+
         # Compute new automated_probability (and, eventually, probability) for each lead separately
         if self._should_update_probability(vals):
             self._update_probability()
 
         return write_result
+
+    # def button_approve(self, force=False):
+    #     self.write({'is_approve': True})
+    #     return {}
+
 
     def action_send_email(self):
         self.ensure_one()
@@ -124,6 +246,7 @@ class MisCRMLead(models.Model):
             template = self.env['mail.template'].browse(ctx['default_template_id'])
 
         ctx['model_description'] = _('Delivery Order')
+        self.is_approve_status = 1
 
         return {
             'name': _('Compose Email'),
@@ -135,8 +258,6 @@ class MisCRMLead(models.Model):
             'target': 'new',
             'context': ctx,
         }
-
-
 
 
 

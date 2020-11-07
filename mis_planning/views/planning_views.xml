@@ -18,9 +18,18 @@
                 <field name="paid_amount" attrs="{'invisible': [('is_invoice', '=', False)], 'required': [('is_invoice', '=', True)]}"/>
 
             </field>
+            <field name="role_id" position="replace">
+                <field name="role_id" string="Team"/>
+            </field>
+
+
 
         </field>
     </record>
+
+
+
+
 
     <record id="mis_planning_view_calendar" model="ir.ui.view">
         <field name="name">mis.planning.calendar.form</field>
@@ -34,11 +43,13 @@
                  <field name="unit_number"/>
                 <field name="building_name"/>
                 <field name="scope"/>
-                <field name="job_status_id"/>
+                <field name="job_status_id" attrs="{'readonly': [('payment_id', '!=', False)]}"/>
 
                 <field name="is_invoice" invisible="1"/>
                 <field name="journal_id" attrs="{'invisible': [('is_invoice', '=', False)], 'required': [('is_invoice', '=', True)]}"/>
                 <field name="paid_amount" attrs="{'invisible': [('is_invoice', '=', False)], 'required': [('is_invoice', '=', True)]}"/>
+                 <field name="payment_id" attrs="{'invisible': [('payment_id', '=', False)]}"/>
+
             </field>
         </field>
     </record>
