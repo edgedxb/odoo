@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+        <record id="planning_wizard_form" model="ir.ui.view">
+            <field name="name">wizard.report.planning.form</field>
+            <field name="model">wizard.report.planning</field>
+            <field name="priority" eval="8"/>
+            <field name="arch" type="xml">
+                <form string="Generate Planning Summary">
+                    <group>
+                        <group>
+                            <field name="current_date"/>
+
+                        </group>
+                        <group>
+
+                        </group>
+                    </group>
+                    <footer>
+                        <button string="Download Planning Summary" name="download_planning_summary" type="object" class="btn-primary"/>
+                        <button string="Cancel" name="cancel" type="object" special="cancel" class="btn-cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="planning_summary_action_view" model="ir.actions.act_window">
+            <field name="name">Planning Summary Report</field>
+            <field name="res_model">wizard.report.planning</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="planning.planning_view_gantt"/>
+            <field name="target">new</field>
+        </record>
+
+        <menuitem id="planning_summary_wizard_submenu"
+                  name="Planning Summary Report"
+                  parent="planning.planning_menu_root"
+                  action="planning_summary_action_view"
+                   groups="planning.group_planning_manager"
+                  sequence="10"/>
+    </data>
+
+</odoo>

@@ -2,7 +2,7 @@
 <odoo>
     <data noupdate="0">
         <record id="email_template_crm_approval" model="mail.template">
-            <field name="name">CRM Approval Request</field>
+            <field name="name">CRM Approval Request for stage change</field>
             <field name="model_id" ref="mis_planning.model_crm_lead"/>
             <field name="subject">Request for the Stage change Approval (${object.name}))</field>
              <field name="email_to">ceo@edgedxb.com</field>
@@ -15,6 +15,59 @@
 
                         <br/><br/>
                         I would like to requst for the change stage approval for  <strong>${object.name}</strong>
+
+
+
+                        <br/><br/>
+                        Best regards,
+                    </p>
+                </div>
+            </field>
+            <field name="user_signature" eval="False"/>
+            <field name="auto_delete" eval="True"/>
+        </record>
+
+        <record id="email_template_crm_approved" model="mail.template">
+            <field name="name">CRM Approval Request for stage change</field>
+            <field name="model_id" ref="mis_planning.model_crm_lead"/>
+            <field name="subject">(${object.name}) - Stage change Approval request is approved by admin</field>
+             <field name="email_to">${(user.email) or '')|safe}</field>
+            <field name="email_from">ceo@edgedxb.com</field>
+            <field name="reply_to">ceo@edgedxb.com</field>
+            <field name="body_html" type="html">
+                <div style="margin: 0px; padding: 0px;">
+                    <p style="margin: 0px; padding: 0px; font-size: 13px;">
+                        Hello,
+
+                        <br/><br/>
+                        ${object.name} - Stage change Approval request is approved by admin
+
+
+
+                        <br/><br/>
+                        Best regards,
+                    </p>
+                </div>
+            </field>
+            <field name="user_signature" eval="False"/>
+            <field name="auto_delete" eval="True"/>
+        </record>
+
+
+        <record id="email_template_crm_cancel" model="mail.template">
+            <field name="name">CRM Approval Request for cancellation</field>
+            <field name="model_id" ref="mis_planning.model_crm_lead"/>
+            <field name="subject">Request for cancellation Approval (${object.name}))</field>
+             <field name="email_to">ceo@edgedxb.com</field>
+            <field name="email_from">${(user.email) or '')|safe}</field>
+            <field name="reply_to">${(user.email) or '')|safe}</field>
+            <field name="body_html" type="html">
+                <div style="margin: 0px; padding: 0px;">
+                    <p style="margin: 0px; padding: 0px; font-size: 13px;">
+                        Dear Sir,
+
+                        <br/><br/>
+                        I would like to request approval for  <strong>${object.name}</strong> to cancellation.
 
 
 
