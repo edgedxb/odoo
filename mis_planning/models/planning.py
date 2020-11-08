@@ -96,16 +96,7 @@ class MisPlanning(models.Model):
                 name = u'%s \U0001F4AC' % name
             result.append([slot.id, name])
         return result
-    # def _checkforoverlap(self):
-    #     raise UserError(self.start_datetime)
-    #     objoverlapstart = self.env['planning.slot'].search([('role_id', '=', self.role_id.id), ('start_datetime', '>=', self.start_datetime), ('end_datetime', '<=', self.start_datetime)])
-    #     if objoverlapstart:
-    #         raise UserError('Schedule Overlapped for the selected team')
-    #     objoverlapend = self.env['planning.slot'].search(
-    #         [('role_id', '=', self.role_id.id), ('start_datetime', '>=', self.end_datetime),
-    #          ('end_datetime', '<=', self.end_datetime)])
-    #     if objoverlapend:
-    #         raise UserError('Schedule Overlapped for the selected team')
+
 
     @api.model
     def create(self, vals):
@@ -115,6 +106,7 @@ class MisPlanning(models.Model):
         if not vals.get('company_id'):
             vals['company_id'] = self.env.company.id
         return super(MisPlanning, self).create(vals)
+
 
     def write(self, values):
  #       self._checkforoverlap()

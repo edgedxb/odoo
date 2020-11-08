@@ -37,6 +37,7 @@ class MisCRMLead(models.Model):
 
     def action_transfer2planning(self):
         self.is_transfer=True
+        self._checkforoverlap()
         for rec in self:
             create_vals={
                 'name': rec.name,
@@ -45,11 +46,25 @@ class MisCRMLead(models.Model):
                 'start_datetime': rec.job_startdate,
                 'end_datetime': rec.job_enddate,
            }
+
         objplanning = self.env['planning.slot'].create(create_vals)
         self.planning_id=objplanning.id
         objstate = self.env['crm.stage'].search([('is_planning', '=', True)])
         for rec in objstate:
             self.stage_id=rec.id
+
+    def _checkforoverlap(self):
+        #raise UserError(self.job_startdate)
+        objoverlapstart = self.env['planning.slot'].search(
+            [('role_id', '=', self.job_team_id.id), ('start_datetime', '>=', self.job_startdate),
+             ('end_datetime', '<=', self.job_startdate)])
+        if objoverlapstart:
+            raise UserError('Schedule Overlapped for the selected team')
+        objoverlapend = self.env['planning.slot'].search(
+            [('role_id', '=', self.job_team_id.id), ('start_datetime', '>=', self.job_enddate),
+             ('end_datetime', '<=', self.job_enddate)])
+        if objoverlapend:
+            raise UserError('Schedule Overlapped for the selected team')
 
         #raise UserError('Transferred to Planning')
     # @api.onchange('job_startdate')
@@ -113,8 +128,9 @@ class MisCRMLead(models.Model):
     #         self.stage_id=self.stage_id.id-1
 
     def button_approve(self):
-        self.is_approve_status=3
+
         self.ensure_one()
+
         ir_model_data = self.env['ir.model.data']
         try:
             template_id = ir_model_data.get_object_reference('mis_planning', 'email_template_crm_approved')[1]
@@ -140,7 +156,7 @@ class MisCRMLead(models.Model):
             template = self.env['mail.template'].browse(ctx['default_template_id'])
 
         ctx['model_description'] = _('Approved')
-        self.is_approve_status = 1
+        self.is_approve_status = 3
 
         return {
             'name': _('Compose Email'),
@@ -163,6 +179,11 @@ class MisCRMLead(models.Model):
 
         if 'stage_id' in vals:
             nstage_id = self.env['crm.stage'].browse(vals['stage_id'])
+            if nstage_id.is_won:
+                objsale = self.env['sale.order'].search(
+                    [('state', '=', 'sale'), ('opportunity_id', '=', self.id)])
+                if len(objsale)==0:
+                    raise UserError('Cannot find confirmed sales order')
 
             if self.stage_id.id == 4 and nstage_id.id == 5:
                 if self.is_transfer!=True:
