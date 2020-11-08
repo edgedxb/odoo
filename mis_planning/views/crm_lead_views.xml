@@ -44,18 +44,13 @@
              <field name="partner_id" position="replace">
                  <field name="partner_id" required="1"/>
              </field>
-
-
             <field name="tag_ids" position="after">
-
                 <field name="planning_id" attrs="{'invisible': [('planning_id', '=', False)]}"/>
                 <field name="job_team_id" attrs="{'required':[('is_won', '=', True), ('is_transfer', '=', True)], 'invisible': [('stage_id', 'in', (1,2,3))]}"/>
                 <field name="area_id" attrs="{'required':[('is_won', '=', True), ('is_transfer', '=', True)]}"/>
                 <field name="unit_number"/>
                 <field name="building_name"/>
                 <field name="scope"/>
-
-
             </field>
              <!--field name="user_id" position="before">
                  <button name="previous_stage"  string="Previous"  class="oe_highlight" type="object"/>

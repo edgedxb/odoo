@@ -193,6 +193,8 @@ class MisCRMLead(models.Model):
                 #if self.stage_id.id > nstage_id.id:
                 if self.stage_id.id > 3 and  nstage_id.id < 4 and self.env.uid != 2:
                     raise UserError('Access denied!, Please contact administrator to change the stage')
+                elif self.stage_id.id > 4 and  nstage_id.id < 5 and self.env.uid != 2:
+                    raise UserError('Access denied!, Please contact administrator to change the stage')
             if self.stage_id.id!= nstage_id.id:
                 vals.update({'is_approve_status': 0})
 
