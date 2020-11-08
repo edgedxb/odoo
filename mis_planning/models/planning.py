@@ -48,7 +48,7 @@ class MisPlanning(models.Model):
     building_name = fields.Char(related='crm_id.building_name', string='Building Name')
     scope = fields.Text(related='crm_id.scope', string='Scope')
     job_status_id = fields.Many2one('mis.planning.status')
-    journal_id = fields.Many2one('account.journal', domain=[('type', 'in', ('bank','cash'))], string="Payment")
+    journal_id = fields.Many2one('account.journal', domain=[('id', '=', 9)], string="Payment")
     paid_amount = fields.Float(string='Amount', default=0.0)
     is_invoice = fields.Boolean(string='Is Invoice?', related='job_status_id.is_invoice')
     payment_id = fields.Many2one('account.payment', string='Payment', readonly=True, store=True)
