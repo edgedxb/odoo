@@ -3,7 +3,7 @@
 from odoo import api, fields, models, _
 from odoo.tools import float_compare
 from odoo.tools.misc import formatLang
-# from datetime import datetime, time, timedelta
+from datetime import datetime, time, timedelta
 from dateutil.relativedelta import relativedelta
 from odoo.exceptions import UserError, ValidationError
 class MisCrmStage(models.Model):
@@ -27,6 +27,7 @@ class MisCRMLead(models.Model):
     job_enddate = fields.Datetime(string='Job End Date')
     is_approve_status = fields.Integer('Approval Status', default=0)
     is_transfer = fields.Boolean('Is Transfer', default=False)
+
 
 
 
@@ -58,11 +59,19 @@ class MisCRMLead(models.Model):
     #             if not rec.job_enddate:
     #                 dt_temp=rec.job_startdate
     #                 rec.job_enddate=dt_temp.timedelta(hours=1)
+    @api.onchange('job_startdate')
+    def _onchange_startdate(self):
+        for rec in self:
+            stdate =rec.job_startdate
+            stdate=stdate + timedelta(hours = 1)
+            rec.job_enddate=stdate
+
 
     @api.depends('job_startdate', 'job_enddate')
     def _compute_job_totalhours(self):
 
         for wktime in self:
+
             if wktime.job_startdate and wktime.job_enddate:
                 total_hr=(wktime.job_enddate - wktime.job_startdate).total_seconds()/ 3600
                 wktime.job_totalhours= total_hr

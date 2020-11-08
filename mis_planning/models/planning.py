@@ -79,26 +79,37 @@ class MisPlanning(models.Model):
 
 
             end_datetime = pytz.utc.localize(slot.end_datetime).astimezone(destination_tz).replace(tzinfo=None)
-            if slot.end_datetime - slot.start_datetime <= timedelta(hours=24):  # shift on a single day
-                name = '%s - %s %s' % (
-                    format_time(self.env, start_datetime.time(), time_format='short'),
-                    format_time(self.env, end_datetime.time(), time_format='short'),
-                    name
-                )
-            else:
-                name = '%s - %s %s' % (
-                    start_datetime.date(),
-                    end_datetime.date(),
-                    name
-                )
+            # if slot.end_datetime - slot.start_datetime <= timedelta(hours=24):  # shift on a single day
+            #     name = '%s - %s %s' % (
+            #         format_time(self.env, start_datetime.time(), time_format='short'),
+            #         format_time(self.env, end_datetime.time(), time_format='short'),
+            #         name
+            #     )
+            # else:
+            #     name = '%s - %s %s' % (
+            #         start_datetime.date(),
+            #         end_datetime.date(),
+            #         name
+            #     )
             # add unicode bubble to tell there is a note
             if slot.name:
                 name = u'%s \U0001F4AC' % name
             result.append([slot.id, name])
         return result
+    # def _checkforoverlap(self):
+    #     raise UserError(self.start_datetime)
+    #     objoverlapstart = self.env['planning.slot'].search([('role_id', '=', self.role_id.id), ('start_datetime', '>=', self.start_datetime), ('end_datetime', '<=', self.start_datetime)])
+    #     if objoverlapstart:
+    #         raise UserError('Schedule Overlapped for the selected team')
+    #     objoverlapend = self.env['planning.slot'].search(
+    #         [('role_id', '=', self.role_id.id), ('start_datetime', '>=', self.end_datetime),
+    #          ('end_datetime', '<=', self.end_datetime)])
+    #     if objoverlapend:
+    #         raise UserError('Schedule Overlapped for the selected team')
 
     @api.model
     def create(self, vals):
+#        self._checkforoverlap()
         if not vals.get('company_id') and vals.get('employee_id'):
             vals['company_id'] = self.env['hr.employee'].browse(vals.get('employee_id')).company_id.id
         if not vals.get('company_id'):
@@ -106,7 +117,7 @@ class MisPlanning(models.Model):
         return super(MisPlanning, self).create(vals)
 
     def write(self, values):
-
+ #       self._checkforoverlap()
         # detach planning entry from recurrency
         if any(fname in values.keys() for fname in self._get_fields_breaking_recurrency()) and not values.get('recurrency_id'):
             values.update({'recurrency_id': False})
@@ -142,7 +153,7 @@ class MisPlanning(models.Model):
                     recurrence = slot.env['planning.recurrency'].create(recurrency_values)
                     slot.recurrency_id = recurrence
                     slot.recurrency_id._repeat_slot()
-                if slot.paid_amount>0:
+                if slot.paid_amount>-1:
                     if slot.paid_amount>slot.revenue:
                         raise UserError('Cannot register more payment than revenue!')
                     strname = ''
@@ -189,19 +200,19 @@ class MisPlanning(models.Model):
                         list_of_ids = []
                         postedinvoice = objacmove.post()
 
+                        if self.paid_amount>0:
+                            payment_vals = {'payment_date': datetime.now(),
+                                            'partner_id': slot.partner_id.id,
+                                            'invoice_ids': [objacmove.id,],
+                                            'payment_type': 'inbound',
+                                            'amount': self.paid_amount,
+                                            'journal_id': self.journal_id.id,
+                                            'payment_method_id': 1,
+                                            'partner_type': 'customer',
 
-                        payment_vals = {'payment_date': datetime.now(),
-                                        'partner_id': slot.partner_id.id,
-                                        'invoice_ids': [objacmove.id,],
-                                        'payment_type': 'inbound',
-                                        'amount': self.paid_amount,
-                                        'journal_id': self.journal_id.id,
-                                        'payment_method_id': 1,
-                                        'partner_type': 'customer',
-
-                                     }
-                        objpayment = self.env['account.payment'].create(payment_vals)
-                        objpayment.post()
+                                         }
+                            objpayment = self.env['account.payment'].create(payment_vals)
+                            objpayment.post()
 
                         # objpayment = self.env['account.payment'].create({'invoice_ids':[objacmove.id,],
                         #                                                  'journal_id': self.journal_id.id,
