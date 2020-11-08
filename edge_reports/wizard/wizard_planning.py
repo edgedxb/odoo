@@ -155,7 +155,7 @@ class PlanningSummary(models.TransientModel):
             endrow = int(endminutes_val / 30)
             if  recteam1.crm_id:
                 #count += 1
-                worksheet.merge_range('B%s:B%s' % (count+startrow, count+endrow), recteam1.crm_id.name + ' ' + str(recteam1.partner_id.name)+ ' AED - ' + str(recteam1.revenue), wbf['content_border_bg'])
+                worksheet.merge_range('B%s:B%s' % (count+startrow, count+endrow), recteam1.crm_id.name + '\n ' + str(recteam1.partner_id.name)+  '\n ' + str(recteam1.phone)+ '\n ' + str(recteam1.scope)+   '\n AED - ' + str(recteam1.revenue), wbf['content_border_bg'])
 
         objteam2 = self.env['planning.slot'].search([('role_id.name','=', 'Team2'), ('start_datetime','>=', filterstartdate), ('start_datetime','<=', filterenddate)], order='start_datetime,end_datetime')
         col = 1
@@ -187,7 +187,7 @@ class PlanningSummary(models.TransientModel):
             endrow = int(endminutes_val / 30)
             if  recteam3.crm_id:
                 #count += 1
-                worksheet.merge_range('D%s:D%s' % (count+startrow, count+endrow), recteam3.crm_id.name + ' ' + str(recteam3.partner_id.name)+ ' AED - ' + str(recteam3.revenue), wbf['content_border_bg'])
+                worksheet.merge_range('D%s:D%s' % (count+startrow, count+endrow), recteam3.crm_id.name + '\n ' + str(recteam3.partner_id.name)+  '\n ' + str(recteam3.phone)+ '\n ' + str(recteam3.scope)+   '\n AED - ' + str(recteam3.revenue), wbf['content_border_bg'])
 
 
         objteam4 = self.env['planning.slot'].search([('role_id.name','=', 'Team4'), ('start_datetime','>=', filterstartdate), ('start_datetime','<=', filterenddate)], order='start_datetime,end_datetime')

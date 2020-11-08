@@ -15,14 +15,9 @@
 
     # always loaded
     'data': [
-        # 'security/ir.model.access.csv',
+
         'wizard/wizard_planning.xml',
-#        'wizard/wizard_stock_details.xml',
-#        'wizard/wizard_stock_summary.xml',
-#        'wizard/wizard_share_summary.xml',
-#        'wizard/wizard_share_details.xml',
-#        'report/report_menu.xml',
-#        'report/stock_details_template.xml',
+
 
     ],
     # only loaded in demonstration mode

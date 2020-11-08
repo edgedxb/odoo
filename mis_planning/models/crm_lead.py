@@ -3,7 +3,7 @@
 from odoo import api, fields, models, _
 from odoo.tools import float_compare
 from odoo.tools.misc import formatLang
-# from datetime import datetime, time, timedelta
+from datetime import datetime, time, timedelta
 from dateutil.relativedelta import relativedelta
 from odoo.exceptions import UserError, ValidationError
 class MisCrmStage(models.Model):
@@ -30,12 +30,14 @@ class MisCRMLead(models.Model):
 
 
 
+
     job_totalhours = fields.Float(string='Job Total Hours', default=0, compute='_compute_job_totalhours', store=True)
 
     scope = fields.Text(string='Scope')
 
     def action_transfer2planning(self):
         self.is_transfer=True
+        self._checkforoverlap()
         for rec in self:
             create_vals={
                 'name': rec.name,
@@ -44,11 +46,25 @@ class MisCRMLead(models.Model):
                 'start_datetime': rec.job_startdate,
                 'end_datetime': rec.job_enddate,
            }
+
         objplanning = self.env['planning.slot'].create(create_vals)
         self.planning_id=objplanning.id
         objstate = self.env['crm.stage'].search([('is_planning', '=', True)])
         for rec in objstate:
             self.stage_id=rec.id
+
+    def _checkforoverlap(self):
+        #raise UserError(self.job_startdate)
+        objoverlapstart = self.env['planning.slot'].search(
+            [('role_id', '=', self.job_team_id.id), ('start_datetime', '>=', self.job_startdate),
+             ('end_datetime', '<=', self.job_startdate)])
+        if objoverlapstart:
+            raise UserError('Schedule Overlapped for the selected team')
+        objoverlapend = self.env['planning.slot'].search(
+            [('role_id', '=', self.job_team_id.id), ('start_datetime', '>=', self.job_enddate),
+             ('end_datetime', '<=', self.job_enddate)])
+        if objoverlapend:
+            raise UserError('Schedule Overlapped for the selected team')
 
         #raise UserError('Transferred to Planning')
     # @api.onchange('job_startdate')
@@ -58,11 +74,19 @@ class MisCRMLead(models.Model):
     #             if not rec.job_enddate:
     #                 dt_temp=rec.job_startdate
     #                 rec.job_enddate=dt_temp.timedelta(hours=1)
+    @api.onchange('job_startdate')
+    def _onchange_startdate(self):
+        for rec in self:
+            stdate =rec.job_startdate
+            stdate=stdate + timedelta(hours = 1)
+            rec.job_enddate=stdate
+
 
     @api.depends('job_startdate', 'job_enddate')
     def _compute_job_totalhours(self):
 
         for wktime in self:
+
             if wktime.job_startdate and wktime.job_enddate:
                 total_hr=(wktime.job_enddate - wktime.job_startdate).total_seconds()/ 3600
                 wktime.job_totalhours= total_hr
@@ -104,8 +128,9 @@ class MisCRMLead(models.Model):
     #         self.stage_id=self.stage_id.id-1
 
     def button_approve(self):
-        self.is_approve_status=3
+
         self.ensure_one()
+
         ir_model_data = self.env['ir.model.data']
         try:
             template_id = ir_model_data.get_object_reference('mis_planning', 'email_template_crm_approved')[1]
@@ -131,7 +156,7 @@ class MisCRMLead(models.Model):
             template = self.env['mail.template'].browse(ctx['default_template_id'])
 
         ctx['model_description'] = _('Approved')
-        self.is_approve_status = 1
+        self.is_approve_status = 3
 
         return {
             'name': _('Compose Email'),
@@ -154,6 +179,11 @@ class MisCRMLead(models.Model):
 
         if 'stage_id' in vals:
             nstage_id = self.env['crm.stage'].browse(vals['stage_id'])
+            if nstage_id.is_won:
+                objsale = self.env['sale.order'].search(
+                    [('state', '=', 'sale'), ('opportunity_id', '=', self.id)])
+                if len(objsale)==0:
+                    raise UserError('Cannot find confirmed sales order')
 
             if self.stage_id.id == 4 and nstage_id.id == 5:
                 if self.is_transfer!=True:
