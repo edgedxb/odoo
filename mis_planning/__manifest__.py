@@ -14,7 +14,7 @@
         'views/crm_lead_views.xml',
         'views/planning_views.xml',
         'data/mail_template_data.xml',
-#        'views/planning_status_views.xml',
+        'views/planning_status_views.xml',
         'security/ir.model.access.csv',
     ],
     'qweb': [

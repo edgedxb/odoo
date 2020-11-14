@@ -27,6 +27,7 @@ class MisPlanningStatus(models.Model):
 
     name = fields.Char(string='Status')
     is_invoice= fields.Boolean(string='Is Invoice?')
+    color = fields.Integer("Color", default=0)
 
     _sql_constraints = [
         ('unique_planningstatus',
@@ -52,6 +53,7 @@ class MisPlanning(models.Model):
     paid_amount = fields.Float(string='Amount', default=0.0)
     is_invoice = fields.Boolean(string='Is Invoice?', related='job_status_id.is_invoice')
     payment_id = fields.Many2one('account.payment', string='Payment', readonly=True, store=True)
+    color = fields.Integer("Color", related='job_status_id.color')
 
 
     def name_get(self):

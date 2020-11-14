@@ -4,10 +4,31 @@
         <field name="name">mis.planningstatus.form</field>
         <field name="model">mis.planning.status</field>
         <field name="arch" type="xml">
-            <group>
-                <field name="name"/>
-                <field name="is_invoice"/>
-            </group>
+            <form string="Planning Status">
+                <group>
+                    <field name="name"/>
+                    <field name="is_invoice"/>
+                    <field name="color" widget="color_picker"/>
+                </group>
+            </form>
         </field>
     </record>
+
+    <record id="mis_planning_status_action" model="ir.actions.act_window">
+        <field name="name">Planning Status</field>
+        <field name="res_model">mis.planning.status</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+             <p>
+                Add a new  Planning Status
+              </p>
+        </field>
+    </record>
+
+    <menuitem
+        id="menu_mis_planning_status_action"
+        name="Planning Status"
+        sequence="100"
+        action="mis_planning_status_action"
+        parent="planning.planning_menu_settings"/>
 </odoo>
