@@ -235,7 +235,19 @@ class MisCRMLead(models.Model):
 #        raise UserError(str(current_stage_id) + str(self.stage_id.id))
 
         if self.planning_id:
-            if self.stage_id.id <4:
+            if self.stage_id.id>4:
+                self._checkforoverlap()
+                for rec in self:
+                    create_vals = {
+                        'name': rec.name,
+                        'crm_id': rec.id,
+                        'role_id': rec.job_team_id.id,
+                        'start_datetime': rec.job_startdate,
+                        'end_datetime': rec.job_enddate,
+                    }
+                    self.planning_id.update(create_vals)
+
+            elif self.stage_id.id <4:
                 self.planning_id.unlink()
 
 #        self.is_approve_status=0
