@@ -175,7 +175,7 @@ class MisCRMLead(models.Model):
         #current_stage_id =self.stage_id.id
 
         if self.stage_id.is_closed:
-            raise UserError('Access denied!, Closed stage cannot be changed')
+             raise UserError('Access denied!, Closed stage cannot be changed')
 
         if 'stage_id' in vals:
             nstage_id = self.env['crm.stage'].browse(vals['stage_id'])
@@ -184,6 +184,7 @@ class MisCRMLead(models.Model):
                     [('state', '=', 'sale'), ('opportunity_id', '=', self.id)])
                 if len(objsale)==0:
                     raise UserError('Cannot find confirmed sales order')
+
 
             if self.stage_id.id == 4 and nstage_id.id == 5:
                 if self.is_transfer!=True:
@@ -235,19 +236,7 @@ class MisCRMLead(models.Model):
 #        raise UserError(str(current_stage_id) + str(self.stage_id.id))
 
         if self.planning_id:
-            if self.stage_id.id>4:
-                self._checkforoverlap()
-                for rec in self:
-                    create_vals = {
-                        'name': rec.name,
-                        'crm_id': rec.id,
-                        'role_id': rec.job_team_id.id,
-                        'start_datetime': rec.job_startdate,
-                        'end_datetime': rec.job_enddate,
-                    }
-                    self.planning_id.update(create_vals)
-
-            elif self.stage_id.id <4:
+            if self.stage_id.id <4:
                 self.planning_id.unlink()
 
 #        self.is_approve_status=0
