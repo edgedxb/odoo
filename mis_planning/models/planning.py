@@ -78,8 +78,6 @@ class MisPlanning(models.Model):
             destination_tz = pytz.timezone(self.env.user.tz or 'UTC')
             start_datetime = pytz.utc.localize(slot.start_datetime).astimezone(destination_tz).replace(tzinfo=None)
 
-
-
             end_datetime = pytz.utc.localize(slot.end_datetime).astimezone(destination_tz).replace(tzinfo=None)
             # if slot.end_datetime - slot.start_datetime <= timedelta(hours=24):  # shift on a single day
             #     name = '%s - %s %s' % (
