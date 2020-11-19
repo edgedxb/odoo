@@ -74,6 +74,8 @@
          </field>
     </record>
 
+
+
     <record id="mis_planning_view_form_quickcreate" model="ir.ui.view">
         <field name="name">mis.planning.slot.form.quickcreate</field>
         <field name="model">planning.slot</field>
