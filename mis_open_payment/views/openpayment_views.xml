@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="mis_openpayment" model="ir.ui.view">
+        <field name="name">mis.openpayment.tree</field>
+        <field name="model">account.move.line</field>
+         <field name="arch" type="xml">
+            <tree  create="0" delete="0"   string="Open Payment" >
+                <field name="partner_id"  optional="show"/>
+                <field name="date"  optional="show"/>
+                <field name="name"  optional="hidden"/>
+                <field name="payment_id"  optional="show"/>
+                <field name="debit"  optional="show"/>
+                <field name="credit"/>
+            </tree>
+        </field>
+
+    </record>
+
+    <record id="mis_openpayment_action" model="ir.actions.act_window">
+        <field name="name">Open Payment</field>
+        <field name="res_model">account.move.line</field>
+
+        <field name="view_id" ref="mis_openpayment"/>
+        <field name="view_mode">tree</field>
+        <field name="domain">[('account_internal_type', '=', 'receivable'), ('reconciled', '=', False), ('payment_id.id', '>', 0)]</field>
+        <field name="help" type="html">
+             <p>
+                Add a new  Open Payment
+              </p>
+        </field>
+    </record>
+
+    <menuitem
+        id="menu_openpayment_act"
+        name="Open Payment"
+        sequence="300"
+        action="mis_openpayment_action"
+        parent="account.menu_finance_receivables"  groups="account.group_account_user"/>
+</odoo>
