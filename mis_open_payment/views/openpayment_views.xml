@@ -10,8 +10,8 @@
                 <field name="date"  optional="show"/>
                 <field name="name"  optional="hidden"/>
                 <field name="payment_id"  optional="show"/>
-                <field name="debit"  optional="show"/>
-                <field name="credit"/>
+                <field name="debit"  optional="show" sum="Total"/>
+                <field name="credit"  sum="Total"/>
             </tree>
         </field>
 
