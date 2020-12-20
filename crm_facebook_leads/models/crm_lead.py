@@ -100,15 +100,24 @@ class CrmLead(models.Model):
         vals, notes = {}, []
         form_mapping = form.mappings.filtered(lambda m: m.odoo_field).mapped('facebook_field')
         unmapped_fields = []
+        customer_name=''
+        customer_email =''
+        customer_mobile=''
         for name, value in lead.items():
             if name not in form_mapping:
                 unmapped_fields.append((name, value))
                 continue
             odoo_field = form.mappings.filtered(lambda m: m.facebook_field == name).odoo_field
             notes.append('%s: %s' % (odoo_field.field_description, value))
+
             if odoo_field.ttype == 'many2one':
-                related_value = self.env[odoo_field.relation].search([('display_name', '=', value)])
-                vals.update({odoo_field.name: related_value and related_value.id})
+                customer_name=value
+                _logger.info('customer name: %s' % value)
+                # related_value = self.env[odoo_field.relation].search([('display_name', '=', value)], limit=1)
+                # if related_value:
+                #     vals.update({odoo_field.name: related_value and related_value.id})
+                # else:
+                #     vals.update({odoo_field.name: value})
             elif odoo_field.ttype in ('float', 'monetary'):
                 vals.update({odoo_field.name: float(value)})
             elif odoo_field.ttype == 'integer':
@@ -121,7 +130,31 @@ class CrmLead(models.Model):
             elif odoo_field.ttype == 'boolean':
                 vals.update({odoo_field.name: value == 'true' if value else False})
             else:
-                vals.update({odoo_field.name: value})
+                if odoo_field.name=='email_from':
+                    customer_email=value
+                elif odoo_field.name=='mobile':
+                    customer_mobile=value
+                else:
+                    vals.update({odoo_field.name: value})
+
+        objcustomer = self.env['res.partner'].search([('email', '=', customer_email)], limit=1)
+        if objcustomer:
+            _logger.info('customer found : %s' % customer_email)
+            vals.update({'partner_id': objcustomer.id})
+            vals.update({'email_from': customer_email})
+            vals.update({'mobile': customer_mobile})
+        else:
+            _logger.info('customer not found creating new: %s' % customer_name)
+            customer_vals = {'name': customer_name,
+                         'mobile': customer_mobile,
+                         'email': customer_email,
+                         'phone': customer_mobile,
+
+                         }
+            objnewcustomer = self.env['res.partner'].create(customer_vals)
+            vals.update({'partner_id': objnewcustomer.id})
+            vals.update({'email_from': customer_email})
+            vals.update({'mobile': customer_mobile})
 
         # NOTE: Doing this to put unmapped fields at the end of the description
         for name, value in unmapped_fields:
