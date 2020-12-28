@@ -97,7 +97,7 @@ class CrmLead(models.Model):
             email_address = self.env['ir.config_parameter'].sudo().get_param('email_crm_notification')
             notification_email = self.env['mail.mail']
             val_email = {
-                'body_html': 'Customer Name : %s <br/>Email : %s  <br/>Mobile : %s <br/> Source : Facebook <br/> Subject : %s' % (customer_name, vals['customer_email'] ,vals['customer_mobile'],vals['name']),
+                'body_html': 'Customer Name : %s <br/>Email : %s  <br/>Mobile : %s <br/> Source : Facebook <br/> Subject : %s' % (customer_name, vals['email_from'] ,vals['mobile'],vals['name']),
                 'subject': 'CRM ODOO Re: %s' % vals['name'],
                 'email_from': 'customercare@edgedxb.com',
                 'email_to': email_address,
