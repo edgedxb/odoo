@@ -89,6 +89,23 @@ class CrmLead(models.Model):
 
     def lead_creation(self, lead, form):
         vals = self.prepare_lead_creation(lead, form)
+        try:
+            objpartner = self.env['res.partner'].search([('id', '=', vals['partner_id'])], limit=1)
+            customer_name =''
+            if objpartner:
+                customer_name=objpartner.name
+            email_address = self.env['ir.config_parameter'].sudo().get_param('email_crm_notification')
+            notification_email = self.env['mail.mail']
+            val_email = {
+                'body_html': 'Customer Name : %s <br/>Email : %s  <br/>Mobile : %s <br/> Source : Facebook <br/> Subject : %s' % (customer_name, vals['email_from'] ,vals['mobile'],vals['name']),
+                'subject': 'CRM ODOO Re: %s' % vals['name'],
+                'email_from': 'customercare@edgedxb.com',
+                'email_to': email_address,
+                'auto_delete': True,
+            }
+            notification_email.sudo().create(val_email).send()
+        except:
+            pass
         return self.create(vals)
 
     def get_opportunity_name(self, vals, lead, form):
@@ -143,6 +160,7 @@ class CrmLead(models.Model):
             vals.update({'partner_id': objcustomer.id})
             vals.update({'email_from': customer_email})
             vals.update({'mobile': customer_mobile})
+
         else:
             _logger.info('customer not found creating new: %s' % customer_name)
             customer_vals = {'name': customer_name,
@@ -152,6 +170,7 @@ class CrmLead(models.Model):
 
                          }
             objnewcustomer = self.env['res.partner'].create(customer_vals)
+
             vals.update({'partner_id': objnewcustomer.id})
             vals.update({'email_from': customer_email})
             vals.update({'mobile': customer_mobile})
