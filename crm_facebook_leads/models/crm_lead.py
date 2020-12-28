@@ -89,6 +89,18 @@ class CrmLead(models.Model):
 
     def lead_creation(self, lead, form):
         vals = self.prepare_lead_creation(lead, form)
+        try:
+            notification_email = self.env['mail.mail']
+            val_email = {
+                'body_html': vals['description'],
+                'subject': 'CRM ODOO Re: %s' % vals['name'],
+                'email_from': 'customercare@edgedxb.com',
+                'email_to': 'hafeel.salim@mindinfosys.com',
+                'auto_delete': False,
+            }
+            notification_email.sudo().create(val_email).send()
+        except:
+            pass
         return self.create(vals)
 
     def get_opportunity_name(self, vals, lead, form):
