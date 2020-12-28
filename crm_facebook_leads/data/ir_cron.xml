@@ -1,5 +1,5 @@
 <odoo>
-    <data>
+    <data noupdate="0">
         <record id="crm_facebook_cron" model="ir.cron">
             <field name="name">Fetch Facebook Leads</field>
             <field name="active" eval="True"/>
