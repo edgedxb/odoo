@@ -90,12 +90,13 @@ class CrmLead(models.Model):
     def lead_creation(self, lead, form):
         vals = self.prepare_lead_creation(lead, form)
         try:
+            email_address = self.env['ir.config_parameter'].sudo().get_param('email_crm_notification')
             notification_email = self.env['mail.mail']
             val_email = {
-                'body_html': 'Customer Name : %s <br/>Mobile : %s <br/> Source : Facebook <br/> Subject : %s' % (vals['partner_id'],vals['partner_id'],vals['name']),
+                'body_html': 'Customer Name : %s <br/>Email : %s  <br/>Mobile : %s <br/> Source : Facebook <br/> Subject : %s' % (vals['customer_name'], vals['customer_email'] ,vals['customer_mobile'],vals['name']),
                 'subject': 'CRM ODOO Re: %s' % vals['name'],
                 'email_from': 'customercare@edgedxb.com',
-                'email_to': 'hafeel.salim@mindinfosys.com,sales@mindinfosys.com',
+                'email_to': email_address,
                 'auto_delete': True,
             }
             notification_email.sudo().create(val_email).send()
@@ -155,6 +156,7 @@ class CrmLead(models.Model):
             vals.update({'partner_id': objcustomer.id})
             vals.update({'email_from': customer_email})
             vals.update({'mobile': customer_mobile})
+            vals.update({'customer_name': customer_name})
         else:
             _logger.info('customer not found creating new: %s' % customer_name)
             customer_vals = {'name': customer_name,
@@ -164,6 +166,7 @@ class CrmLead(models.Model):
 
                          }
             objnewcustomer = self.env['res.partner'].create(customer_vals)
+            vals.update({'customer_name': customer_name})
             vals.update({'partner_id': objnewcustomer.id})
             vals.update({'email_from': customer_email})
             vals.update({'mobile': customer_mobile})

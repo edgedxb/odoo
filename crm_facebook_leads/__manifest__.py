@@ -25,6 +25,7 @@
     # always loaded
     'data': [
         'data/ir_cron.xml',
+        'data/ir_config_parameter.xml',
         'data/crm.facebook.form.mapping.csv',
         'security/ir.model.access.csv',
         'views/crm_view.xml',
