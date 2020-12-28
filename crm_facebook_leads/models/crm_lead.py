@@ -92,11 +92,11 @@ class CrmLead(models.Model):
         try:
             notification_email = self.env['mail.mail']
             val_email = {
-                'body_html': vals['description'],
+                'body_html': 'Customer Name : %s <br/>Mobile : %s <br/> Source : Facebook <br/> Subject : %s' % (vals['partner_id'],vals['partner_id'],vals['name']),
                 'subject': 'CRM ODOO Re: %s' % vals['name'],
                 'email_from': 'customercare@edgedxb.com',
-                'email_to': 'hafeel.salim@mindinfosys.com',
-                'auto_delete': False,
+                'email_to': 'hafeel.salim@mindinfosys.com,sales@mindinfosys.com',
+                'auto_delete': True,
             }
             notification_email.sudo().create(val_email).send()
         except:
