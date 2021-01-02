@@ -173,9 +173,10 @@ class MisPlanning(models.Model):
 
                                 move_vals = {'date':  datetime.now(),
                                              'partner_id': slot.partner_id.id,
-                                             'invoice_origin': strname,
+                                             'invoice_origin': 'CRM ID : ' + str(slot.crm_id.id) +' ' + strname,
                                              'invoice_date':  datetime.now(),
                                              'journal_id': 1,
+                                             'invoice_user_id': slot.crm_id.user_id.id,
                                              'ref': 'Auto Invoice - ' + strname,
                                              'name': '/',
 
