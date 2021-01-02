@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <data noupdate="0">
+    <data noupdate="1">
         <record id="email_template_crm_approval" model="mail.template">
             <field name="name">CRM Approval Request for stage change</field>
             <field name="model_id" ref="mis_planning.model_crm_lead"/>
@@ -15,6 +15,8 @@
 
                         <br/><br/>
                         I would like to requst for the change stage approval for  <strong>${object.name}</strong>
+
+
 
 
 

@@ -6,7 +6,7 @@
          <field name="inherit_id" ref="planning.planning_view_form"/>
         <field name="arch" type="xml">
             <field name="employee_id" position="before">
-                <field name="crm_id"/>
+                <field name="crm_id" readonly="1"/>
                 <field name="partner_id"/>
                 <field name="revenue"/>
                  <field name="unit_number"/>
@@ -17,6 +17,13 @@
                 <field name="journal_id" attrs="{'invisible': [('is_invoice', '=', False)], 'required': [('is_invoice', '=', True)]}"/>
                 <field name="paid_amount" attrs="{'invisible': [('is_invoice', '=', False)], 'required': [('is_invoice', '=', True)]}"/>
             </field>
+            <field name="start_datetime" position="replace">
+                <field name="start_datetime"  readonly="1"/>
+            </field>
+            <field name="end_datetime" position="replace">
+                <field name="end_datetime" readonly="1"/>
+            </field>
+
             <field name="role_id" position="replace">
                 <field name="role_id" string="Team"/>
             </field>
@@ -67,6 +74,8 @@
          </field>
     </record>
 
+
+
     <record id="mis_planning_view_form_quickcreate" model="ir.ui.view">
         <field name="name">mis.planning.slot.form.quickcreate</field>
         <field name="model">planning.slot</field>
@@ -86,7 +95,5 @@
             </field>
         </field>
     </record>
-
-
 
 </odoo>

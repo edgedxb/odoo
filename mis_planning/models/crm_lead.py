@@ -105,28 +105,6 @@ class MisCRMLead(models.Model):
             }
         }
 
-    # def next_stage(self):
-    #     if self.stage_id.id==4:
-    #         self.action_transfer2planning()
-    #         #self.stage_id = self.stage_id.id + 1
-    #
-    #
-    #     elif self.stage_id.id!=6:
-    #         self.stage_id=self.stage_id.id+1
-    #
-    #
-    # def previous_stage(self):
-    #     if self.stage_id.is_closed:
-    #         raise UserError('Access denied!, Closed stage cannot be changed')
-    #     elif self.is_approve!=True:
-    #         raise UserError('Access denied!, Please contact administrator to change the stage')
-    #     elif self.stage_id.is_won or self.stage_id.is_planning:
-    #         if self.user_id.id != 2:
-    #             raise UserError('Access denied!, Please contact administrator to change the stage')
-    #
-    #     if self.stage_id.id!=1:
-    #         self.stage_id=self.stage_id.id-1
-
     def button_approve(self):
 
         self.ensure_one()
@@ -175,7 +153,7 @@ class MisCRMLead(models.Model):
         #current_stage_id =self.stage_id.id
 
         if self.stage_id.is_closed:
-            raise UserError('Access denied!, Closed stage cannot be changed')
+             raise UserError('Access denied!, Closed stage cannot be changed')
 
         if 'stage_id' in vals:
             nstage_id = self.env['crm.stage'].browse(vals['stage_id'])
@@ -237,6 +215,11 @@ class MisCRMLead(models.Model):
         if self.planning_id:
             if self.stage_id.id <4:
                 self.planning_id.unlink()
+            else:
+                if self.planning_id.is_invoice==False:
+                    self._checkforoverlap()
+                    self.planning_id.update({'start_datetime': self.job_startdate,'end_datetime': self.job_enddate})
+
 
 #        self.is_approve_status=0
 
