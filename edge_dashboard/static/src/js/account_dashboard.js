@@ -1233,6 +1233,27 @@ odoo.define('AccountingDashboard.AccountingDashboard', function (require) {
                             //                            $('#unreconciled_counts_this_year').append('<span style= "color:#455e7b;">' + unreconciled_counts_this_year + ' Item(s)</span><div class="title">This Year</div>')
                         })
 
+                    rpc.query({
+                        model: "account.move",
+                        method: "total_crm_pie_summary_today",
+                        args: [posted],
+                    })
+                        .then(function (result) {
+
+                            var total_month_amt = result['totalamt'];
+                             var total_month_target = result['targetamt'];
+                             var total_month_balance = result['balance'];
+
+                            total_month_amt = self.format_currency(currency, total_month_amt);
+                            total_month_target = self.format_currency(currency, total_month_target);
+                            total_month_balance = self.format_currency(currency, total_month_balance);
+
+                            $('#scr_today_achieved').append('<span>Achieved : ' + total_month_amt + '</span>')
+                            $('#scr_today_target').append('<span>Target : ' + total_month_target + '</span>')
+                            $('#scr_today_balance').append('<span>Balance : ' + total_month_balance + '</span>')
+                            //                            $('#unreconciled_counts_this_year').append('<span style= "color:#455e7b;">' + unreconciled_counts_this_year + ' Item(s)</span><div class="title">This Year</div>')
+                        })
+
                      rpc.query({
                         model: "account.move",
                         method: "total_crm_rpt3",
@@ -1529,19 +1550,7 @@ odoo.define('AccountingDashboard.AccountingDashboard', function (require) {
                             //                            $('#unreconciled_counts_this_year').append('<span style= "color:#455e7b;">' + unreconciled_counts_this_year + ' Item(s)</span><div class="title">This Year</div>')
                         })
 
-                    rpc.query({
-                        model: "account.move",
-                        method: "total_test_balance",
-                        args: [posted],
-                    })
-                        .then(function (result) {
 
-                            var tot_test_balance = result.totalbalance;
-                            tot_test_balance = self.format_currency(currency, tot_test_balance);
-
-                            $('#total_test_balance').append('<span>' + tot_test_balance + '</span>')
-                            //                            $('#unreconciled_counts_this_year').append('<span style= "color:#455e7b;">' + unreconciled_counts_this_year + ' Item(s)</span><div class="title">This Year</div>')
-                        })
 
                        rpc.query({
                         model: "account.move",
