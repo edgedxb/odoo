@@ -1254,6 +1254,29 @@ odoo.define('AccountingDashboard.AccountingDashboard', function (require) {
                             //                            $('#unreconciled_counts_this_year').append('<span style= "color:#455e7b;">' + unreconciled_counts_this_year + ' Item(s)</span><div class="title">This Year</div>')
                         })
 
+                    rpc.query({
+                        model: "account.move",
+                        method: "get_current_month_asofnow_prodata",
+                        args: [posted],
+                    })
+                        .then(function (result) {
+
+                            var totalamount = result['totalamount'];
+                             var targetasofnow = result['targetasofnow'];
+                             var balance = result['balance'];
+                             var asofnowdays = result['balance'];
+
+
+                            totalamount = self.format_currency(currency, totalamount);
+                            targetasofnow = self.format_currency(currency, targetasofnow);
+                            balance = self.format_currency(currency, balance);
+
+                            $('#scr_asofnow_budget').append('<span>Achieved : ' + totalamount + '</span>')
+                            $('#scr_asofnow_achieved').append('<span>Target : ' + targetasofnow + '</span>')
+                            $('#scr_asofnowbalance').append('<span>Balance : ' + balance + '</span>')
+                            //                            $('#unreconciled_counts_this_year').append('<span style= "color:#455e7b;">' + unreconciled_counts_this_year + ' Item(s)</span><div class="title">This Year</div>')
+                        })
+
                      rpc.query({
                         model: "account.move",
                         method: "total_crm_rpt3",

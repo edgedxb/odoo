@@ -64,6 +64,8 @@ class MisPlanning(models.Model):
             # label part, depending on context `groupby`
             name = ' - '.join([self._fields[fname].convert_to_display_name(slot[fname], slot) for fname in field_list if slot[fname]])
 
+            if slot.crm_id.partner_id:
+                name =str(name) + ' - ' + str(slot.crm_id.partner_id.name)
             if slot.crm_id.name:
                 name =str(name) + ' - ' + str(slot.crm_id.name)
             if slot.building_name:

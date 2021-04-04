@@ -25,14 +25,29 @@ class DashBoard(models.Model):
         print (todays_date.weekday())
         count = 0
         dt = date(year, month, 1)
-
-
         while dt.year == year and dt.month == month:
             if dt.weekday() != 4:
                 count += 1
             dt += timedelta(days=1)
-
         return count
+
+    @api.model
+    def getworkingdaysasofnow(self, chkdate):
+        todays_date = chkdate
+        year = todays_date.year
+        month = todays_date.month
+        dayin = todays_date.day
+        start_date = date(year, month, 1)
+        end_date = date(year, month + 1, 1)
+        print (todays_date.weekday())
+        count = 0
+        dt = date(year, month, 1)
+        while dt.year == year and dt.month == month and dt.day<=dayin:
+            if dt.weekday() != 4:
+                count += 1
+            dt += timedelta(days=1)
+        return count
+
     @api.model
     def getdailytarget(self, chkdate):
         noofdays=self.getworkingdays(chkdate)
@@ -40,6 +55,8 @@ class DashBoard(models.Model):
             return 325000/(noofdays)
         else:
             0
+
+
 
     @api.model
     def get_income_this_year(self, *post):
@@ -1359,7 +1376,7 @@ select 'This Month' as thismonth,sum(planned_revenue) as totalamt  from
                from crm_lead where stage_id in (4,5,6)) t where DATE_TRUNC('month',datestr)=DATE_TRUNC('month',now()) and DATE_TRUNC('year',datestr)= DATE_TRUNC('year',now()) 
                group by thismonth 
 			   
-			   union select 'Balance',(375000-(select sum(planned_revenue) as totalamt  from
+			   union select 'Balance',(325000-(select sum(planned_revenue) as totalamt  from
                (select to_date(to_char(job_enddate, 'YYYY/MM/DD'), 'YYYY/MM/DD')  as datestr,planned_revenue 
                from crm_lead where stage_id in (4,5,6)) t where DATE_TRUNC('month',datestr)=DATE_TRUNC('month',now()) and DATE_TRUNC('year',datestr)= DATE_TRUNC('year',now()) 
                ));'''
@@ -1374,7 +1391,7 @@ select 'This Month' as thismonth,sum(planned_revenue) as totalamt  from
             amt = record['totalamt']
             per = 0
             if amt:
-                per = round(((amt / 375000) * 100), 0)
+                per = round(((amt / 325000) * 100), 0)
             totalamount.append(amt)
             days.append(record['thismonth'] + ' ' + str(per) + '%')
 
@@ -1384,10 +1401,37 @@ select 'This Month' as thismonth,sum(planned_revenue) as totalamt  from
         }
         return records
 
+    @api.model
+    def get_current_month_asofnow_prodata(self, *post):
 
+        query = '''
+    select 'asofnow' as asofnow,sum(planned_revenue) as totalamt  from
+                   (select to_date(to_char(job_enddate, 'YYYY/MM/DD'), 'YYYY/MM/DD')  as datestr,planned_revenue 
+                   from crm_lead where stage_id in (4,5,6)) t where DATE_TRUNC('month',datestr)=DATE_TRUNC('month',now()) 
+                   and DATE_TRUNC('year',datestr)= DATE_TRUNC('year',now())  and datestr<(now()+ INTERVAL '1 day')
+                   group by asofnow ;'''
+        ## raise UserError(query)
+        self._cr.execute(query)
+        docs = self._cr.dictfetchall()
 
+        totalamt = 0.0
+        dttoday =date.today()
+        datestr = date.today() + timedelta(days=0)
+        asofnowdays = self.getworkingdaysasofnow(datestr)
+        dailytarget =self.getdailytarget(datestr)
 
+        #raise UserError(asofnowdays)
+        targetasofnow = asofnowdays*dailytarget
+        for record in docs:
+            totalamt += record['totalamt']
 
+        records = {
+            'totalamount': totalamt,
+            'targetasofnow': targetasofnow,
+            'balance': (targetasofnow-totalamt),
+            'asofnowdays': asofnowdays,
+        }
+        return records
 
     @api.model
     def total_crm_pie_summary(self, *post):
@@ -1413,8 +1457,8 @@ select 'This Month' as thismonth,sum(planned_revenue) as totalamt  from
 
         records = {
             'totalamt': totalamt,
-            'balance': (375000 - totalamt),
-            'targetamt': 375000
+            'balance': (325000 - totalamt),
+            'targetamt': 325000
         }
         return records
 
@@ -1440,12 +1484,10 @@ select 'This Month' as thismonth,sum(planned_revenue) as totalamt  from
 
         records = {
             'totalamt': totalamt,
-            'balance': (375000 - totalamt),
-            'targetamt': 375000
+            'balance': (325000 - totalamt),
+            'targetamt': 325000
         }
         return records
-
-
 
     @api.model
     def total_crm_weekly(self, *post):
@@ -1561,8 +1603,8 @@ select 'This Month' as thismonth,sum(planned_revenue) as totalamt  from
         self._cr.execute(('''select p.name,s1.* from res_partner p,
 (select u.partner_id, s.* from res_users u,
 (select user_id,datestr,sum(planned_revenue) as totalamt  from
-               (select user_id, to_date(to_char(job_enddate, 'YYYY/MM/DD'), 'YYYY/MM/DD')  as datestr,planned_revenue 
-               from crm_lead where stage_id in (4,5,6) and job_enddate<now()) t where DATE_TRUNC('month',datestr)=DATE_TRUNC('month',now()) and DATE_TRUNC('year',datestr)= DATE_TRUNC('year',now()) and DATE_TRUNC('day',datestr)= DATE_TRUNC('day',now()) 
+               (select user_id, to_date(to_char(date_last_stage_update, 'YYYY/MM/DD'), 'YYYY/MM/DD')  as datestr,planned_revenue 
+               from crm_lead where stage_id in (4,5,6) and date_last_stage_update<now()) t where DATE_TRUNC('month',datestr)=DATE_TRUNC('month',now()) and DATE_TRUNC('year',datestr)= DATE_TRUNC('year',now()) and DATE_TRUNC('day',datestr)= DATE_TRUNC('day',now()) 
                group by datestr,user_id) s where u.id=s.user_id) s1 where s1.partner_id=p.id order by s1.datestr desc, p.name
 
                                 '''))
