@@ -1420,8 +1420,8 @@ DATE_TRUNC('month',date)=DATE_TRUNC('month',now()) and DATE_TRUNC('year',date)= 
         #raise UserError(asofnowdays)
         targetasofnow = asofnowdays*dailytarget
         for record in docs:
-            if record['totalamt']:
-                totalamt += record['totalamt']
+            #if record['totalamt']:
+            totalamt += record['totalamt']
 
         records = {
             'totalamount': totalamt,
@@ -1433,7 +1433,6 @@ DATE_TRUNC('month',date)=DATE_TRUNC('month',now()) and DATE_TRUNC('year',date)= 
 
     @api.model
     def total_crm_pie_summary(self, *post):
-
         query = '''
                    select 'This Month' as thismonth,sum(amount_untaxed) as totalamt from account_move where type='out_invoice'  and state='posted' and 
 DATE_TRUNC('month',date)=DATE_TRUNC('month',now()) and DATE_TRUNC('year',date)= DATE_TRUNC('year',now()) 
@@ -1449,8 +1448,8 @@ DATE_TRUNC('month',date)=DATE_TRUNC('month',now()) and DATE_TRUNC('year',date)= 
         totalamt = 0.0
 
         for record in docs:
-            if record['totalamt']:
-                totalamt = record['totalamt']
+            #if record['totalamt']:
+            totalamt = record['totalamt']
 
         records = {
             'totalamt': totalamt,
