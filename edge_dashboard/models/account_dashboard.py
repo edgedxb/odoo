@@ -1405,7 +1405,7 @@ select 'This Month' as thismonth,sum(planned_revenue) as totalamt  from
     def get_current_month_asofnow_prodata(self, *post):
 
         query = '''select 'asofnow' as asofnow,sum(amount_untaxed) as totalamt from account_move where type='out_invoice'  and state='posted' and 
-DATE_TRUNC('month',date)=DATE_TRUNC('month',now()) and DATE_TRUNC('year',date)= DATE_TRUNC('year',now())   and date<(now()+ INTERVAL '1 day')
+DATE_TRUNC('month',date)=DATE_TRUNC('month',now()) and DATE_TRUNC('year',date)= DATE_TRUNC('year',now())   and date<(now()+ INTERVAL '1 day')  and company_id=1
                    '''
         ## raise UserError(query)
         self._cr.execute(query)
@@ -1435,7 +1435,7 @@ DATE_TRUNC('month',date)=DATE_TRUNC('month',now()) and DATE_TRUNC('year',date)= 
     def total_crm_pie_summary(self, *post):
         query = '''
                    select 'This Month' as thismonth,sum(amount_untaxed) as totalamt from account_move where type='out_invoice'  and state='posted' and 
-DATE_TRUNC('month',date)=DATE_TRUNC('month',now()) and DATE_TRUNC('year',date)= DATE_TRUNC('year',now()) 
+DATE_TRUNC('month',date)=DATE_TRUNC('month',now()) and DATE_TRUNC('year',date)= DATE_TRUNC('year',now() and company_id=1) 
 
     			  ;'''
         ## raise UserError(query)
