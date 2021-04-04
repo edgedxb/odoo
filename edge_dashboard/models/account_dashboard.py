@@ -1404,14 +1404,8 @@ select 'This Month' as thismonth,sum(planned_revenue) as totalamt  from
     @api.model
     def get_current_month_asofnow_prodata(self, *post):
 
-        query = '''
-    # select 'asofnow' as asofnow,sum(planned_revenue) as totalamt  from
-    #                (select to_date(to_char(job_enddate, 'YYYY/MM/DD'), 'YYYY/MM/DD')  as datestr,planned_revenue 
-    #                from crm_lead where stage_id in (4,5,6)) t where DATE_TRUNC('month',datestr)=DATE_TRUNC('month',now()) 
-    #                and DATE_TRUNC('year',datestr)= DATE_TRUNC('year',now())  and datestr<(now()+ INTERVAL '1 day')
-    #                group by asofnow ;
-                   select 'asofnow' as asofnow,sum(amount_untaxed) as totalamt from account_move where type='out_invoice'  and state='posted' and 
-DATE_TRUNC('month',date)=DATE_TRUNC('month',now()) and DATE_TRUNC('year',date)= DATE_TRUNC('year',now())   and datestr<(now()+ INTERVAL '1 day')
+        query = '''select 'asofnow' as asofnow,sum(amount_untaxed) as totalamt from account_move where type='out_invoice'  and state='posted' and 
+DATE_TRUNC('month',date)=DATE_TRUNC('month',now()) and DATE_TRUNC('year',date)= DATE_TRUNC('year',now())   and date<(now()+ INTERVAL '1 day')
                    '''
         ## raise UserError(query)
         self._cr.execute(query)
@@ -1426,7 +1420,8 @@ DATE_TRUNC('month',date)=DATE_TRUNC('month',now()) and DATE_TRUNC('year',date)= 
         #raise UserError(asofnowdays)
         targetasofnow = asofnowdays*dailytarget
         for record in docs:
-            totalamt += record['totalamt']
+            if record['totalamt']:
+                totalamt += record['totalamt']
 
         records = {
             'totalamount': totalamt,
@@ -1440,10 +1435,6 @@ DATE_TRUNC('month',date)=DATE_TRUNC('month',now()) and DATE_TRUNC('year',date)= 
     def total_crm_pie_summary(self, *post):
 
         query = '''
-    # select 'This Month' as thismonth,sum(planned_revenue) as totalamt  from
-    #                (select to_date(to_char(job_enddate, 'YYYY/MM/DD'), 'YYYY/MM/DD')  as datestr,planned_revenue 
-    #                from crm_lead where stage_id in (4,5,6)) t where DATE_TRUNC('month',datestr)=DATE_TRUNC('month',now()) and DATE_TRUNC('year',datestr)= DATE_TRUNC('year',now()) 
-    #                group by thismonth 
                    select 'This Month' as thismonth,sum(amount_untaxed) as totalamt from account_move where type='out_invoice'  and state='posted' and 
 DATE_TRUNC('month',date)=DATE_TRUNC('month',now()) and DATE_TRUNC('year',date)= DATE_TRUNC('year',now()) 
 
@@ -1458,7 +1449,8 @@ DATE_TRUNC('month',date)=DATE_TRUNC('month',now()) and DATE_TRUNC('year',date)= 
         totalamt = 0.0
 
         for record in docs:
-            totalamt = record['totalamt']
+            if record['totalamt']:
+                totalamt = record['totalamt']
 
         records = {
             'totalamt': totalamt,
