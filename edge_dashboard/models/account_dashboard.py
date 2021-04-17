@@ -1143,7 +1143,7 @@ class DashBoard(models.Model):
 
         self._cr.execute((''' select datestr,to_char(datestr,'Day') daystr,sum(planned_revenue) as totalamt  from
                (select to_date(to_char(job_enddate, 'YYYY/MM/DD'), 'YYYY/MM/DD')  as datestr,planned_revenue 
-               from crm_lead where stage_id in (4,5,6) and job_enddate>(now()+ INTERVAL '-1 day')) t where datestr =to_date(to_char(now(), 'YYYY/MM/DD'), 'YYYY/MM/DD') 
+               from crm_lead where stage_id in (4,5,6) and won_status <>'lost' and job_enddate>(now()+ INTERVAL '-1 day')) t where datestr =to_date(to_char(now(), 'YYYY/MM/DD'), 'YYYY/MM/DD') 
                group by datestr order by datestr '''))
         record = self._cr.dictfetchall()
         totalamt=0.0
@@ -1177,7 +1177,7 @@ class DashBoard(models.Model):
 
         self._cr.execute((''' select datestr,to_char(datestr,'Day') daystr,sum(planned_revenue) as totalamt  from
                    (select to_date(to_char(job_enddate, 'YYYY/MM/DD'), 'YYYY/MM/DD')  as datestr,planned_revenue 
-                   from crm_lead where stage_id in (4,5,6) and job_enddate>(now()+ INTERVAL '0 day')) t where datestr =to_date(to_char((now()+ INTERVAL '1 day'), 'YYYY/MM/DD'), 'YYYY/MM/DD')
+                   from crm_lead where stage_id in (4,5,6) and  won_status <>'lost' and job_enddate>(now()+ INTERVAL '0 day')) t where datestr =to_date(to_char((now()+ INTERVAL '1 day'), 'YYYY/MM/DD'), 'YYYY/MM/DD')
                    group by datestr order by datestr '''))
         record = self._cr.dictfetchall()
         totalamt=0.0
@@ -1210,7 +1210,7 @@ class DashBoard(models.Model):
 
         self._cr.execute((''' select datestr,to_char(datestr,'Day') daystr,sum(planned_revenue) as totalamt  from
                    (select to_date(to_char(job_enddate, 'YYYY/MM/DD'), 'YYYY/MM/DD')  as datestr,planned_revenue 
-                   from crm_lead where stage_id in (4,5,6) and job_enddate>(now()+ INTERVAL '1 day')) t where datestr =to_date(to_char((now()+ INTERVAL '2 day'), 'YYYY/MM/DD'), 'YYYY/MM/DD')
+                   from crm_lead where stage_id in (4,5,6)  and won_status <>'lost' and job_enddate>(now()+ INTERVAL '1 day')) t where datestr =to_date(to_char((now()+ INTERVAL '2 day'), 'YYYY/MM/DD'), 'YYYY/MM/DD')
                    group by datestr order by datestr '''))
         record = self._cr.dictfetchall()
         totalamt=0.0
@@ -1241,7 +1241,7 @@ class DashBoard(models.Model):
 
         self._cr.execute((''' select datestr,to_char(datestr,'Day') daystr,sum(planned_revenue) as totalamt  from
                    (select to_date(to_char(job_enddate, 'YYYY/MM/DD'), 'YYYY/MM/DD')  as datestr,planned_revenue 
-                   from crm_lead where stage_id in (4,5,6) and job_enddate>(now()+ INTERVAL '2 day')) t where datestr =to_date(to_char((now()+ INTERVAL '3 day'), 'YYYY/MM/DD'), 'YYYY/MM/DD')
+                   from crm_lead where stage_id in (4,5,6)  and won_status <>'lost' and job_enddate>(now()+ INTERVAL '2 day')) t where datestr =to_date(to_char((now()+ INTERVAL '3 day'), 'YYYY/MM/DD'), 'YYYY/MM/DD')
                    group by datestr order by datestr '''))
         record = self._cr.dictfetchall()
         totalamt=0.0
@@ -1274,7 +1274,7 @@ class DashBoard(models.Model):
 
         self._cr.execute((''' select datestr,to_char(datestr,'Day') daystr,sum(planned_revenue) as totalamt  from
                        (select to_date(to_char(job_enddate, 'YYYY/MM/DD'), 'YYYY/MM/DD')  as datestr,planned_revenue 
-                       from crm_lead where stage_id in (4,5,6) and job_enddate>(now()+ INTERVAL '3 day')) t where datestr =to_date(to_char((now()+ INTERVAL '4 day'), 'YYYY/MM/DD'), 'YYYY/MM/DD')
+                       from crm_lead where stage_id in (4,5,6)  and won_status <>'lost' and job_enddate>(now()+ INTERVAL '3 day')) t where datestr =to_date(to_char((now()+ INTERVAL '4 day'), 'YYYY/MM/DD'), 'YYYY/MM/DD')
                        group by datestr order by datestr '''))
         record = self._cr.dictfetchall()
         totalamt=0.0
@@ -1305,7 +1305,7 @@ class DashBoard(models.Model):
 
         self._cr.execute((''' select datestr,to_char(datestr,'Day') daystr,sum(planned_revenue) as totalamt  from
                            (select to_date(to_char(job_enddate, 'YYYY/MM/DD'), 'YYYY/MM/DD')  as datestr,planned_revenue 
-                           from crm_lead where stage_id in (4,5,6) and job_enddate>(now()+ INTERVAL '4 day')) t where datestr =to_date(to_char((now()+ INTERVAL '5 day'), 'YYYY/MM/DD'), 'YYYY/MM/DD') 
+                           from crm_lead where stage_id in (4,5,6)  and won_status <>'lost' and job_enddate>(now()+ INTERVAL '4 day')) t where datestr =to_date(to_char((now()+ INTERVAL '5 day'), 'YYYY/MM/DD'), 'YYYY/MM/DD') 
                            group by datestr order by datestr '''))
         record = self._cr.dictfetchall()
         totalamt = 0.0
@@ -1339,7 +1339,7 @@ class DashBoard(models.Model):
 
         self._cr.execute((''' select datestr,to_char(datestr,'Day') daystr,sum(planned_revenue) as totalamt  from
                            (select to_date(to_char(job_enddate, 'YYYY/MM/DD'), 'YYYY/MM/DD')  as datestr,planned_revenue 
-                           from crm_lead where stage_id in (4,5,6) and job_enddate>(now()+ INTERVAL '5 day')) t where datestr =to_date(to_char((now()+ INTERVAL '6 day'), 'YYYY/MM/DD'), 'YYYY/MM/DD')
+                           from crm_lead where stage_id in (4,5,6)  and won_status <>'lost' and job_enddate>(now()+ INTERVAL '5 day')) t where datestr =to_date(to_char((now()+ INTERVAL '6 day'), 'YYYY/MM/DD'), 'YYYY/MM/DD')
                            group by datestr order by datestr '''))
         record = self._cr.dictfetchall()
         totalamt = 0.0
