@@ -15,8 +15,9 @@ class DashBoard(models.Model):
     # function to getting expenses
 
     # function to getting income of this year
-    def getworkingdays(self):
-        todays_date = date.today()
+    @api.model
+    def getworkingdays(self, chkdate):
+        todays_date = chkdate
         year = todays_date.year
         month = todays_date.month
         start_date = date(year, month, 1)
@@ -28,15 +29,34 @@ class DashBoard(models.Model):
             if dt.weekday() != 4:
                 count += 1
             dt += timedelta(days=1)
-
         return count
 
-    def getdailytarget(self):
-        noofdays=self.getworkingdays()
+    @api.model
+    def getworkingdaysasofnow(self, chkdate):
+        todays_date = chkdate
+        year = todays_date.year
+        month = todays_date.month
+        dayin = todays_date.day
+        start_date = date(year, month, 1)
+        end_date = date(year, month + 1, 1)
+        print (todays_date.weekday())
+        count = 0
+        dt = date(year, month, 1)
+        while dt.year == year and dt.month == month and dt.day<=dayin:
+            if dt.weekday() != 4:
+                count += 1
+            dt += timedelta(days=1)
+        return count
+
+    @api.model
+    def getdailytarget(self, chkdate):
+        noofdays=self.getworkingdays(chkdate)
         if noofdays>0:
             return 325000/(noofdays)
         else:
             0
+
+
 
     @api.model
     def get_income_this_year(self, *post):
@@ -1116,44 +1136,30 @@ class DashBoard(models.Model):
                              '''))
         totalbalance = self._cr.dictfetchall()
         return totalbalance
-        # self._cr.execute((''' select datestr,to_char(datestr,'Day') daystr,sum(expected_revenue) as totalamt  from
-        #        (select to_date(to_char(date_last_stage_update, 'YYYY/MM/DD'), 'YYYY/MM/DD')  as datestr,expected_revenue
-        #        from crm_lead where won_status='won' and date_last_stage_update<now()) t where datestr <(now()+ INTERVAL '-6 day')
-        #        group by datestr order by datestr'''))
 
-    @api.model
-    def total_test_balance(self, *post):
-
-        company_ids = self.get_current_multi_company_value()  # self.get_current_company_value()
-
-        states_arg = ""
-        if post != ('posted',):
-            states_arg = """ parent_state = 'posted'"""
-        else:
-            states_arg = """ parent_state in ('posted', 'draft')"""
-
-
-        totalbalance = 100.0
-        return totalbalance
 
     @api.model
     def total_crm_rpt1(self, *post):
 
-        self._cr.execute((''' select datestr,to_char(datestr,'Day') daystr,sum(expected_revenue) as totalamt  from
-               (select to_date(to_char(date_last_stage_update, 'YYYY/MM/DD'), 'YYYY/MM/DD')  as datestr,expected_revenue 
-               from crm_lead where won_status='won' and date_last_stage_update<now()) t where datestr <(now()+ INTERVAL '-6 day') and datestr >(now()+ INTERVAL '-7 day') 
+        self._cr.execute((''' select datestr,to_char(datestr,'Day') daystr,sum(planned_revenue) as totalamt  from
+               (select to_date(to_char(job_enddate, 'YYYY/MM/DD'), 'YYYY/MM/DD')  as datestr,planned_revenue 
+               from crm_lead where stage_id in (4,5,6) and won_status <>'lost' and job_enddate>(now()+ INTERVAL '-1 day')) t where datestr =to_date(to_char(now(), 'YYYY/MM/DD'), 'YYYY/MM/DD') 
                group by datestr order by datestr '''))
         record = self._cr.dictfetchall()
         totalamt=0.0
-        datestr=date.today()+timedelta(days=-6)
+        datestr=date.today()+timedelta(days=0)
         daystr=datestr.strftime("%A")
         for item in record:
             datestr = item['datestr']
             daystr = item['daystr']
         #totalamt = [item['totalamt'] for item in record]
             totalamt = item['totalamt']
-        totaltarget=int(self.getdailytarget())
+        totaltarget=int(self.getdailytarget(datestr))
         achpercent = str(int((totalamt/totaltarget)*100))+'%'
+
+        if 'Friday' in daystr:
+            totaltarget = 0
+            achpercent = '%'
 
 
         records = {
@@ -1169,22 +1175,26 @@ class DashBoard(models.Model):
     @api.model
     def total_crm_rpt2(self, *post):
 
-        self._cr.execute((''' select datestr,to_char(datestr,'Day') daystr,sum(expected_revenue) as totalamt  from
-                   (select to_date(to_char(date_last_stage_update, 'YYYY/MM/DD'), 'YYYY/MM/DD')  as datestr,expected_revenue 
-                   from crm_lead where won_status='won' and date_last_stage_update<now()) t where datestr <(now()+ INTERVAL '-5 day') and datestr >(now()+ INTERVAL '-6 day') 
+        self._cr.execute((''' select datestr,to_char(datestr,'Day') daystr,sum(planned_revenue) as totalamt  from
+                   (select to_date(to_char(job_enddate, 'YYYY/MM/DD'), 'YYYY/MM/DD')  as datestr,planned_revenue 
+                   from crm_lead where stage_id in (4,5,6) and  won_status <>'lost' and job_enddate>(now()+ INTERVAL '0 day')) t where datestr =to_date(to_char((now()+ INTERVAL '1 day'), 'YYYY/MM/DD'), 'YYYY/MM/DD')
                    group by datestr order by datestr '''))
         record = self._cr.dictfetchall()
         totalamt=0.0
-        datestr=date.today()+timedelta(days=-5)
+        datestr=date.today()+timedelta(days=1)
         daystr=datestr.strftime("%A")
         for item in record:
             datestr = item['datestr']
             daystr = item['daystr']
             # totalamt = [item['totalamt'] for item in record]
             totalamt = item['totalamt']
-        totaltarget = int(self.getdailytarget())
+        totaltarget = int(self.getdailytarget(datestr))
         achpercent = str(int((totalamt / totaltarget) * 100)) + '%'
 
+
+        if 'Friday' in daystr:
+            totaltarget = 0
+            achpercent = '%'
         records = {
             'datestr': datestr,
             'daystr': daystr,
@@ -1198,22 +1208,24 @@ class DashBoard(models.Model):
     @api.model
     def total_crm_rpt3(self, *post):
 
-        self._cr.execute((''' select datestr,to_char(datestr,'Day') daystr,sum(expected_revenue) as totalamt  from
-                   (select to_date(to_char(date_last_stage_update, 'YYYY/MM/DD'), 'YYYY/MM/DD')  as datestr,expected_revenue 
-                   from crm_lead where won_status='won' and date_last_stage_update<now()) t where datestr <(now()+ INTERVAL '-4 day') and datestr >(now()+ INTERVAL '-5 day') 
+        self._cr.execute((''' select datestr,to_char(datestr,'Day') daystr,sum(planned_revenue) as totalamt  from
+                   (select to_date(to_char(job_enddate, 'YYYY/MM/DD'), 'YYYY/MM/DD')  as datestr,planned_revenue 
+                   from crm_lead where stage_id in (4,5,6)  and won_status <>'lost' and job_enddate>(now()+ INTERVAL '1 day')) t where datestr =to_date(to_char((now()+ INTERVAL '2 day'), 'YYYY/MM/DD'), 'YYYY/MM/DD')
                    group by datestr order by datestr '''))
         record = self._cr.dictfetchall()
         totalamt=0.0
-        datestr=date.today()+timedelta(days=-4)
+        datestr=date.today()+timedelta(days=2)
         daystr=datestr.strftime("%A")
         for item in record:
             datestr = item['datestr']
             daystr = item['daystr']
             # totalamt = [item['totalamt'] for item in record]
             totalamt = item['totalamt']
-        totaltarget = int(self.getdailytarget())
+        totaltarget = int(self.getdailytarget(datestr))
         achpercent = str(int((totalamt / totaltarget) * 100)) + '%'
-
+        if 'Friday' in daystr:
+            totaltarget = 0
+            achpercent = '%'
         records = {
             'datestr': datestr,
             'daystr': daystr,
@@ -1227,21 +1239,90 @@ class DashBoard(models.Model):
     @api.model
     def total_crm_rpt4(self, *post):
 
-        self._cr.execute((''' select datestr,to_char(datestr,'Day') daystr,sum(expected_revenue) as totalamt  from
-                   (select to_date(to_char(date_last_stage_update, 'YYYY/MM/DD'), 'YYYY/MM/DD')  as datestr,expected_revenue 
-                   from crm_lead where won_status='won' and date_last_stage_update<now()) t where datestr <(now()+ INTERVAL '-3 day') and datestr >(now()+ INTERVAL '-4 day') 
+        self._cr.execute((''' select datestr,to_char(datestr,'Day') daystr,sum(planned_revenue) as totalamt  from
+                   (select to_date(to_char(job_enddate, 'YYYY/MM/DD'), 'YYYY/MM/DD')  as datestr,planned_revenue 
+                   from crm_lead where stage_id in (4,5,6)  and won_status <>'lost' and job_enddate>(now()+ INTERVAL '2 day')) t where datestr =to_date(to_char((now()+ INTERVAL '3 day'), 'YYYY/MM/DD'), 'YYYY/MM/DD')
                    group by datestr order by datestr '''))
         record = self._cr.dictfetchall()
         totalamt=0.0
-        datestr=date.today()+timedelta(days=-3)
+        datestr=date.today()+timedelta(days=3)
         daystr=datestr.strftime("%A")
         for item in record:
             datestr = item['datestr']
             daystr = item['daystr']
             # totalamt = [item['totalamt'] for item in record]
             totalamt = item['totalamt']
-        totaltarget = int(self.getdailytarget())
+        totaltarget = int(self.getdailytarget(datestr))
         achpercent = str(int((totalamt / totaltarget) * 100)) + '%'
+        if 'Friday' in daystr:
+            totaltarget = 0
+            achpercent = '%'
+
+        records = {
+            'datestr': datestr,
+            'daystr': daystr,
+            'totalamt': totalamt,
+            'daily_target': totaltarget,
+            'achpercent': achpercent
+
+        }
+        return records
+
+
+    @api.model
+    def total_crm_rpt5(self, *post):
+
+        self._cr.execute((''' select datestr,to_char(datestr,'Day') daystr,sum(planned_revenue) as totalamt  from
+                       (select to_date(to_char(job_enddate, 'YYYY/MM/DD'), 'YYYY/MM/DD')  as datestr,planned_revenue 
+                       from crm_lead where stage_id in (4,5,6)  and won_status <>'lost' and job_enddate>(now()+ INTERVAL '3 day')) t where datestr =to_date(to_char((now()+ INTERVAL '4 day'), 'YYYY/MM/DD'), 'YYYY/MM/DD')
+                       group by datestr order by datestr '''))
+        record = self._cr.dictfetchall()
+        totalamt=0.0
+        datestr=date.today()+timedelta(days=4)
+        daystr=datestr.strftime("%A")
+        for item in record:
+            datestr = item['datestr']
+            daystr = item['daystr']
+            # totalamt = [item['totalamt'] for item in record]
+            totalamt = item['totalamt']
+        totaltarget = int(self.getdailytarget(datestr))
+        achpercent = str(int((totalamt / totaltarget) * 100)) + '%'
+        if 'Friday' in daystr:
+            totaltarget = 0
+            achpercent = '%'
+        records = {
+            'datestr': datestr,
+            'daystr': daystr,
+            'totalamt': totalamt,
+            'daily_target': totaltarget,
+            'achpercent': achpercent
+
+        }
+        return records
+
+    @api.model
+    def total_crm_rpt6(self, *post):
+
+        self._cr.execute((''' select datestr,to_char(datestr,'Day') daystr,sum(planned_revenue) as totalamt  from
+                           (select to_date(to_char(job_enddate, 'YYYY/MM/DD'), 'YYYY/MM/DD')  as datestr,planned_revenue 
+                           from crm_lead where stage_id in (4,5,6)  and won_status <>'lost' and job_enddate>(now()+ INTERVAL '4 day')) t where datestr =to_date(to_char((now()+ INTERVAL '5 day'), 'YYYY/MM/DD'), 'YYYY/MM/DD') 
+                           group by datestr order by datestr '''))
+        record = self._cr.dictfetchall()
+        totalamt = 0.0
+        datestr = date.today()+ timedelta(days=5)
+        daystr = datestr.strftime("%A")
+        for item in record:
+            datestr = item['datestr']
+            daystr = item['daystr']
+            # totalamt = [item['totalamt'] for item in record]
+            totalamt = item['totalamt']
+
+        totaltarget = int(self.getdailytarget(datestr))
+        achpercent = str(int((totalamt / totaltarget) * 100)) + '%'
+
+        if 'Friday' in daystr:
+            totaltarget = 0
+            achpercent = '%'
 
         records = {
             'datestr': datestr,
@@ -1256,50 +1337,25 @@ class DashBoard(models.Model):
     @api.model
     def total_crm_rpt7(self, *post):
 
-        self._cr.execute((''' select datestr,to_char(datestr,'Day') daystr,sum(expected_revenue) as totalamt  from
-                       (select to_date(to_char(date_last_stage_update, 'YYYY/MM/DD'), 'YYYY/MM/DD')  as datestr,expected_revenue 
-                       from crm_lead where won_status='won' and date_last_stage_update<now()) t where datestr <(now()+ INTERVAL '-0 day') and datestr >(now()+ INTERVAL '-1 day') 
-                       group by datestr order by datestr '''))
+        self._cr.execute((''' select datestr,to_char(datestr,'Day') daystr,sum(planned_revenue) as totalamt  from
+                           (select to_date(to_char(job_enddate, 'YYYY/MM/DD'), 'YYYY/MM/DD')  as datestr,planned_revenue 
+                           from crm_lead where stage_id in (4,5,6)  and won_status <>'lost' and job_enddate>(now()+ INTERVAL '5 day')) t where datestr =to_date(to_char((now()+ INTERVAL '6 day'), 'YYYY/MM/DD'), 'YYYY/MM/DD')
+                           group by datestr order by datestr '''))
         record = self._cr.dictfetchall()
-        totalamt=0.0
-        datestr=date.today()
-        daystr=datestr.strftime("%A")
+        totalamt = 0.0
+        datestr = date.today()+ timedelta(days=6)
+        daystr = datestr.strftime("%A")
         for item in record:
             datestr = item['datestr']
             daystr = item['daystr']
             # totalamt = [item['totalamt'] for item in record]
             totalamt = item['totalamt']
-        totaltarget = int(self.getdailytarget())
+        totaltarget = int(self.getdailytarget(datestr))
         achpercent = str(int((totalamt / totaltarget) * 100)) + '%'
 
-        records = {
-            'datestr': datestr,
-            'daystr': daystr,
-            'totalamt': totalamt,
-            'daily_target': totaltarget,
-            'achpercent': achpercent
-
-        }
-        return records
-
-    @api.model
-    def total_crm_rpt5(self, *post):
-
-        self._cr.execute((''' select datestr,to_char(datestr,'Day') daystr,sum(expected_revenue) as totalamt  from
-                       (select to_date(to_char(date_last_stage_update, 'YYYY/MM/DD'), 'YYYY/MM/DD')  as datestr,expected_revenue 
-                       from crm_lead where won_status='won' and date_last_stage_update<now()) t where datestr <(now()+ INTERVAL '-2 day') and datestr >(now()+ INTERVAL '-3 day') 
-                       group by datestr order by datestr '''))
-        record = self._cr.dictfetchall()
-        totalamt=0.0
-        datestr=date.today()+timedelta(days=-2)
-        daystr=datestr.strftime("%A")
-        for item in record:
-            datestr = item['datestr']
-            daystr = item['daystr']
-            # totalamt = [item['totalamt'] for item in record]
-            totalamt = item['totalamt']
-        totaltarget = int(self.getdailytarget())
-        achpercent = str(int((totalamt / totaltarget) * 100)) + '%'
+        if 'Friday' in daystr:
+            totaltarget = 0
+            achpercent = '%'
 
         records = {
             'datestr': datestr,
@@ -1315,64 +1371,117 @@ class DashBoard(models.Model):
     def get_pie_month_target(self, *post):
 
         query = '''
-select 'This Month' as thismonth,sum(expected_revenue) as totalamt  from
-               (select to_date(to_char(date_last_stage_update, 'YYYY/MM/DD'), 'YYYY/MM/DD')  as datestr,expected_revenue 
-               from crm_lead where won_status='won' and date_last_stage_update<now()) t where DATE_TRUNC('month',datestr)=DATE_TRUNC('month',now()) and DATE_TRUNC('year',datestr)= DATE_TRUNC('year',now()) 
+select 'This Month' as thismonth,sum(planned_revenue) as totalamt  from
+               (select to_date(to_char(job_enddate, 'YYYY/MM/DD'), 'YYYY/MM/DD')  as datestr,planned_revenue 
+               from crm_lead where stage_id in (4,5,6)) t where DATE_TRUNC('month',datestr)=DATE_TRUNC('month',now()) and DATE_TRUNC('year',datestr)= DATE_TRUNC('year',now()) 
                group by thismonth 
 			   
-			   union select 'Balance',(375000-(select sum(expected_revenue) as totalamt  from
-               (select to_date(to_char(date_last_stage_update, 'YYYY/MM/DD'), 'YYYY/MM/DD')  as datestr,expected_revenue 
-               from crm_lead where won_status='won' and date_last_stage_update<now()) t where DATE_TRUNC('month',datestr)=DATE_TRUNC('month',now()) and DATE_TRUNC('year',datestr)= DATE_TRUNC('year',now()) 
+			   union select 'Balance',(325000-(select sum(planned_revenue) as totalamt  from
+               (select to_date(to_char(job_enddate, 'YYYY/MM/DD'), 'YYYY/MM/DD')  as datestr,planned_revenue 
+               from crm_lead where stage_id in (4,5,6)) t where DATE_TRUNC('month',datestr)=DATE_TRUNC('month',now()) and DATE_TRUNC('year',datestr)= DATE_TRUNC('year',now()) 
                ));'''
        ## raise UserError(query)
         self._cr.execute(query)
         docs = self._cr.dictfetchall()
         #print(docs)
-
         totalamount = []
+        totalamt = 0.0
         days = []
         for record in docs:
-            amt=record['totalamt']
-            per=0
+            amt = record['totalamt']
+            per = 0
             if amt:
-                per = round(((amt/375000)*100),0)
+                per = round(((amt / 325000) * 100), 0)
             totalamount.append(amt)
-            days.append(record['thismonth'] + ' ' + str(per) +'%')
-
+            days.append(record['thismonth'] + ' ' + str(per) + '%')
 
         records = {
-            'totalamount':totalamount,
+            'totalamount': totalamount,
             'days': days
         }
         return records
 
-
     @api.model
-    def total_crm_rpt6(self, *post):
+    def get_current_month_asofnow_prodata(self, *post):
 
-        self._cr.execute((''' select datestr,to_char(datestr,'Day') daystr,sum(expected_revenue) as totalamt  from
-                       (select to_date(to_char(date_last_stage_update, 'YYYY/MM/DD'), 'YYYY/MM/DD')  as datestr,expected_revenue 
-                       from crm_lead where won_status='won' and date_last_stage_update<now()) t where datestr <(now()+ INTERVAL '-1 day') and datestr >(now()+ INTERVAL '-2 day') 
-                       group by datestr order by datestr '''))
-        record = self._cr.dictfetchall()
-        totalamt=0.0
-        datestr=date.today()+timedelta(days=-1)
-        daystr=datestr.strftime("%A")
-        for item in record:
-            datestr = item['datestr']
-            daystr = item['daystr']
-            # totalamt = [item['totalamt'] for item in record]
-            totalamt = item['totalamt']
-        totaltarget = int(self.getdailytarget())
-        achpercent = str(int((totalamt / totaltarget) * 100)) + '%'
+        query = '''select 'asofnow' as asofnow,sum(amount_untaxed) as totalamt from account_move where type='out_invoice'  and state='posted' and 
+DATE_TRUNC('month',date)=DATE_TRUNC('month',now()) and DATE_TRUNC('year',date)= DATE_TRUNC('year',now())   and date<(now()+ INTERVAL '1 day')  and company_id=1
+                   '''
+        ## raise UserError(query)
+        self._cr.execute(query)
+        docs = self._cr.dictfetchall()
+
+        totalamt = 0.0
+        dttoday =date.today()
+        datestr = date.today() + timedelta(days=0)
+        asofnowdays = self.getworkingdaysasofnow(datestr)
+        dailytarget =self.getdailytarget(datestr)
+
+        #raise UserError(asofnowdays)
+        targetasofnow = asofnowdays*dailytarget
+        for record in docs:
+            #if record['totalamt']:
+            totalamt += record['totalamt']
 
         records = {
-            'datestr': datestr,
-            'daystr': daystr,
-            'totalamt': totalamt,
-            'daily_target': totaltarget,
-            'achpercent': achpercent
+            'totalamount': totalamt,
+            'targetasofnow': targetasofnow,
+            'balance': (targetasofnow-totalamt),
+            'asofnowdays': asofnowdays,
+        }
+        return records
 
+    @api.model
+    def total_crm_pie_summary(self, *post):
+        query = '''
+                   select 'This Month' as thismonth,sum(amount_untaxed) as totalamt from account_move where type='out_invoice'  and state='posted' and 
+DATE_TRUNC('month',date)=DATE_TRUNC('month',now()) and DATE_TRUNC('year',date)= DATE_TRUNC('year',now()) and company_id=1 
+
+    			  ;'''
+        ## raise UserError(query)
+        self._cr.execute(query)
+        docs = self._cr.dictfetchall()
+        # print(docs)
+
+
+
+        totalamt = 0.0
+
+        for record in docs:
+            #if record['totalamt']:
+            totalamt = record['totalamt']
+
+        records = {
+            'totalamt': totalamt,
+            'balance': (325000 - totalamt),
+            'targetamt': 325000
+        }
+        return records
+
+    @api.model
+    def total_crm_pie_summary_today(self, *post):
+
+        query = '''
+        select 'This Month' as thismonth,sum(planned_revenue) as totalamt  from
+                       (select to_date(to_char(job_enddate, 'YYYY/MM/DD'), 'YYYY/MM/DD')  as datestr,planned_revenue 
+                       from crm_lead where stage_id in (4,5,6)) t where DATE_TRUNC('month',datestr)=DATE_TRUNC('month',now()) and DATE_TRUNC('year',datestr)= DATE_TRUNC('year',now()) and DATE_TRUNC('day',datestr)= DATE_TRUNC('day',now()) 
+                       group by thismonth 
+
+        			  ;'''
+        ## raise UserError(query)
+        self._cr.execute(query)
+        docs = self._cr.dictfetchall()
+        # print(docs)
+
+        totalamt = 0.0
+
+        for record in docs:
+            totalamt = record['totalamt']
+
+        records = {
+            'totalamt': totalamt,
+            'balance': (325000 - totalamt),
+            'targetamt': 325000
         }
         return records
 
@@ -1388,9 +1497,9 @@ select 'This Month' as thismonth,sum(expected_revenue) as totalamt  from
         # else:
         #     states_arg = """ parent_state in ('posted', 'draft')"""
 
-        self._cr.execute((''' select datestr,to_char(datestr,'Day') daystr,sum(expected_revenue) as totalamt  from
-        (select to_date(to_char(date_last_stage_update, 'YYYY/MM/DD'), 'YYYY/MM/DD')  as datestr,expected_revenue 
-        from crm_lead where won_status='won' and date_last_stage_update<now()) t where datestr <(now()+ INTERVAL '-6 day') 
+        self._cr.execute((''' select datestr,to_char(datestr,'Day') daystr,sum(planned_revenue) as totalamt  from
+        (select to_date(to_char(job_enddate, 'YYYY/MM/DD'), 'YYYY/MM/DD')  as datestr,planned_revenue 
+        from crm_lead where stage_id in (4,5,6)) t where datestr <(now()+ INTERVAL '+6 day') 
         group by datestr order by datestr '''))
         record = self._cr.dictfetchall()
 
@@ -1489,9 +1598,9 @@ select 'This Month' as thismonth,sum(expected_revenue) as totalamt  from
 
         self._cr.execute(('''select p.name,s1.* from res_partner p,
 (select u.partner_id, s.* from res_users u,
-(select user_id,datestr,sum(expected_revenue) as totalamt  from
-               (select user_id, to_date(to_char(date_last_stage_update, 'YYYY/MM/DD'), 'YYYY/MM/DD')  as datestr,expected_revenue 
-               from crm_lead where won_status='won' and date_last_stage_update<now()) t where DATE_TRUNC('month',datestr)=DATE_TRUNC('month',now()) and DATE_TRUNC('year',datestr)= DATE_TRUNC('year',now()) 
+(select user_id,datestr,sum(planned_revenue) as totalamt  from
+               (select user_id, to_date(to_char(date_last_stage_update, 'YYYY/MM/DD'), 'YYYY/MM/DD')  as datestr,planned_revenue 
+               from crm_lead where stage_id in (4,5,6) and date_last_stage_update<now()) t where DATE_TRUNC('month',datestr)=DATE_TRUNC('month',now()) and DATE_TRUNC('year',datestr)= DATE_TRUNC('year',now()) and DATE_TRUNC('day',datestr)= DATE_TRUNC('day',now()) 
                group by datestr,user_id) s where u.id=s.user_id) s1 where s1.partner_id=p.id order by s1.datestr desc, p.name
 
                                 '''))

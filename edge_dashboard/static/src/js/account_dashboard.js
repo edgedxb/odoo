@@ -1170,15 +1170,18 @@ odoo.define('AccountingDashboard.AccountingDashboard', function (require) {
                             var date_crm_rpt1 = result['datestr'];
                             var daily_target_rpt1 = result['daily_target'];
                             var daily_achpercent_rpt1 = result['achpercent'];
+                            var daily_balance_rpt1 = daily_target_rpt1-tot_crm_rpt1_amt;
 
                             tot_crm_rpt1_amt = self.format_currency(currency, tot_crm_rpt1_amt);
                             daily_target_rpt1 = self.format_currency(currency, daily_target_rpt1);
+                            daily_balance_rpt1 = self.format_currency(currency, daily_balance_rpt1);
 
                             $('#scr_day_crm_rpt1').append('<span>' + day_crm_rpt1 + '</span>')
                             $('#scr_date_crm_rpt1').append('<span>' + date_crm_rpt1 + '</span>')
-                            $('#scr_total_crm_rpt1').append('<span>' + tot_crm_rpt1_amt + '</span><div class="title">Archieved</div>')
+                            $('#scr_total_crm_rpt1').append('<span>' + tot_crm_rpt1_amt + '</span><div class="title">Achieved</div>')
                             $('#scr_target_rpt1').append('<span>' + daily_target_rpt1 + '</span><div class="title">Target</div>')
                             $('#scr_arcpercent_rpt1').append('<span>' + daily_achpercent_rpt1 + '</span><div class="title"></div>')
+                            $('#scr_balance_rpt1').append('<span> Balance : ' + daily_balance_rpt1 + '</span>')
                             //                            $('#unreconciled_counts_this_year').append('<span style= "color:#455e7b;">' + unreconciled_counts_this_year + ' Item(s)</span><div class="title">This Year</div>')
                         })
 
@@ -1194,15 +1197,83 @@ odoo.define('AccountingDashboard.AccountingDashboard', function (require) {
                             var date_crm_rpt2 = result['datestr'];
                             var daily_target_rpt2 = result['daily_target'];
                             var daily_achpercent_rpt2 = result['achpercent'];
+                            var daily_balance_rpt2 = daily_target_rpt2-tot_crm_rpt2_amt;
 
                             tot_crm_rpt2_amt = self.format_currency(currency, tot_crm_rpt2_amt);
                             daily_target_rpt2 = self.format_currency(currency, daily_target_rpt2);
+                            daily_balance_rpt2 = self.format_currency(currency, daily_balance_rpt2);
 
                             $('#scr_day_crm_rpt2').append('<span>' + day_crm_rpt2 + '</span>')
                             $('#scr_date_crm_rpt2').append('<span>' + date_crm_rpt2 + '</span>')
-                            $('#scr_total_crm_rpt2').append('<span>' + tot_crm_rpt2_amt + '</span><div class="title">Archieved</div>')
+                            $('#scr_total_crm_rpt2').append('<span>' + tot_crm_rpt2_amt + '</span><div class="title">Achieved</div>')
                             $('#scr_target_rpt2').append('<span>' + daily_target_rpt2 + '</span><div class="title">Target</div>')
                             $('#scr_arcpercent_rpt2').append('<span>' + daily_achpercent_rpt2 + '</span><div class="title"></div>')
+                            $('#scr_balance_rpt2').append('<span> Balance : ' + daily_balance_rpt2 + '</span>')
+                            //                            $('#unreconciled_counts_this_year').append('<span style= "color:#455e7b;">' + unreconciled_counts_this_year + ' Item(s)</span><div class="title">This Year</div>')
+                        })
+
+                     rpc.query({
+                        model: "account.move",
+                        method: "total_crm_pie_summary",
+                        args: [posted],
+                    })
+                        .then(function (result) {
+
+                            var total_month_amt = result['totalamt'];
+                             var total_month_target = result['targetamt'];
+                             var total_month_balance = result['balance'];
+
+                            total_month_amt = self.format_currency(currency, total_month_amt);
+                            total_month_target = self.format_currency(currency, total_month_target);
+                            total_month_balance = self.format_currency(currency, total_month_balance);
+
+                            $('#scr_this_month_achieved').append('<span>Achieved : ' + total_month_amt + '</span>')
+                            $('#scr_this_month_target').append('<span>Target : ' + total_month_target + '</span>')
+                            $('#scr_this_month_balance').append('<span>Balance : ' + total_month_balance + '</span>')
+                            //                            $('#unreconciled_counts_this_year').append('<span style= "color:#455e7b;">' + unreconciled_counts_this_year + ' Item(s)</span><div class="title">This Year</div>')
+                        })
+
+                    rpc.query({
+                        model: "account.move",
+                        method: "total_crm_pie_summary_today",
+                        args: [posted],
+                    })
+                        .then(function (result) {
+
+                            var total_month_amt = result['totalamt'];
+                             var total_month_target = result['targetamt'];
+                             var total_month_balance = result['balance'];
+
+                            total_month_amt = self.format_currency(currency, total_month_amt);
+                            total_month_target = self.format_currency(currency, total_month_target);
+                            total_month_balance = self.format_currency(currency, total_month_balance);
+
+                            $('#scr_today_achieved').append('<span>Achieved : ' + total_month_amt + '</span>')
+                            $('#scr_today_target').append('<span>Target : ' + total_month_target + '</span>')
+                            $('#scr_today_balance').append('<span>Balance : ' + total_month_balance + '</span>')
+                            //                            $('#unreconciled_counts_this_year').append('<span style= "color:#455e7b;">' + unreconciled_counts_this_year + ' Item(s)</span><div class="title">This Year</div>')
+                        })
+
+                    rpc.query({
+                        model: "account.move",
+                        method: "get_current_month_asofnow_prodata",
+                        args: [posted],
+                    })
+                        .then(function (result) {
+
+                            var totalamount = result['totalamount'];
+                             var targetasofnow = result['targetasofnow'];
+                             var balance = result['balance'];
+                             var asofnowdays = result['balance'];
+
+
+                            totalamount = self.format_currency(currency, totalamount);
+                            targetasofnow = self.format_currency(currency, targetasofnow);
+                            balance = self.format_currency(currency, balance);
+
+                            $('#scr_asofnow_budget').append('<span>Achieved : ' + totalamount + '</span>')
+                            $('#scr_asofnow_achieved').append('<span>Target : ' + targetasofnow + '</span>')
+                            $('#scr_asofnowbalance').append('<span>Balance : ' + balance + '</span>')
                             //                            $('#unreconciled_counts_this_year').append('<span style= "color:#455e7b;">' + unreconciled_counts_this_year + ' Item(s)</span><div class="title">This Year</div>')
                         })
 
@@ -1218,15 +1289,18 @@ odoo.define('AccountingDashboard.AccountingDashboard', function (require) {
                             var date_crm_rpt3 = result['datestr'];
                             var daily_target_rpt3 = result['daily_target'];
                             var daily_achpercent_rpt3 = result['achpercent'];
+                            var daily_balance_rpt3 = daily_target_rpt3-tot_crm_rpt3_amt;
 
                             tot_crm_rpt3_amt = self.format_currency(currency, tot_crm_rpt3_amt);
                             daily_target_rpt3 = self.format_currency(currency, daily_target_rpt3);
+                            daily_balance_rpt3 = self.format_currency(currency, daily_balance_rpt3);
 
                             $('#scr_day_crm_rpt3').append('<span>' + day_crm_rpt3 + '</span>')
                             $('#scr_date_crm_rpt3').append('<span>' + date_crm_rpt3 + '</span>')
-                            $('#scr_total_crm_rpt3').append('<span>' + tot_crm_rpt3_amt + '</span><div class="title">Archieved</div>')
+                            $('#scr_total_crm_rpt3').append('<span>' + tot_crm_rpt3_amt + '</span><div class="title">Achieved</div>')
                             $('#scr_target_rpt3').append('<span>' + daily_target_rpt3 + '</span><div class="title">Target</div>')
                             $('#scr_arcpercent_rpt3').append('<span>' + daily_achpercent_rpt3 + '</span><div class="title"></div>')
+                            $('#scr_balance_rpt3').append('<span> Balance : ' + daily_balance_rpt3 + '</span><div class="title"></div>')
                             //                            $('#unreconciled_counts_this_year').append('<span style= "color:#455e7b;">' + unreconciled_counts_this_year + ' Item(s)</span><div class="title">This Year</div>')
                         })
                     rpc.query({
@@ -1241,15 +1315,18 @@ odoo.define('AccountingDashboard.AccountingDashboard', function (require) {
                             var date_crm_rpt4 = result['datestr'];
                             var daily_target_rpt4 = result['daily_target'];
                             var daily_achpercent_rpt4 = result['achpercent'];
+                            var daily_balance_rpt4 = daily_target_rpt4-tot_crm_rpt4_amt;
 
                             tot_crm_rpt4_amt = self.format_currency(currency, tot_crm_rpt4_amt);
                             daily_target_rpt4 = self.format_currency(currency, daily_target_rpt4);
+                            daily_balance_rpt4 = self.format_currency(currency, daily_balance_rpt4);
 
                             $('#scr_day_crm_rpt4').append('<span>' + day_crm_rpt4 + '</span>')
                             $('#scr_date_crm_rpt4').append('<span>' + date_crm_rpt4 + '</span>')
-                            $('#scr_total_crm_rpt4').append('<span>' + tot_crm_rpt4_amt + '</span><div class="title">Archieved</div>')
+                            $('#scr_total_crm_rpt4').append('<span>' + tot_crm_rpt4_amt + '</span><div class="title">Achieved</div>')
                             $('#scr_target_rpt4').append('<span>' + daily_target_rpt4 + '</span><div class="title">Target</div>')
                             $('#scr_arcpercent_rpt4').append('<span>' + daily_achpercent_rpt4 + '</span><div class="title"></div>')
+                            $('#scr_balance_rpt4').append('<span> Balance : ' + daily_balance_rpt4 + '</span>')
                             //                            $('#unreconciled_counts_this_year').append('<span style= "color:#455e7b;">' + unreconciled_counts_this_year + ' Item(s)</span><div class="title">This Year</div>')
                         })
 
@@ -1265,15 +1342,18 @@ odoo.define('AccountingDashboard.AccountingDashboard', function (require) {
                             var date_crm_rpt7 = result['datestr'];
                             var daily_target_rpt7 = result['daily_target'];
                             var daily_achpercent_rpt7 = result['achpercent'];
+                            var daily_balance_rpt7 = daily_target_rpt7-tot_crm_rpt7_amt;
 
                             tot_crm_rpt7_amt = self.format_currency(currency, tot_crm_rpt7_amt);
                             daily_target_rpt7 = self.format_currency(currency, daily_target_rpt7);
+                            daily_balance_rpt7 = self.format_currency(currency, daily_balance_rpt7);
 
                             $('#scr_day_crm_rpt7').append('<span>' + day_crm_rpt7 + '</span>')
                             $('#scr_date_crm_rpt7').append('<span>' + date_crm_rpt7 + '</span>')
-                            $('#scr_total_crm_rpt7').append('<span>' + tot_crm_rpt7_amt + '</span><div class="title">Archieved</div>')
+                            $('#scr_total_crm_rpt7').append('<span>' + tot_crm_rpt7_amt + '</span><div class="title">Achieved</div>')
                             $('#scr_target_rpt7').append('<span>' + daily_target_rpt7 + '</span><div class="title">Target</div>')
                             $('#scr_arcpercent_rpt7').append('<span>' + daily_achpercent_rpt7 + '</span><div class="title"></div>')
+                            $('#scr_balance_rpt7').append('<span> Balance : ' + daily_balance_rpt7 + '</span>')
                             //                            $('#unreconciled_counts_this_year').append('<span style= "color:#455e7b;">' + unreconciled_counts_this_year + ' Item(s)</span><div class="title">This Year</div>')
                         })
 
@@ -1289,15 +1369,18 @@ odoo.define('AccountingDashboard.AccountingDashboard', function (require) {
                             var date_crm_rpt5 = result['datestr'];
                             var daily_target_rpt5 = result['daily_target'];
                             var daily_achpercent_rpt5 = result['achpercent'];
+                            var daily_balance_rpt5 = daily_target_rpt5-tot_crm_rpt5_amt;
 
                             tot_crm_rpt5_amt = self.format_currency(currency, tot_crm_rpt5_amt);
                             daily_target_rpt5 = self.format_currency(currency, daily_target_rpt5);
+                            daily_balance_rpt5 = self.format_currency(currency, daily_balance_rpt5);
 
                             $('#scr_day_crm_rpt5').append('<span>' + day_crm_rpt5 + '</span>')
                             $('#scr_date_crm_rpt5').append('<span>' + date_crm_rpt5 + '</span>')
-                            $('#scr_total_crm_rpt5').append('<span>' + tot_crm_rpt5_amt + '</span><div class="title">Archieved</div>')
+                            $('#scr_total_crm_rpt5').append('<span>' + tot_crm_rpt5_amt + '</span><div class="title">Achieved</div>')
                             $('#scr_target_rpt5').append('<span>' + daily_target_rpt5 + '</span><div class="title">Target</div>')
                             $('#scr_arcpercent_rpt5').append('<span>' + daily_achpercent_rpt5 + '</span><div class="title"></div>')
+                            $('#scr_balance_rpt5').append('<span> Balance : ' + daily_balance_rpt5 + '</span>')
                             //                            $('#unreconciled_counts_this_year').append('<span style= "color:#455e7b;">' + unreconciled_counts_this_year + ' Item(s)</span><div class="title">This Year</div>')
                         })
 
@@ -1313,15 +1396,17 @@ odoo.define('AccountingDashboard.AccountingDashboard', function (require) {
                             var date_crm_rpt6 = result['datestr'];
                             var daily_target_rpt6 = result['daily_target'];
                             var daily_achpercent_rpt6 = result['achpercent'];
+                            var daily_balance_rpt6 = daily_target_rpt6-tot_crm_rpt6_amt;
 
                             tot_crm_rpt6_amt = self.format_currency(currency, tot_crm_rpt6_amt);
                             daily_target_rpt6 = self.format_currency(currency, daily_target_rpt6);
+                            daily_balance_rpt6 = self.format_currency(currency, daily_balance_rpt6);
 
                             $('#scr_day_crm_rpt6').append('<span>' + day_crm_rpt6 + '</span>')
                             $('#scr_date_crm_rpt6').append('<span>' + date_crm_rpt6 + '</span>')
-                            $('#scr_total_crm_rpt6').append('<span>' + tot_crm_rpt6_amt + '</span><div class="title">Archieved</div>')
+                            $('#scr_total_crm_rpt6').append('<span>' + tot_crm_rpt6_amt + '</span><div class="title">Achieved</div>')
                             $('#scr_target_rpt6').append('<span>' + daily_target_rpt6 + '</span><div class="title">Target</div>')
-                            $('#scr_arcpercent_rpt6').append('<span>' + daily_achpercent_rpt6 + '</span><div class="title"></div>')
+                            $('#scr_balance_rpt6').append('<span> Balance : ' + daily_balance_rpt6 + '</span>')
                             //                            $('#unreconciled_counts_this_year').append('<span style= "color:#455e7b;">' + unreconciled_counts_this_year + ' Item(s)</span><div class="title">This Year</div>')
                         })
 
@@ -1488,19 +1573,7 @@ odoo.define('AccountingDashboard.AccountingDashboard', function (require) {
                             //                            $('#unreconciled_counts_this_year').append('<span style= "color:#455e7b;">' + unreconciled_counts_this_year + ' Item(s)</span><div class="title">This Year</div>')
                         })
 
-                    rpc.query({
-                        model: "account.move",
-                        method: "total_test_balance",
-                        args: [posted],
-                    })
-                        .then(function (result) {
 
-                            var tot_test_balance = result.totalbalance;
-                            tot_test_balance = self.format_currency(currency, tot_test_balance);
-
-                            $('#total_test_balance').append('<span>' + tot_test_balance + '</span>')
-                            //                            $('#unreconciled_counts_this_year').append('<span style= "color:#455e7b;">' + unreconciled_counts_this_year + ' Item(s)</span><div class="title">This Year</div>')
-                        })
 
                        rpc.query({
                         model: "account.move",
