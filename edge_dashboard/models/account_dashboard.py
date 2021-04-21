@@ -7,6 +7,7 @@ from odoo.exceptions import UserError
 from dateutil.relativedelta import relativedelta
 from odoo import models, api
 from odoo.http import request
+from math import pi
 
 
 class DashBoard(models.Model):
@@ -1165,8 +1166,8 @@ class DashBoard(models.Model):
         records = {
             'datestr': datestr,
             'daystr': daystr,
-            'totalamt': totalamt,
-            'daily_target': totaltarget,
+            'totalamt': '{0:.2f}'.format(totalamt),
+            'daily_target': '{0:.2f}'.format(totaltarget),
             'achpercent': achpercent
 
         }
@@ -1198,8 +1199,8 @@ class DashBoard(models.Model):
         records = {
             'datestr': datestr,
             'daystr': daystr,
-            'totalamt': totalamt,
-            'daily_target': totaltarget,
+            'totalamt': '{0:.2f}'.format(totalamt),
+            'daily_target': '{0:.2f}'.format(totaltarget),
             'achpercent': achpercent
 
         }
@@ -1229,8 +1230,8 @@ class DashBoard(models.Model):
         records = {
             'datestr': datestr,
             'daystr': daystr,
-            'totalamt': totalamt,
-            'daily_target': totaltarget,
+            'totalamt': '{0:.2f}'.format(totalamt),
+            'daily_target': '{0:.2f}'.format(totaltarget),
             'achpercent': achpercent
 
         }
@@ -1261,8 +1262,8 @@ class DashBoard(models.Model):
         records = {
             'datestr': datestr,
             'daystr': daystr,
-            'totalamt': totalamt,
-            'daily_target': totaltarget,
+            'totalamt': '{0:.2f}'.format(totalamt),
+            'daily_target': '{0:.2f}'.format(totaltarget),
             'achpercent': achpercent
 
         }
@@ -1293,8 +1294,8 @@ class DashBoard(models.Model):
         records = {
             'datestr': datestr,
             'daystr': daystr,
-            'totalamt': totalamt,
-            'daily_target': totaltarget,
+            'totalamt': '{0:.2f}'.format(totalamt),
+            'daily_target': '{0:.2f}'.format(totaltarget),
             'achpercent': achpercent
 
         }
@@ -1327,8 +1328,8 @@ class DashBoard(models.Model):
         records = {
             'datestr': datestr,
             'daystr': daystr,
-            'totalamt': totalamt,
-            'daily_target': totaltarget,
+            'totalamt': '{0:.2f}'.format(totalamt),
+            'daily_target': '{0:.2f}'.format(totaltarget),
             'achpercent': achpercent
 
         }
@@ -1360,8 +1361,8 @@ class DashBoard(models.Model):
         records = {
             'datestr': datestr,
             'daystr': daystr,
-            'totalamt': totalamt,
-            'daily_target': totaltarget,
+            'totalamt': '{0:.2f}'.format(totalamt),
+            'daily_target': '{0:.2f}'.format(totaltarget),
             'achpercent': achpercent
 
         }
@@ -1424,9 +1425,9 @@ DATE_TRUNC('month',date)=DATE_TRUNC('month',now()) and DATE_TRUNC('year',date)= 
             totalamt += record['totalamt']
 
         records = {
-            'totalamount': totalamt,
-            'targetasofnow': targetasofnow,
-            'balance': (targetasofnow-totalamt),
+            'totalamount': '{0:.2f}'.format(totalamt),
+            'targetasofnow': '{0:.2f}'.format(targetasofnow),
+            'balance': '{0:.2f}'.format((targetasofnow-totalamt)),
             'asofnowdays': asofnowdays,
         }
         return records
@@ -1452,9 +1453,9 @@ DATE_TRUNC('month',date)=DATE_TRUNC('month',now()) and DATE_TRUNC('year',date)= 
             totalamt = record['totalamt']
 
         records = {
-            'totalamt': totalamt,
-            'balance': (325000 - totalamt),
-            'targetamt': 325000
+            'totalamt': '{0:.2f}'.format(totalamt),
+            'balance': '{0:.2f}'.format((325000 - totalamt)),
+            'targetamt': '{0:.2f}'.format(325000.00)
         }
         return records
 
@@ -1479,9 +1480,9 @@ DATE_TRUNC('month',date)=DATE_TRUNC('month',now()) and DATE_TRUNC('year',date)= 
             totalamt = record['totalamt']
 
         records = {
-            'totalamt': totalamt,
-            'balance': (325000 - totalamt),
-            'targetamt': 325000
+            'totalamt': '{0:.2f}'.format(totalamt),
+            'balance': '{0:.2f}'.format((325000 - totalamt)),
+            'targetamt': '{0:.2f}'.format(325000.00)
         }
         return records
 

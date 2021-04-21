@@ -179,9 +179,9 @@ odoo.define('AccountingDashboard.AccountingDashboard', function (require) {
                             var daily_achpercent_rpt1 = result['achpercent'];
                             var daily_balance_rpt1 = daily_target_rpt1-tot_crm_rpt1_amt;
 
-                            tot_crm_rpt1_amt = self.format_currency(currency, tot_crm_rpt1_amt);
-                            daily_target_rpt1 = self.format_currency(currency, daily_target_rpt1);
-                            daily_balance_rpt1 = self.format_currency(currency, daily_balance_rpt1);
+                            //tot_crm_rpt1_amt = self.format_currency(currency, tot_crm_rpt1_amt);
+                            //daily_target_rpt1 = self.format_currency(currency, daily_target_rpt1);
+                            //daily_balance_rpt1 = self.format_currency(currency, daily_balance_rpt1);
 
                             $('#scr_day_crm_rpt1').append('<span>' + day_crm_rpt1 + '</span>')
                             $('#scr_date_crm_rpt1').append('<span>' + date_crm_rpt1 + '</span>')
@@ -206,9 +206,9 @@ odoo.define('AccountingDashboard.AccountingDashboard', function (require) {
                             var daily_achpercent_rpt2 = result['achpercent'];
                             var daily_balance_rpt2 = daily_target_rpt2-tot_crm_rpt2_amt;
 
-                            tot_crm_rpt2_amt = self.format_currency(currency, tot_crm_rpt2_amt);
-                            daily_target_rpt2 = self.format_currency(currency, daily_target_rpt2);
-                            daily_balance_rpt2 = self.format_currency(currency, daily_balance_rpt2);
+                            //tot_crm_rpt2_amt = self.format_currency(currency, tot_crm_rpt2_amt);
+                            //daily_target_rpt2 = self.format_currency(currency, daily_target_rpt2);
+                            //daily_balance_rpt2 = self.format_currency(currency, daily_balance_rpt2);
 
                             $('#scr_day_crm_rpt2').append('<span>' + day_crm_rpt2 + '</span>')
                             $('#scr_date_crm_rpt2').append('<span>' + date_crm_rpt2 + '</span>')
@@ -230,9 +230,9 @@ odoo.define('AccountingDashboard.AccountingDashboard', function (require) {
                              var total_month_target = result['targetamt'];
                              var total_month_balance = result['balance'];
 
-                            total_month_amt = self.format_currency(currency, total_month_amt);
-                            total_month_target = self.format_currency(currency, total_month_target);
-                            total_month_balance = self.format_currency(currency, total_month_balance);
+                            //total_month_amt = self.format_currency(currency, total_month_amt);
+                            //total_month_target = self.format_currency(currency, total_month_target);
+                            //total_month_balance = self.format_currency(currency, total_month_balance);
 
                             $('#scr_this_month_achieved').append('<span>Achieved : ' + total_month_amt + '</span>')
                             $('#scr_this_month_target').append('<span>Target : ' + total_month_target + '</span>')
@@ -251,9 +251,9 @@ odoo.define('AccountingDashboard.AccountingDashboard', function (require) {
                              var total_month_target = result['targetamt'];
                              var total_month_balance = result['balance'];
 
-                            total_month_amt = self.format_currency(currency, total_month_amt);
-                            total_month_target = self.format_currency(currency, total_month_target);
-                            total_month_balance = self.format_currency(currency, total_month_balance);
+                            //total_month_amt = self.format_currency(currency, total_month_amt);
+                            //total_month_target = self.format_currency(currency, total_month_target);
+                            //total_month_balance = self.format_currency(currency, total_month_balance);
 
                             $('#scr_today_achieved').append('<span>Achieved : ' + total_month_amt + '</span>')
                             $('#scr_today_target').append('<span>Target : ' + total_month_target + '</span>')
