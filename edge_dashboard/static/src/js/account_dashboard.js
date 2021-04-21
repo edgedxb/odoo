@@ -298,9 +298,9 @@ odoo.define('AccountingDashboard.AccountingDashboard', function (require) {
                             var daily_achpercent_rpt3 = result['achpercent'];
                             var daily_balance_rpt3 = result['balance']; //daily_target_rpt3-tot_crm_rpt3_amt;
 
-                            tot_crm_rpt3_amt = String(tot_crm_rpt3_amt) +' AED' //self.format_currency(currency, tot_crm_rpt3_amt);
-                            daily_target_rpt3 = String(daily_target_rpt3) +' AED' // self.format_currency(currency, daily_target_rpt3);
-                            daily_balance_rpt3 = String(daily_balance_rpt3) +' AED' //self.format_currency(currency, daily_balance_rpt3);
+                            tot_crm_rpt3_amt = String(tot_crm_rpt3_amt) //+' AED' //self.format_currency(currency, tot_crm_rpt3_amt);
+                            daily_target_rpt3 = String(daily_target_rpt3) //+' AED' // self.format_currency(currency, daily_target_rpt3);
+                            daily_balance_rpt3 = String(daily_balance_rpt3) //+' AED' //self.format_currency(currency, daily_balance_rpt3);
 
                             $('#scr_day_crm_rpt3').append('<span>' + day_crm_rpt3 + '</span>')
                             $('#scr_date_crm_rpt3').append('<span>' + date_crm_rpt3 + '</span>')
