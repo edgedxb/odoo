@@ -84,12 +84,12 @@ odoo.define('AccountingDashboard.AccountingDashboard', function (require) {
 //            if ($('#toggle-two')[0].checked == true) {
 //                posted = "posted"
 //            }
-//            rpc.query({
-//                model: "account.move",
-//                method: "get_currency",
-//            }).then(function (result) {
-//                currency = result;
-//            })
+            rpc.query({
+                model: "account.move",
+                method: "get_currency",
+            }).then(function (result) {
+                currency = result;
+            })
 //            rpc.query({
 //                model: "account.move",
 //                method: "get_top_10_customers_month",
@@ -1100,12 +1100,12 @@ odoo.define('AccountingDashboard.AccountingDashboard', function (require) {
                 fontSize: 16
               }
             },
-                                    options: {
-                                        responsive: false
-                                    }
-                                });
+                                options: {
+                                    responsive: false
+                                }
                             });
-                        })
+                        });
+                    })
                     rpc.query({
                         model: "account.move",
                         method: "get_overdues",
