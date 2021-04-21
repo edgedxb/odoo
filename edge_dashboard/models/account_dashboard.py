@@ -1166,9 +1166,9 @@ class DashBoard(models.Model):
         records = {
             'datestr': datestr,
             'daystr': daystr,
-            'totalamt': '{0:.2f}'.format(totalamt),
-            'daily_target': '{0:.2f}'.format(totaltarget),
-            'balance': '{0:.2f}'.format(totaltarget-totalamt),
+            'totalamt': '{0:,.2f}'.format(totalamt),
+            'daily_target': '{0:,.2f}'.format(totaltarget),
+            'balance': '{0:,.2f}'.format(totaltarget-totalamt),
             'achpercent': achpercent
 
         }
@@ -1200,9 +1200,9 @@ class DashBoard(models.Model):
         records = {
             'datestr': datestr,
             'daystr': daystr,
-            'totalamt': '{0:.2f}'.format(totalamt),
-            'daily_target': '{0:.2f}'.format(totaltarget),
-            'balance': '{0:.2f}'.format(totaltarget - totalamt),
+            'totalamt': '{0:,.2f}'.format(totalamt),
+            'daily_target': '{0:,.2f}'.format(totaltarget),
+            'balance': '{0:,.2f}'.format(totaltarget - totalamt),
             'achpercent': achpercent
 
         }
@@ -1232,9 +1232,9 @@ class DashBoard(models.Model):
         records = {
             'datestr': datestr,
             'daystr': daystr,
-            'totalamt': '{0:.2f}'.format(totalamt),
-            'daily_target': '{0:.2f}'.format(totaltarget),
-            'balance': '{0:.2f}'.format(totaltarget - totalamt),
+            'totalamt': '{0:,.2f}'.format(totalamt),
+            'daily_target': '{0:,.2f}'.format(totaltarget),
+            'balance': '{0:,.2f}'.format(totaltarget - totalamt),
             'achpercent': achpercent
 
         }
@@ -1265,9 +1265,9 @@ class DashBoard(models.Model):
         records = {
             'datestr': datestr,
             'daystr': daystr,
-            'totalamt': '{0:.2f}'.format(totalamt),
-            'daily_target': '{0:.2f}'.format(totaltarget),
-            'balance': '{0:.2f}'.format(totaltarget - totalamt),
+            'totalamt': '{0:,.2f}'.format(totalamt),
+            'daily_target': '{0:,.2f}'.format(totaltarget),
+            'balance': '{0:,.2f}'.format(totaltarget - totalamt),
             'achpercent': achpercent
 
         }
@@ -1298,9 +1298,9 @@ class DashBoard(models.Model):
         records = {
             'datestr': datestr,
             'daystr': daystr,
-            'totalamt': '{0:.2f}'.format(totalamt),
-            'daily_target': '{0:.2f}'.format(totaltarget),
-            'balance': '{0:.2f}'.format(totaltarget - totalamt),
+            'totalamt': '{0:,.2f}'.format(totalamt),
+            'daily_target': '{0:,.2f}'.format(totaltarget),
+            'balance': '{0:,.2f}'.format(totaltarget - totalamt),
             'achpercent': achpercent
 
         }
@@ -1333,9 +1333,9 @@ class DashBoard(models.Model):
         records = {
             'datestr': datestr,
             'daystr': daystr,
-            'totalamt': '{0:.2f}'.format(totalamt),
-            'daily_target': '{0:.2f}'.format(totaltarget),
-            'balance': '{0:.2f}'.format(totaltarget - totalamt),
+            'totalamt': '{0:,.2f}'.format(totalamt),
+            'daily_target': '{0:,.2f}'.format(totaltarget),
+            'balance': '{0:,.2f}'.format(totaltarget - totalamt),
             'achpercent': achpercent
 
         }
@@ -1367,9 +1367,9 @@ class DashBoard(models.Model):
         records = {
             'datestr': datestr,
             'daystr': daystr,
-            'totalamt': '{0:.2f}'.format(totalamt),
-            'daily_target': '{0:.2f}'.format(totaltarget),
-            'balance': '{0:.2f}'.format(totaltarget - totalamt),
+            'totalamt': '{0:,.2f}'.format(totalamt),
+            'daily_target': '{0:,.2f}'.format(totaltarget),
+            'balance': '{0:,.2f}'.format(totaltarget - totalamt),
             'achpercent': achpercent
 
         }
@@ -1432,9 +1432,9 @@ DATE_TRUNC('month',date)=DATE_TRUNC('month',now()) and DATE_TRUNC('year',date)= 
             totalamt += record['totalamt']
 
         records = {
-            'totalamount': '{0:.2f}'.format(totalamt),
-            'targetasofnow': '{0:.2f}'.format(targetasofnow),
-            'balance': '{0:.2f}'.format((targetasofnow-totalamt)),
+            'totalamount': '{0:,.2f}'.format(totalamt),
+            'targetasofnow': '{0:,.2f}'.format(targetasofnow),
+            'balance': '{0:,.2f}'.format((targetasofnow-totalamt)),
             'asofnowdays': asofnowdays,
         }
         return records
@@ -1460,9 +1460,9 @@ DATE_TRUNC('month',date)=DATE_TRUNC('month',now()) and DATE_TRUNC('year',date)= 
             totalamt = record['totalamt']
 
         records = {
-            'totalamt': '{0:.2f}'.format(totalamt),
-            'balance': '{0:.2f}'.format((325000 - totalamt)),
-            'targetamt': '{0:.2f}'.format(325000.00)
+            'totalamt': '{0:,.2f}'.format(totalamt),
+            'balance': '{0:,.2f}'.format((325000 - totalamt)),
+            'targetamt': '{0:,.2f}'.format(325000.00)
         }
         return records
 
@@ -1487,9 +1487,9 @@ DATE_TRUNC('month',date)=DATE_TRUNC('month',now()) and DATE_TRUNC('year',date)= 
             totalamt = record['totalamt']
 
         records = {
-            'totalamt': '{0:.2f}'.format(totalamt),
-            'balance': '{0:.2f}'.format((325000 - totalamt)),
-            'targetamt': '{0:.2f}'.format(325000.00)
+            'totalamt': '{0:,.2f}'.format(totalamt),
+            'balance': '{0:,.2f}'.format((325000 - totalamt)),
+            'targetamt': '{0:,.2f}'.format(325000.00)
         }
         return records
 
