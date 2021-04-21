@@ -185,10 +185,10 @@ odoo.define('AccountingDashboard.AccountingDashboard', function (require) {
 
                             $('#scr_day_crm_rpt1').append('<span>' + day_crm_rpt1 + '</span>')
                             $('#scr_date_crm_rpt1').append('<span>' + date_crm_rpt1 + '</span>')
-                            $('#scr_total_crm_rpt1').append('<span>' + tot_crm_rpt1_amt + '</span><div class="title">Achieved</div>')
-                            $('#scr_target_rpt1').append('<span>' + daily_target_rpt1 + '</span><div class="title">Target</div>')
+                            $('#scr_total_crm_rpt1').append('<span>' + tot_crm_rpt1_amt + ' AED</span><div class="title">Achieved</div>')
+                            $('#scr_target_rpt1').append('<span>' + daily_target_rpt1 + ' AED</span><div class="title">Target</div>')
                             $('#scr_arcpercent_rpt1').append('<span>' + daily_achpercent_rpt1 + '</span><div class="title"></div>')
-                            $('#scr_balance_rpt1').append('<span> Balance : ' + daily_balance_rpt1 + '</span>')
+                            $('#scr_balance_rpt1').append('<span> Balance : ' + daily_balance_rpt1 + ' AED</span>')
                             //                            $('#unreconciled_counts_this_year').append('<span style= "color:#455e7b;">' + unreconciled_counts_this_year + ' Item(s)</span><div class="title">This Year</div>')
                         })
 
@@ -212,10 +212,10 @@ odoo.define('AccountingDashboard.AccountingDashboard', function (require) {
 
                             $('#scr_day_crm_rpt2').append('<span>' + day_crm_rpt2 + '</span>')
                             $('#scr_date_crm_rpt2').append('<span>' + date_crm_rpt2 + '</span>')
-                            $('#scr_total_crm_rpt2').append('<span>' + tot_crm_rpt2_amt + '</span><div class="title">Achieved</div>')
-                            $('#scr_target_rpt2').append('<span>' + daily_target_rpt2 + '</span><div class="title">Target</div>')
+                            $('#scr_total_crm_rpt2').append('<span>' + tot_crm_rpt2_amt + ' AED</span><div class="title">Achieved</div>')
+                            $('#scr_target_rpt2').append('<span>' + daily_target_rpt2 + ' AED</span><div class="title">Target</div>')
                             $('#scr_arcpercent_rpt2').append('<span>' + daily_achpercent_rpt2 + '</span><div class="title"></div>')
-                            $('#scr_balance_rpt2').append('<span> Balance : ' + daily_balance_rpt2 + '</span>')
+                            $('#scr_balance_rpt2').append('<span> Balance : ' + daily_balance_rpt2 + ' AED</span>')
                             //                            $('#unreconciled_counts_this_year').append('<span style= "color:#455e7b;">' + unreconciled_counts_this_year + ' Item(s)</span><div class="title">This Year</div>')
                         })
 
@@ -234,9 +234,9 @@ odoo.define('AccountingDashboard.AccountingDashboard', function (require) {
                             //total_month_target = self.format_currency(currency, total_month_target);
                             //total_month_balance = self.format_currency(currency, total_month_balance);
 
-                            $('#scr_this_month_achieved').append('<span>Achieved : ' + total_month_amt + '</span>')
-                            $('#scr_this_month_target').append('<span>Target : ' + total_month_target + '</span>')
-                            $('#scr_this_month_balance').append('<span>Balance : ' + total_month_balance + '</span>')
+                            $('#scr_this_month_achieved').append('<span>Achieved : ' + total_month_amt + ' AED</span>')
+                            $('#scr_this_month_target').append('<span>Target : ' + total_month_target + ' AED</span>')
+                            $('#scr_this_month_balance').append('<span>Balance : ' + total_month_balance + ' AED</span>')
                             //                            $('#unreconciled_counts_this_year').append('<span style= "color:#455e7b;">' + unreconciled_counts_this_year + ' Item(s)</span><div class="title">This Year</div>')
                         })
 
@@ -255,9 +255,9 @@ odoo.define('AccountingDashboard.AccountingDashboard', function (require) {
                             //total_month_target = self.format_currency(currency, total_month_target);
                             //total_month_balance = self.format_currency(currency, total_month_balance);
 
-                            $('#scr_today_achieved').append('<span>Achieved : ' + total_month_amt + '</span>')
-                            $('#scr_today_target').append('<span>Target : ' + total_month_target + '</span>')
-                            $('#scr_today_balance').append('<span>Balance : ' + total_month_balance + '</span>')
+                            $('#scr_today_achieved').append('<span>Achieved : ' + total_month_amt + ' AED</span>')
+                            $('#scr_today_target').append('<span>Target : ' + total_month_target + ' AED</span>')
+                            $('#scr_today_balance').append('<span>Balance : ' + total_month_balance + ' AED</span>')
                             //                            $('#unreconciled_counts_this_year').append('<span style= "color:#455e7b;">' + unreconciled_counts_this_year + ' Item(s)</span><div class="title">This Year</div>')
                         })
 
@@ -298,9 +298,9 @@ odoo.define('AccountingDashboard.AccountingDashboard', function (require) {
                             var daily_achpercent_rpt3 = result['achpercent'];
                             var daily_balance_rpt3 = daily_target_rpt3-tot_crm_rpt3_amt;
 
-                            //tot_crm_rpt3_amt = self.format_currency(currency, tot_crm_rpt3_amt);
-                            //daily_target_rpt3 = self.format_currency(currency, daily_target_rpt3);
-                            //daily_balance_rpt3 = self.format_currency(currency, daily_balance_rpt3);
+                            tot_crm_rpt3_amt = String(tot_crm_rpt3_amt) +' AED' //self.format_currency(currency, tot_crm_rpt3_amt);
+                            daily_target_rpt3 = String(daily_target_rpt3) +' AED' // self.format_currency(currency, daily_target_rpt3);
+                            daily_balance_rpt3 = String(daily_balance_rpt3) +' AED' //self.format_currency(currency, daily_balance_rpt3);
 
                             $('#scr_day_crm_rpt3').append('<span>' + day_crm_rpt3 + '</span>')
                             $('#scr_date_crm_rpt3').append('<span>' + date_crm_rpt3 + '</span>')
