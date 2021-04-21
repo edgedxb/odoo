@@ -1780,6 +1780,7 @@ DATE_TRUNC('month',date)=DATE_TRUNC('month',now()) and DATE_TRUNC('year',date)= 
         if not lang:
             lang = 'en_US'
         lang = lang.replace("_", '-')
+
         currency = {'position': default.position, 'symbol': default.symbol, 'language': lang}
         return currency
 
