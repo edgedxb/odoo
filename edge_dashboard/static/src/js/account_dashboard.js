@@ -177,7 +177,7 @@ odoo.define('AccountingDashboard.AccountingDashboard', function (require) {
                             var date_crm_rpt1 = result['datestr'];
                             var daily_target_rpt1 = result['daily_target'];
                             var daily_achpercent_rpt1 = result['achpercent'];
-                            var daily_balance_rpt1 = daily_target_rpt1-tot_crm_rpt1_amt;
+                            var daily_balance_rpt1 = result['balance']; //daily_target_rpt1-tot_crm_rpt1_amt;
 
                             //tot_crm_rpt1_amt = self.format_currency(currency, tot_crm_rpt1_amt);
                             //daily_target_rpt1 = self.format_currency(currency, daily_target_rpt1);
@@ -204,7 +204,7 @@ odoo.define('AccountingDashboard.AccountingDashboard', function (require) {
                             var date_crm_rpt2 = result['datestr'];
                             var daily_target_rpt2 = result['daily_target'];
                             var daily_achpercent_rpt2 = result['achpercent'];
-                            var daily_balance_rpt2 = daily_target_rpt2-tot_crm_rpt2_amt;
+                            var daily_balance_rpt2 = result['balance']; //daily_target_rpt2-tot_crm_rpt2_amt;
 
                             //tot_crm_rpt2_amt = self.format_currency(currency, tot_crm_rpt2_amt);
                             //daily_target_rpt2 = self.format_currency(currency, daily_target_rpt2);
@@ -296,7 +296,7 @@ odoo.define('AccountingDashboard.AccountingDashboard', function (require) {
                             var date_crm_rpt3 = result['datestr'];
                             var daily_target_rpt3 = result['daily_target'];
                             var daily_achpercent_rpt3 = result['achpercent'];
-                            var daily_balance_rpt3 = daily_target_rpt3-tot_crm_rpt3_amt;
+                            var daily_balance_rpt3 = result['balance']; //daily_target_rpt3-tot_crm_rpt3_amt;
 
                             tot_crm_rpt3_amt = String(tot_crm_rpt3_amt) +' AED' //self.format_currency(currency, tot_crm_rpt3_amt);
                             daily_target_rpt3 = String(daily_target_rpt3) +' AED' // self.format_currency(currency, daily_target_rpt3);
@@ -322,7 +322,7 @@ odoo.define('AccountingDashboard.AccountingDashboard', function (require) {
                             var date_crm_rpt4 = result['datestr'];
                             var daily_target_rpt4 = result['daily_target'];
                             var daily_achpercent_rpt4 = result['achpercent'];
-                            var daily_balance_rpt4 = daily_target_rpt4-tot_crm_rpt4_amt;
+                            var daily_balance_rpt4 = result['balance']; //daily_target_rpt4-tot_crm_rpt4_amt;
 
                             tot_crm_rpt4_amt = String(tot_crm_rpt4_amt) + ' AED'//self.format_currency(currency, tot_crm_rpt4_amt);
                             daily_target_rpt4 = String(daily_target_rpt4) + ' AED'//self.format_currency(currency, daily_target_rpt4);
@@ -349,7 +349,7 @@ odoo.define('AccountingDashboard.AccountingDashboard', function (require) {
                             var date_crm_rpt7 = result['datestr'];
                             var daily_target_rpt7 = result['daily_target'];
                             var daily_achpercent_rpt7 = result['achpercent'];
-                            var daily_balance_rpt7 = daily_target_rpt7-tot_crm_rpt7_amt;
+                            var daily_balance_rpt7 = result['balance']; //daily_target_rpt7-tot_crm_rpt7_amt;
 
                             tot_crm_rpt7_amt = String(tot_crm_rpt7_amt) + ' AED'//self.format_currency(currency, tot_crm_rpt7_amt);
                             daily_target_rpt7 = String(daily_target_rpt7) + ' AED'//self.format_currency(currency, daily_target_rpt7);
@@ -376,7 +376,7 @@ odoo.define('AccountingDashboard.AccountingDashboard', function (require) {
                             var date_crm_rpt5 = result['datestr'];
                             var daily_target_rpt5 = result['daily_target'];
                             var daily_achpercent_rpt5 = result['achpercent'];
-                            var daily_balance_rpt5 = daily_target_rpt5-tot_crm_rpt5_amt;
+                            var daily_balance_rpt5 = result['balance']; //daily_target_rpt5-tot_crm_rpt5_amt;
 
                             tot_crm_rpt5_amt = String(tot_crm_rpt5_amt) + ' AED'//self.format_currency(currency, tot_crm_rpt5_amt);
                             daily_target_rpt5 = String(daily_target_rpt5) + ' AED'//self.format_currency(currency, daily_target_rpt5);
@@ -403,7 +403,7 @@ odoo.define('AccountingDashboard.AccountingDashboard', function (require) {
                             var date_crm_rpt6 = result['datestr'];
                             var daily_target_rpt6 = result['daily_target'];
                             var daily_achpercent_rpt6 = result['achpercent'];
-                            var daily_balance_rpt6 = daily_target_rpt6-tot_crm_rpt6_amt;
+                            var daily_balance_rpt6 = result['balance']; //daily_target_rpt6-tot_crm_rpt6_amt;
 
                             tot_crm_rpt6_amt = String(tot_crm_rpt6_amt) + ' AED'//self.format_currency(currency, tot_crm_rpt6_amt);
                             daily_target_rpt6 = String(daily_target_rpt6) + ' AED'//self.format_currency(currency, daily_target_rpt6);

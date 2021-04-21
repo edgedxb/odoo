@@ -1168,6 +1168,7 @@ class DashBoard(models.Model):
             'daystr': daystr,
             'totalamt': '{0:.2f}'.format(totalamt),
             'daily_target': '{0:.2f}'.format(totaltarget),
+            'balance': '{0:.2f}'.format(totaltarget-totalamt),
             'achpercent': achpercent
 
         }
@@ -1201,6 +1202,7 @@ class DashBoard(models.Model):
             'daystr': daystr,
             'totalamt': '{0:.2f}'.format(totalamt),
             'daily_target': '{0:.2f}'.format(totaltarget),
+            'balance': '{0:.2f}'.format(totaltarget - totalamt),
             'achpercent': achpercent
 
         }
@@ -1232,6 +1234,7 @@ class DashBoard(models.Model):
             'daystr': daystr,
             'totalamt': '{0:.2f}'.format(totalamt),
             'daily_target': '{0:.2f}'.format(totaltarget),
+            'balance': '{0:.2f}'.format(totaltarget - totalamt),
             'achpercent': achpercent
 
         }
@@ -1264,6 +1267,7 @@ class DashBoard(models.Model):
             'daystr': daystr,
             'totalamt': '{0:.2f}'.format(totalamt),
             'daily_target': '{0:.2f}'.format(totaltarget),
+            'balance': '{0:.2f}'.format(totaltarget - totalamt),
             'achpercent': achpercent
 
         }
@@ -1296,6 +1300,7 @@ class DashBoard(models.Model):
             'daystr': daystr,
             'totalamt': '{0:.2f}'.format(totalamt),
             'daily_target': '{0:.2f}'.format(totaltarget),
+            'balance': '{0:.2f}'.format(totaltarget - totalamt),
             'achpercent': achpercent
 
         }
@@ -1330,6 +1335,7 @@ class DashBoard(models.Model):
             'daystr': daystr,
             'totalamt': '{0:.2f}'.format(totalamt),
             'daily_target': '{0:.2f}'.format(totaltarget),
+            'balance': '{0:.2f}'.format(totaltarget - totalamt),
             'achpercent': achpercent
 
         }
@@ -1363,6 +1369,7 @@ class DashBoard(models.Model):
             'daystr': daystr,
             'totalamt': '{0:.2f}'.format(totalamt),
             'daily_target': '{0:.2f}'.format(totaltarget),
+            'balance': '{0:.2f}'.format(totaltarget - totalamt),
             'achpercent': achpercent
 
         }
