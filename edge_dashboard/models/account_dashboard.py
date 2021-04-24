@@ -1607,8 +1607,8 @@ DATE_TRUNC('month',date)=DATE_TRUNC('month',now()) and DATE_TRUNC('year',date)= 
         self._cr.execute(('''select p.name,s1.* from res_partner p,
 (select u.partner_id, s.* from res_users u,
 (select user_id,datestr,sum(planned_revenue) as totalamt  from
-               (select user_id, to_date(to_char(date_last_stage_update, 'YYYY/MM/DD'), 'YYYY/MM/DD')  as datestr,planned_revenue 
-               from crm_lead where stage_id in (4,5,6) and date_last_stage_update<now()) t where DATE_TRUNC('month',datestr)=DATE_TRUNC('month',now()) and DATE_TRUNC('year',datestr)= DATE_TRUNC('year',now()) and DATE_TRUNC('day',datestr)= DATE_TRUNC('day',now()) 
+               (select user_id, to_date(to_char(won_date, 'YYYY/MM/DD'), 'YYYY/MM/DD')  as datestr,planned_revenue 
+               from crm_lead where stage_id in (4,5,6) and won_date<now()) t where DATE_TRUNC('month',datestr)=DATE_TRUNC('month',now()) and DATE_TRUNC('year',datestr)= DATE_TRUNC('year',now()) and DATE_TRUNC('day',datestr)= DATE_TRUNC('day',now()) 
                group by datestr,user_id) s where u.id=s.user_id) s1 where s1.partner_id=p.id order by s1.datestr desc, p.name
 
                                 '''))
