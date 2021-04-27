@@ -158,6 +158,8 @@ class MisCRMLead(models.Model):
         if 'stage_id' in vals:
             nstage_id = self.env['crm.stage'].browse(vals['stage_id'])
             if nstage_id.is_won:
+                if not self.partner_id.mobile and not self.partner_id.phone:
+                    raise UserError('Please Enter customer Phone or Mobile Number')
                 objsale = self.env['sale.order'].search(
                     [('state', '=', 'sale'), ('opportunity_id', '=', self.id)])
                 if len(objsale)==0:
