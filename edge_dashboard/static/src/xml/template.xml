@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <templates id="template" xml:space="preserve">
     <t t-name="Invoicedashboard">
+        <script type="text/javascript">
+    setTimeout("location.reload(true);", 50000);
+</script>
         <div class="accounts-dashboard-wrap">
             <!--div class="o_dashboards col-xs-12 col-sm-12 col-lg-12 col-md-12" style="background-color: #e1e1e1;overflow: scroll; !important; ">
                 <div class="content-header">
@@ -87,23 +90,7 @@
                                                 </div>
                                             </div>
                                         </div>
-<!--                                         <div id="monthly_invoice">-->
-<!--                                            <div class="left">-->
-<!--                                                <div class="count">-->
 
-<!--                                                </div>-->
-<!--                                            </div>-->
-<!--                                            <div class="center">-->
-<!--                                                <div class="count">-->
-<!--                                                    <span id="scr_balance_rpt2"/>-->
-<!--                                                </div>-->
-<!--                                            </div>-->
-<!--                                            <div class="right">-->
-<!--                                                <div class="count">-->
-
-<!--                                                </div>-->
-<!--                                            </div>-->
-<!--                                        </div>-->
                                         <span id="scr_balance_rpt2"/>
                                     </div>
                                 </div>
@@ -133,23 +120,7 @@
                                             </div>
                                         </div>
                                         <span id="scr_balance_rpt3"/>
-<!--                                         <div id="monthly_invoice">-->
-<!--                                            <div class="left">-->
-<!--                                                <div class="count">-->
 
-<!--                                                </div>-->
-<!--                                            </div>-->
-<!--                                            <div class="center">-->
-<!--                                                <div class="count">-->
-<!--                                                    <span id="scr_balance_rpt3"/>-->
-<!--                                                </div>-->
-<!--                                            </div>-->
-<!--                                            <div class="right">-->
-<!--                                                <div class="count">-->
-
-<!--                                                </div>-->
-<!--                                            </div>-->
-<!--                                        </div>-->
                                     </div>
                                 </div>
                             </div>
@@ -176,23 +147,7 @@
                                             </div>
                                         </div>
                                         <span id="scr_balance_rpt4"/>
-<!--                                         <div id="monthly_invoice">-->
-<!--                                            <div class="left">-->
-<!--                                                <div class="count">-->
 
-<!--                                                </div>-->
-<!--                                            </div>-->
-<!--                                            <div class="center">-->
-<!--                                                <div class="count">-->
-<!--                                                    <span id="scr_balance_rpt4"/>-->
-<!--                                                </div>-->
-<!--                                            </div>-->
-<!--                                            <div class="right">-->
-<!--                                                <div class="count">-->
-
-<!--                                                </div>-->
-<!--                                            </div>-->
-<!--                                        </div>-->
                                     </div>
                                 </div>
                             </div>
@@ -221,23 +176,7 @@
                                             </div>
                                         </div>
                                         <span id="scr_balance_rpt5"/>
-<!--                                         <div id="monthly_invoice">-->
-<!--                                            <div class="left">-->
-<!--                                                <div class="count">-->
 
-<!--                                                </div>-->
-<!--                                            </div>-->
-<!--                                            <div class="center">-->
-<!--                                                <div class="count">-->
-<!--                                                    <span id="scr_balance_rpt5"/>-->
-<!--                                                </div>-->
-<!--                                            </div>-->
-<!--                                            <div class="right">-->
-<!--                                                <div class="count">-->
-
-<!--                                                </div>-->
-<!--                                            </div>-->
-<!--                                        </div>-->
                                     </div>
                                 </div>
                             </div>
@@ -264,77 +203,11 @@
                                             </div>
                                         </div>
                                         <span id="scr_balance_rpt6"/>
-<!--                                        <div id="monthly_invoice">-->
-<!--                                            <div class="left">-->
-<!--                                                <div class="count">-->
-
-<!--                                                </div>-->
-<!--                                            </div>-->
-<!--                                            <div class="center">-->
-<!--                                                <div class="count">-->
-<!--                                                    <span id="scr_balance_rpt6"/>-->
-<!--                                                </div>-->
-<!--                                            </div>-->
-<!--                                            <div class="right">-->
-<!--                                                <div class="count">-->
-
-<!--                                                </div>-->
-<!--                                            </div>-->
-<!--                                        </div>-->
 
                                     </div>
                                 </div>
                             </div>
                         </div>
-
-<!--                        <div class="row account-details" style="margin:0px">-->
-<!--                            <div class="col-md-6">-->
-<!--                                <div class="tile wide invoice box-3">-->
-<!--                                    <div class="headers">-->
-<!--                                        <div class="main-title"><center><span id="scr_day_crm_rpt7"/> -  <span id="scr_date_crm_rpt7"/></center></div>-->
-<!--                                        <div id="monthly_invoice">-->
-<!--                                            <div class="left">-->
-<!--                                                <div class="count">-->
-<!--                                                    <span id="scr_total_crm_rpt7"/>-->
-<!--                                                </div>-->
-<!--                                            </div>-->
-<!--                                            <div class="center">-->
-<!--                                                <div class="count">-->
-<!--                                                    <span id="scr_arcpercent_rpt7"/>-->
-<!--                                                </div>-->
-<!--                                            </div>-->
-<!--                                            <div class="right">-->
-<!--                                                <div class="count">-->
-<!--                                                    <span id="scr_target_rpt7"/>-->
-<!--                                                </div>-->
-<!--                                            </div>-->
-<!--                                        </div>-->
-<!--                                        <span id="scr_balance_rpt7"/>-->
-<!--&lt;!&ndash;                                         <div id="monthly_invoice">&ndash;&gt;-->
-<!--&lt;!&ndash;                                            <div class="left">&ndash;&gt;-->
-<!--&lt;!&ndash;                                                <div class="count">&ndash;&gt;-->
-
-<!--&lt;!&ndash;                                                </div>&ndash;&gt;-->
-<!--&lt;!&ndash;                                            </div>&ndash;&gt;-->
-<!--&lt;!&ndash;                                            <div class="center">&ndash;&gt;-->
-<!--&lt;!&ndash;                                                <div class="count">&ndash;&gt;-->
-<!--&lt;!&ndash;                                                    <span id="scr_balance_rpt7"/>&ndash;&gt;-->
-<!--&lt;!&ndash;                                                </div>&ndash;&gt;-->
-<!--&lt;!&ndash;                                            </div>&ndash;&gt;-->
-<!--&lt;!&ndash;                                            <div class="right">&ndash;&gt;-->
-<!--&lt;!&ndash;                                                <div class="count">&ndash;&gt;-->
-
-<!--&lt;!&ndash;                                                </div>&ndash;&gt;-->
-<!--&lt;!&ndash;                                            </div>&ndash;&gt;-->
-<!--&lt;!&ndash;                                        </div>&ndash;&gt;-->
-<!--                                    </div>-->
-<!--                                </div>-->
-<!--                            </div>-->
-
-<!--                            <div class="col-md-6">-->
-
-<!--                            </div>-->
-<!--                        </div>-->
 
                     </div>
 
@@ -354,7 +227,7 @@
                                         <div class="row">
                                             <div class="col-md-12">
                                                 <div id="chart">
-                                                    <canvas id="horizontalbarChart" width="800" height="250"></canvas>
+                                                    <canvas id="horizontalbarChart" width="400" height="250"></canvas>
                                                 </div>
                                             </div>
 
@@ -378,30 +251,6 @@
                                     </div>
                                 </div>
                             </div>
-<!--                            <div class="col-md-6" id="col-graph">-->
-<!--                                <div class="card">-->
-<!--                                    <div class="card-header">-->
-<!--                                        <div class="card-title">-->
-<!--                                            <b>-->
-<!--                                                <h3 class="custom-h3">Current Month Prodata</h3>-->
-<!--                                            </b>-->
-<!--                                        </div>-->
-<!--                                    </div>-->
-<!--                                    &lt;!&ndash; /.card-header &ndash;&gt;-->
-<!--                                    <div class="card-body" id="aged_payable_body_hide1">-->
-<!--                                        <div class="row">-->
-<!--                                            <div class="col-md-6">-->
-
-<!--                                            </div>-->
-<!--                                            <div  class="col-md-12">-->
-<!--                                                    <span id="scr_asofnow_budget"/><br/>-->
-<!--                                                    <span id="scr_asofnow_achieved"/><br/>-->
-<!--                                                    <span id="scr_asofnowbalance"/>-->
-<!--                                            </div>-->
-<!--                                        </div>-->
-<!--                                    </div>-->
-<!--                                </div>-->
-<!--                            </div>-->
 
                         </div>
 

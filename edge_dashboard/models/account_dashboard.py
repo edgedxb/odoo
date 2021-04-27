@@ -7,6 +7,7 @@ from odoo.exceptions import UserError
 from dateutil.relativedelta import relativedelta
 from odoo import models, api
 from odoo.http import request
+from math import pi
 
 
 class DashBoard(models.Model):
@@ -1070,7 +1071,7 @@ class DashBoard(models.Model):
     @api.model
     def unreconcile_items_last_year(self):
 
-        self._cr.execute('''  select count(*) FROM account_move_line l,account_account a
+        self._cr.execute('''  select COALESCE(count(*),0) FROM account_move_line l,account_account a
                                       where Extract(year FROM l.date) = Extract(year FROM DATE(NOW())) - 1 AND
                                       L.account_id=a.id AND l.full_reconcile_id IS NULL AND 
                                       l.balance != 0 AND a.reconcile IS TRUE
@@ -1083,7 +1084,7 @@ class DashBoard(models.Model):
     @api.model
     def month_income(self):
 
-        self._cr.execute(''' select sum(debit) as debit , sum(credit) as credit  from account_move, account_account,account_move_line
+        self._cr.execute(''' select COALESCE(sum(debit),0.0) as debit , COALESCE(sum(credit),0.0) as credit  from account_move, account_account,account_move_line
                             where  account_move.type = 'entry'  AND account_move.state = 'posted' AND  account_move_line.account_id=account_account.id AND
                              account_account.internal_group='income'
                               AND to_char(DATE(NOW()), 'MM') = to_char(account_move_line.date, 'MM')
@@ -1104,7 +1105,7 @@ class DashBoard(models.Model):
         else:
             states_arg = """ parent_state = 'posted'"""
 
-        self._cr.execute(('''select sum(debit) as debit, sum(credit) as credit from account_account, account_move_line where
+        self._cr.execute(('''select COALESCE(sum(debit),0.0) as debit, COALESCE(sum(credit),0.0) as credit from account_account, account_move_line where
                             account_move_line.account_id = account_account.id AND account_account.internal_group = 'income'
                            AND parent_state = 'posted'
                            AND Extract(month FROM account_move_line.date) = Extract(month FROM DATE(NOW())) 
@@ -1127,7 +1128,7 @@ class DashBoard(models.Model):
         else:
             states_arg = """ parent_state in ('posted', 'draft')"""
 
-        self._cr.execute((''' select  sum(balance) as totalbalance from account_move_line left join
+        self._cr.execute((''' select  COALESCE(sum(balance),0.0) as totalbalance from account_move_line left join
                              account_account on account_account.id = account_move_line.account_id join
                              account_account_type on account_account_type.id = account_account.user_type_id
                              where account_account_type.name = 'Bank and Cash'
@@ -1141,7 +1142,7 @@ class DashBoard(models.Model):
     @api.model
     def total_crm_rpt1(self, *post):
 
-        self._cr.execute((''' select datestr,to_char(datestr,'Day') daystr,sum(planned_revenue) as totalamt  from
+        self._cr.execute((''' select datestr,to_char(datestr,'Day') daystr,COALESCE(sum(planned_revenue),0.0) as totalamt  from
                (select to_date(to_char(job_enddate, 'YYYY/MM/DD'), 'YYYY/MM/DD')  as datestr,planned_revenue 
                from crm_lead where stage_id in (4,5,6) and won_status <>'lost' and job_enddate>(now()+ INTERVAL '-1 day')) t where datestr =to_date(to_char(now(), 'YYYY/MM/DD'), 'YYYY/MM/DD') 
                group by datestr order by datestr '''))
@@ -1165,8 +1166,9 @@ class DashBoard(models.Model):
         records = {
             'datestr': datestr,
             'daystr': daystr,
-            'totalamt': totalamt,
-            'daily_target': totaltarget,
+            'totalamt': '{0:,.2f}'.format(totalamt),
+            'daily_target': '{0:,.2f}'.format(totaltarget),
+            'balance': '{0:,.2f}'.format(totaltarget-totalamt),
             'achpercent': achpercent
 
         }
@@ -1175,7 +1177,7 @@ class DashBoard(models.Model):
     @api.model
     def total_crm_rpt2(self, *post):
 
-        self._cr.execute((''' select datestr,to_char(datestr,'Day') daystr,sum(planned_revenue) as totalamt  from
+        self._cr.execute((''' select datestr,to_char(datestr,'Day') daystr,COALESCE(sum(planned_revenue),0.0) as totalamt  from
                    (select to_date(to_char(job_enddate, 'YYYY/MM/DD'), 'YYYY/MM/DD')  as datestr,planned_revenue 
                    from crm_lead where stage_id in (4,5,6) and  won_status <>'lost' and job_enddate>(now()+ INTERVAL '0 day')) t where datestr =to_date(to_char((now()+ INTERVAL '1 day'), 'YYYY/MM/DD'), 'YYYY/MM/DD')
                    group by datestr order by datestr '''))
@@ -1198,8 +1200,9 @@ class DashBoard(models.Model):
         records = {
             'datestr': datestr,
             'daystr': daystr,
-            'totalamt': totalamt,
-            'daily_target': totaltarget,
+            'totalamt': '{0:,.2f}'.format(totalamt),
+            'daily_target': '{0:,.2f}'.format(totaltarget),
+            'balance': '{0:,.2f}'.format(totaltarget - totalamt),
             'achpercent': achpercent
 
         }
@@ -1208,7 +1211,7 @@ class DashBoard(models.Model):
     @api.model
     def total_crm_rpt3(self, *post):
 
-        self._cr.execute((''' select datestr,to_char(datestr,'Day') daystr,sum(planned_revenue) as totalamt  from
+        self._cr.execute((''' select datestr,to_char(datestr,'Day') daystr,COALESCE(sum(planned_revenue),0.0) as totalamt  from
                    (select to_date(to_char(job_enddate, 'YYYY/MM/DD'), 'YYYY/MM/DD')  as datestr,planned_revenue 
                    from crm_lead where stage_id in (4,5,6)  and won_status <>'lost' and job_enddate>(now()+ INTERVAL '1 day')) t where datestr =to_date(to_char((now()+ INTERVAL '2 day'), 'YYYY/MM/DD'), 'YYYY/MM/DD')
                    group by datestr order by datestr '''))
@@ -1229,8 +1232,9 @@ class DashBoard(models.Model):
         records = {
             'datestr': datestr,
             'daystr': daystr,
-            'totalamt': totalamt,
-            'daily_target': totaltarget,
+            'totalamt': '{0:,.2f}'.format(totalamt),
+            'daily_target': '{0:,.2f}'.format(totaltarget),
+            'balance': '{0:,.2f}'.format(totaltarget - totalamt),
             'achpercent': achpercent
 
         }
@@ -1239,7 +1243,7 @@ class DashBoard(models.Model):
     @api.model
     def total_crm_rpt4(self, *post):
 
-        self._cr.execute((''' select datestr,to_char(datestr,'Day') daystr,sum(planned_revenue) as totalamt  from
+        self._cr.execute((''' select datestr,to_char(datestr,'Day') daystr,COALESCE(sum(planned_revenue),0.0) as totalamt  from
                    (select to_date(to_char(job_enddate, 'YYYY/MM/DD'), 'YYYY/MM/DD')  as datestr,planned_revenue 
                    from crm_lead where stage_id in (4,5,6)  and won_status <>'lost' and job_enddate>(now()+ INTERVAL '2 day')) t where datestr =to_date(to_char((now()+ INTERVAL '3 day'), 'YYYY/MM/DD'), 'YYYY/MM/DD')
                    group by datestr order by datestr '''))
@@ -1261,8 +1265,9 @@ class DashBoard(models.Model):
         records = {
             'datestr': datestr,
             'daystr': daystr,
-            'totalamt': totalamt,
-            'daily_target': totaltarget,
+            'totalamt': '{0:,.2f}'.format(totalamt),
+            'daily_target': '{0:,.2f}'.format(totaltarget),
+            'balance': '{0:,.2f}'.format(totaltarget - totalamt),
             'achpercent': achpercent
 
         }
@@ -1272,7 +1277,7 @@ class DashBoard(models.Model):
     @api.model
     def total_crm_rpt5(self, *post):
 
-        self._cr.execute((''' select datestr,to_char(datestr,'Day') daystr,sum(planned_revenue) as totalamt  from
+        self._cr.execute((''' select datestr,to_char(datestr,'Day') daystr,COALESCE(sum(planned_revenue),0.0) as totalamt  from
                        (select to_date(to_char(job_enddate, 'YYYY/MM/DD'), 'YYYY/MM/DD')  as datestr,planned_revenue 
                        from crm_lead where stage_id in (4,5,6)  and won_status <>'lost' and job_enddate>(now()+ INTERVAL '3 day')) t where datestr =to_date(to_char((now()+ INTERVAL '4 day'), 'YYYY/MM/DD'), 'YYYY/MM/DD')
                        group by datestr order by datestr '''))
@@ -1293,8 +1298,9 @@ class DashBoard(models.Model):
         records = {
             'datestr': datestr,
             'daystr': daystr,
-            'totalamt': totalamt,
-            'daily_target': totaltarget,
+            'totalamt': '{0:,.2f}'.format(totalamt),
+            'daily_target': '{0:,.2f}'.format(totaltarget),
+            'balance': '{0:,.2f}'.format(totaltarget - totalamt),
             'achpercent': achpercent
 
         }
@@ -1303,7 +1309,7 @@ class DashBoard(models.Model):
     @api.model
     def total_crm_rpt6(self, *post):
 
-        self._cr.execute((''' select datestr,to_char(datestr,'Day') daystr,sum(planned_revenue) as totalamt  from
+        self._cr.execute((''' select datestr,to_char(datestr,'Day') daystr,COALESCE(sum(planned_revenue),0.0) as totalamt  from
                            (select to_date(to_char(job_enddate, 'YYYY/MM/DD'), 'YYYY/MM/DD')  as datestr,planned_revenue 
                            from crm_lead where stage_id in (4,5,6)  and won_status <>'lost' and job_enddate>(now()+ INTERVAL '4 day')) t where datestr =to_date(to_char((now()+ INTERVAL '5 day'), 'YYYY/MM/DD'), 'YYYY/MM/DD') 
                            group by datestr order by datestr '''))
@@ -1327,8 +1333,9 @@ class DashBoard(models.Model):
         records = {
             'datestr': datestr,
             'daystr': daystr,
-            'totalamt': totalamt,
-            'daily_target': totaltarget,
+            'totalamt': '{0:,.2f}'.format(totalamt),
+            'daily_target': '{0:,.2f}'.format(totaltarget),
+            'balance': '{0:,.2f}'.format(totaltarget - totalamt),
             'achpercent': achpercent
 
         }
@@ -1337,7 +1344,7 @@ class DashBoard(models.Model):
     @api.model
     def total_crm_rpt7(self, *post):
 
-        self._cr.execute((''' select datestr,to_char(datestr,'Day') daystr,sum(planned_revenue) as totalamt  from
+        self._cr.execute((''' select datestr,to_char(datestr,'Day') daystr,COALESCE(sum(planned_revenue),0.0) as totalamt  from
                            (select to_date(to_char(job_enddate, 'YYYY/MM/DD'), 'YYYY/MM/DD')  as datestr,planned_revenue 
                            from crm_lead where stage_id in (4,5,6)  and won_status <>'lost' and job_enddate>(now()+ INTERVAL '5 day')) t where datestr =to_date(to_char((now()+ INTERVAL '6 day'), 'YYYY/MM/DD'), 'YYYY/MM/DD')
                            group by datestr order by datestr '''))
@@ -1360,8 +1367,9 @@ class DashBoard(models.Model):
         records = {
             'datestr': datestr,
             'daystr': daystr,
-            'totalamt': totalamt,
-            'daily_target': totaltarget,
+            'totalamt': '{0:,.2f}'.format(totalamt),
+            'daily_target': '{0:,.2f}'.format(totaltarget),
+            'balance': '{0:,.2f}'.format(totaltarget - totalamt),
             'achpercent': achpercent
 
         }
@@ -1371,12 +1379,12 @@ class DashBoard(models.Model):
     def get_pie_month_target(self, *post):
 
         query = '''
-select 'This Month' as thismonth,sum(planned_revenue) as totalamt  from
+select 'This Month' as thismonth,COALESCE(sum(planned_revenue),0.0) as totalamt  from
                (select to_date(to_char(job_enddate, 'YYYY/MM/DD'), 'YYYY/MM/DD')  as datestr,planned_revenue 
                from crm_lead where stage_id in (4,5,6)) t where DATE_TRUNC('month',datestr)=DATE_TRUNC('month',now()) and DATE_TRUNC('year',datestr)= DATE_TRUNC('year',now()) 
                group by thismonth 
 			   
-			   union select 'Balance',(325000-(select sum(planned_revenue) as totalamt  from
+			   union select 'Balance',(325000-(select COALESCE(sum(planned_revenue),0.0) as totalamt  from
                (select to_date(to_char(job_enddate, 'YYYY/MM/DD'), 'YYYY/MM/DD')  as datestr,planned_revenue 
                from crm_lead where stage_id in (4,5,6)) t where DATE_TRUNC('month',datestr)=DATE_TRUNC('month',now()) and DATE_TRUNC('year',datestr)= DATE_TRUNC('year',now()) 
                ));'''
@@ -1404,7 +1412,7 @@ select 'This Month' as thismonth,sum(planned_revenue) as totalamt  from
     @api.model
     def get_current_month_asofnow_prodata(self, *post):
 
-        query = '''select 'asofnow' as asofnow,sum(amount_untaxed) as totalamt from account_move where type='out_invoice'  and state='posted' and 
+        query = '''select 'asofnow' as asofnow,COALESCE(sum(amount_untaxed),0.0) as totalamt from account_move where type='out_invoice'  and state='posted' and 
 DATE_TRUNC('month',date)=DATE_TRUNC('month',now()) and DATE_TRUNC('year',date)= DATE_TRUNC('year',now())   and date<(now()+ INTERVAL '1 day')  and company_id=1
                    '''
         ## raise UserError(query)
@@ -1424,9 +1432,9 @@ DATE_TRUNC('month',date)=DATE_TRUNC('month',now()) and DATE_TRUNC('year',date)= 
             totalamt += record['totalamt']
 
         records = {
-            'totalamount': totalamt,
-            'targetasofnow': targetasofnow,
-            'balance': (targetasofnow-totalamt),
+            'totalamount': '{0:,.2f}'.format(totalamt),
+            'targetasofnow': '{0:,.2f}'.format(targetasofnow),
+            'balance': '{0:,.2f}'.format((targetasofnow-totalamt)),
             'asofnowdays': asofnowdays,
         }
         return records
@@ -1434,7 +1442,7 @@ DATE_TRUNC('month',date)=DATE_TRUNC('month',now()) and DATE_TRUNC('year',date)= 
     @api.model
     def total_crm_pie_summary(self, *post):
         query = '''
-                   select 'This Month' as thismonth,sum(amount_untaxed) as totalamt from account_move where type='out_invoice'  and state='posted' and 
+                   select 'This Month' as thismonth,COALESCE(sum(amount_untaxed),0.0) as totalamt from account_move where type='out_invoice'  and state='posted' and 
 DATE_TRUNC('month',date)=DATE_TRUNC('month',now()) and DATE_TRUNC('year',date)= DATE_TRUNC('year',now()) and company_id=1 
 
     			  ;'''
@@ -1452,9 +1460,9 @@ DATE_TRUNC('month',date)=DATE_TRUNC('month',now()) and DATE_TRUNC('year',date)= 
             totalamt = record['totalamt']
 
         records = {
-            'totalamt': totalamt,
-            'balance': (325000 - totalamt),
-            'targetamt': 325000
+            'totalamt': '{0:,.2f}'.format(totalamt),
+            'balance': '{0:,.2f}'.format((325000 - totalamt)),
+            'targetamt': '{0:,.2f}'.format(325000.00)
         }
         return records
 
@@ -1462,7 +1470,7 @@ DATE_TRUNC('month',date)=DATE_TRUNC('month',now()) and DATE_TRUNC('year',date)= 
     def total_crm_pie_summary_today(self, *post):
 
         query = '''
-        select 'This Month' as thismonth,sum(planned_revenue) as totalamt  from
+        select 'This Month' as thismonth,COALESCE(sum(planned_revenue),0.00) as totalamt  from
                        (select to_date(to_char(job_enddate, 'YYYY/MM/DD'), 'YYYY/MM/DD')  as datestr,planned_revenue 
                        from crm_lead where stage_id in (4,5,6)) t where DATE_TRUNC('month',datestr)=DATE_TRUNC('month',now()) and DATE_TRUNC('year',datestr)= DATE_TRUNC('year',now()) and DATE_TRUNC('day',datestr)= DATE_TRUNC('day',now()) 
                        group by thismonth 
@@ -1479,9 +1487,9 @@ DATE_TRUNC('month',date)=DATE_TRUNC('month',now()) and DATE_TRUNC('year',date)= 
             totalamt = record['totalamt']
 
         records = {
-            'totalamt': totalamt,
-            'balance': (325000 - totalamt),
-            'targetamt': 325000
+            'totalamt': '{0:,.2f}'.format(totalamt),
+            'balance': '{0:,.2f}'.format((325000 - totalamt)),
+            'targetamt': '{0:,.2f}'.format(325000.00)
         }
         return records
 
@@ -1497,7 +1505,7 @@ DATE_TRUNC('month',date)=DATE_TRUNC('month',now()) and DATE_TRUNC('year',date)= 
         # else:
         #     states_arg = """ parent_state in ('posted', 'draft')"""
 
-        self._cr.execute((''' select datestr,to_char(datestr,'Day') daystr,sum(planned_revenue) as totalamt  from
+        self._cr.execute((''' select datestr,to_char(datestr,'Day') daystr,COALESCE(sum(planned_revenue),0.0) as totalamt  from
         (select to_date(to_char(job_enddate, 'YYYY/MM/DD'), 'YYYY/MM/DD')  as datestr,planned_revenue 
         from crm_lead where stage_id in (4,5,6)) t where datestr <(now()+ INTERVAL '+6 day') 
         group by datestr order by datestr '''))
@@ -1599,8 +1607,8 @@ DATE_TRUNC('month',date)=DATE_TRUNC('month',now()) and DATE_TRUNC('year',date)= 
         self._cr.execute(('''select p.name,s1.* from res_partner p,
 (select u.partner_id, s.* from res_users u,
 (select user_id,datestr,sum(planned_revenue) as totalamt  from
-               (select user_id, to_date(to_char(date_last_stage_update, 'YYYY/MM/DD'), 'YYYY/MM/DD')  as datestr,planned_revenue 
-               from crm_lead where stage_id in (4,5,6) and date_last_stage_update<now()) t where DATE_TRUNC('month',datestr)=DATE_TRUNC('month',now()) and DATE_TRUNC('year',datestr)= DATE_TRUNC('year',now()) and DATE_TRUNC('day',datestr)= DATE_TRUNC('day',now()) 
+               (select user_id, to_date(to_char(won_date, 'YYYY/MM/DD'), 'YYYY/MM/DD')  as datestr,planned_revenue 
+               from crm_lead where stage_id in (4,5,6) and won_date<now()) t where DATE_TRUNC('month',datestr)=DATE_TRUNC('month',now()) and DATE_TRUNC('year',datestr)= DATE_TRUNC('year',now()) and DATE_TRUNC('day',datestr)= DATE_TRUNC('day',now()) 
                group by datestr,user_id) s where u.id=s.user_id) s1 where s1.partner_id=p.id order by s1.datestr desc, p.name
 
                                 '''))
@@ -1780,6 +1788,7 @@ DATE_TRUNC('month',date)=DATE_TRUNC('month',now()) and DATE_TRUNC('year',date)= 
         if not lang:
             lang = 'en_US'
         lang = lang.replace("_", '-')
+
         currency = {'position': default.position, 'symbol': default.symbol, 'language': lang}
         return currency
 

@@ -10,6 +10,7 @@ class MisCrmStage(models.Model):
     _inherit = 'crm.stage'
     is_planning = fields.Boolean('Is Planning')
     is_closed = fields.Boolean('Is Closed')
+    is_approval_reqired = fields.Boolean('Is Approval Required', default=False)
 
 class MisCRMLead(models.Model):
     _inherit = 'crm.lead'
@@ -27,7 +28,7 @@ class MisCRMLead(models.Model):
     job_enddate = fields.Datetime(string='Job End Date')
     is_approve_status = fields.Integer('Approval Status', default=0)
     is_transfer = fields.Boolean('Is Transfer', default=False)
-
+    won_date = fields.Datetime('Won Date')
 
 
 
@@ -154,39 +155,42 @@ class MisCRMLead(models.Model):
 
         if self.stage_id.is_closed:
              raise UserError('Access denied!, Closed stage cannot be changed')
-
         if 'stage_id' in vals:
             nstage_id = self.env['crm.stage'].browse(vals['stage_id'])
             if nstage_id.is_won:
+                if not self.partner_id.mobile and not self.partner_id.phone:
+                    raise UserError('Please Enter customer Phone or Mobile Number')
                 objsale = self.env['sale.order'].search(
                     [('state', '=', 'sale'), ('opportunity_id', '=', self.id)])
                 if len(objsale)==0:
                     raise UserError('Cannot find confirmed sales order')
+                vals.update({'won_date': fields.Datetime.now()})
 
-            if self.stage_id.id == 4 and nstage_id.id == 5:
-                if self.is_transfer!=True:
+            if self.stage_id.sequence < nstage_id.sequence  and nstage_id.is_planning:
+                if self.is_transfer != True:
                     raise UserError('Cannot drag and drop, please use transfer to planning button')
 
             if self.is_approve_status != 3:
-                #if self.stage_id.id > nstage_id.id:
-                if self.stage_id.id > 3 and  nstage_id.id < 4 and self.env.uid != 2:
+                # if self.stage_id.id > nstage_id.id:
+                if self.stage_id.sequence > nstage_id.sequence and  self.stage_id.is_approval_reqired==True  and self.env.uid != 2:
                     raise UserError('Access denied!, Please contact administrator to change the stage')
-                elif self.stage_id.id > 4 and  nstage_id.id < 5 and self.env.uid != 2:
-                    raise UserError('Access denied!, Please contact administrator to change the stage')
-            if self.stage_id.id!= nstage_id.id:
+                # elif self.stage_id.id > 4 and nstage_id.id < 5 and self.env.uid != 2:
+                #     raise UserError('Access denied!, Please contact administrator to change the stage')
+            if self.stage_id.id != nstage_id.id:
                 vals.update({'is_approve_status': 0})
 
-
-        #           raise UserError(stage_id.id)
-     #    self.is_transfer = False
-
-        #     raise UserError('Access denied!, Please contact administrator to change the stage')
-        #       if (current_stage_id!=self.stage_id.id and (self.stage_id.is_won or self.stage_id.is_planning) and  self.is_approve_status != 3):
-        #           if self.user_id.id != 2:
-        #               raise UserError('Access denied!, Please contact administrator to change the stage')
-        #           if self.stage_id.is_closed:
-        #               raise UserError('Access denied!, Cannot move closed stage lead')
-
+            # if self.stage_id.id == 4 and nstage_id.id == 5:
+            #     if self.is_transfer!=True:
+            #         raise UserError('Cannot drag and drop, please use transfer to planning button')
+            #
+            # if self.is_approve_status != 3:
+            #     #if self.stage_id.id > nstage_id.id:
+            #     if self.stage_id.id > 3 and  nstage_id.id < 4 and self.env.uid != 2:
+            #         raise UserError('Access denied!, Please contact administrator to change the stage')
+            #     elif self.stage_id.id > 4 and  nstage_id.id < 5 and self.env.uid != 2:
+            #         raise UserError('Access denied!, Please contact administrator to change the stage')
+            # if self.stage_id.id!= nstage_id.id:
+            #     vals.update({'is_approve_status': 0})
 
         if vals.get('website'):
             vals['website'] = self.env['res.partner']._clean_website(vals['website'])
