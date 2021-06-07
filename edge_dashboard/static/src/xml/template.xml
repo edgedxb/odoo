@@ -227,7 +227,7 @@
                                         <div class="row">
                                             <div class="col-md-12">
                                                 <div id="chart">
-                                                    <canvas id="horizontalbarChart" width="400" height="250"></canvas>
+                                                    <canvas id="horizontalbarChart" width="300" height="200"></canvas>
                                                 </div>
                                             </div>
 
