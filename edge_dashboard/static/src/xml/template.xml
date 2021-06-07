@@ -217,7 +217,7 @@
                                     <div class="card-header" style=" padding: 17px 1.5rem !important; display: flex !IMPORTANT; justify-content: space-between; align-items: center; ">
                                         <div class="card-title">
                                             <h3 class="custom-h3 card-title">
-                                                <b>CRM Progress</b>
+                                                <b>CRM Progress</b> - <span id="scr_this_month_target"/>
                                             </h3>
                                         </div>
 
@@ -255,7 +255,8 @@
                                                 <br/><br/><br/>
                                                 <span id="scr_this_month_target"/><br/>
                                                 <span id="scr_this_month_achieved"/><br/>
-                                                <span id="scr_this_month_balance"/><br/>
+                                                <span id="scr_this_month_balance"/><br/><br/>
+                                                <span>As of Now</span><br/>
                                                 <span id="scr_asofnow_budget"/><br/>
                                                 <span id="scr_asofnow_achieved"/><br/>
                                                 <span id="scr_asofnowbalance"/>
