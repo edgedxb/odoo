@@ -212,6 +212,27 @@
                     </div>
 
 					<div class="col-md-6" id="col-graph">
+                        <div class="card">
+                                <div class="card-body p-0" style=" height: 287px; overflow-y: auto; ">
+                                    <div class="card-header" style=" padding: 17px 1.5rem !important; display: flex !IMPORTANT; justify-content: space-between; align-items: center; ">
+                                        <div class="card-title">
+                                            <h3 class="custom-h3 card-title">
+                                                <b>CRM Progress</b>
+                                            </h3>
+                                        </div>
+
+                                        <div class="card-title">
+                                            <h3 class="custom-h3 card-title">
+
+                                            </h3>
+                                        </div>
+                                    </div>
+
+                                    <div class="card-body p-0" style=" height: 100px;">
+                                        <ul id="crm_sales_list"></ul>
+                                    </div>
+                                </div>
+                            </div>
                         <div class="row col-md-12">
                             <div class="col-md-12" id="col-graph">
                                 <div class="card">
@@ -259,27 +280,7 @@
 
                         </div>
 
-                            <div class="card">
-                                <div class="card-body p-0" style=" height: 287px; overflow-y: auto; ">
-                                    <div class="card-header" style=" padding: 17px 1.5rem !important; display: flex !IMPORTANT; justify-content: space-between; align-items: center; ">
-                                        <div class="card-title">
-                                            <h3 class="custom-h3 card-title">
-                                                <b>CRM Progress</b>
-                                            </h3>
-                                        </div>
 
-                                        <div class="card-title">
-                                            <h3 class="custom-h3 card-title">
-
-                                            </h3>
-                                        </div>
-                                    </div>
-
-                                    <div class="card-body p-0" style=" height: 100px;">
-                                        <ul id="crm_sales_list"></ul>
-                                    </div>
-                                </div>
-                            </div>
                         </div>
 
 
