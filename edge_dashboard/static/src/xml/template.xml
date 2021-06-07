@@ -227,14 +227,14 @@
                                         <div class="row">
                                             <div class="col-md-6">
                                                 <div id="chart">
-                                                    <canvas id="horizontalbarChart" width="200" height="150"></canvas>
+                                                    <canvas id="horizontalbarChart" width="200" height="200"></canvas>
                                                 </div>
                                             </div>
                                             <div  class="col-md-6">
                                                 <br/><br/><br/>
                                                 <span id="scr_this_month_target"/><br/>
                                                 <span id="scr_this_month_achieved"/><br/>
-                                                <span id="scr_this_month_balance"/>
+                                                <span id="scr_this_month_balance"/><br/>
                                                 <span id="scr_asofnow_budget"/><br/>
                                                 <span id="scr_asofnow_achieved"/><br/>
                                                 <span id="scr_asofnowbalance"/>
