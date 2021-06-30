@@ -212,49 +212,7 @@
                     </div>
 
 					<div class="col-md-6" id="col-graph">
-                        <div class="row col-md-12">
-                            <div class="col-md-12" id="col-graph">
-                                <div class="card">
-                                    <div class="card-header">
-                                        <div class="card-title">
-                                            <b>
-                                                <h3 class="custom-h3">Current Month Achievement</h3>
-                                            </b>
-                                        </div>
-                                    </div>
-                                    <!-- /.card-header -->
-                                    <div class="card-body" id="aged_payable_body_hide1">
-                                        <div class="row">
-                                            <div class="col-md-12">
-                                                <div id="chart">
-                                                    <canvas id="horizontalbarChart" width="300" height="200"></canvas>
-                                                </div>
-                                            </div>
-
-
-
-                                        </div>
-                                         <div class="row">
-                                            <div  class="col-md-6">
-                                                <span id="scr_this_month_target"/><br/>
-                                                <span id="scr_this_month_achieved"/><br/>
-                                                <span id="scr_this_month_balance"/>
-                                            </div>
-
-                                            <div  class="col-md-6">
-
-                                                <span id="scr_asofnow_budget"/><br/>
-                                                <span id="scr_asofnow_achieved"/><br/>
-                                                <span id="scr_asofnowbalance"/>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                        </div>
-
-                            <div class="card">
+                        <div class="card">
                                 <div class="card-body p-0" style=" height: 287px; overflow-y: auto; ">
                                     <div class="card-header" style=" padding: 17px 1.5rem !important; display: flex !IMPORTANT; justify-content: space-between; align-items: center; ">
                                         <div class="card-title">
@@ -275,6 +233,55 @@
                                     </div>
                                 </div>
                             </div>
+                        <div class="row col-md-12">
+                            <div class="col-md-12" id="col-graph">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <div class="card-title">
+                                            <b>
+                                                <h3 class="custom-h3">Current Month Achievement</h3>
+                                            </b>
+                                        </div>
+                                    </div>
+                                    <!-- /.card-header -->
+                                    <div class="card-body" id="aged_payable_body_hide1">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div id="chart">
+                                                    <canvas id="horizontalbarChart" width="200" height="200"></canvas>
+                                                </div>
+                                            </div>
+                                            <div  class="col-md-6">
+                                                <br/><br/><br/>
+                                                <span id="scr_this_month_target"/><br/>
+                                                <span id="scr_this_month_achieved"/><br/>
+                                                <span id="scr_this_month_balance"/><br/>
+                                                <span>=============================</span><br/>
+                                                <span id="scr_asofnow_budget"/><br/>
+                                                <span id="scr_asofnow_achieved"/><br/>
+                                                <span id="scr_asofnowbalance"/>
+                                            </div>
+
+
+
+                                        </div>
+<!--                                         <div class="row">-->
+<!--                                            -->
+
+<!--                                            <div  class="col-md-6">-->
+
+<!--                                                <span id="scr_asofnow_budget"/><br/>-->
+<!--                                                <span id="scr_asofnow_achieved"/><br/>-->
+<!--                                                <span id="scr_asofnowbalance"/>-->
+<!--                                            </div>-->
+<!--                                        </div>-->
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+
                         </div>
 
 
