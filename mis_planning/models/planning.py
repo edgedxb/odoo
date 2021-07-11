@@ -128,7 +128,9 @@ class MisPlanning(models.Model):
             if slot.job_status_id.is_invoice:
                 objstate = self.env['crm.stage'].search([('is_closed', '=', True)])
                 for rec in objstate:
+                    slot.crm_id.is_system = False
                     slot.crm_id.stage_id = rec.id
+
 #            raise UserError('hi')
                 if slot.paid_amount < 0:
                     raise UserError('Amount cannot be negative')
@@ -156,6 +158,9 @@ class MisPlanning(models.Model):
 
                     objsale = self.env['sale.order'].search(
                         [('state', '=', 'sale'), ('opportunity_id', '=', slot.crm_id.id)])
+                    if not objsale:
+                        raise UserError('Missing Confirmed sales order in the CRM!')
+
                     move_line_vals = []
                     if objsale:
                         for rec in objsale:

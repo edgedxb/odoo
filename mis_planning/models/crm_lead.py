@@ -28,6 +28,7 @@ class MisCRMLead(models.Model):
     job_enddate = fields.Datetime(string='Job End Date')
     is_approve_status = fields.Integer('Approval Status', default=0)
     is_transfer = fields.Boolean('Is Transfer', default=False)
+    is_system = fields.Boolean('Is System', default=True)
     won_date = fields.Datetime('Won Date')
 
 
@@ -170,9 +171,13 @@ class MisCRMLead(models.Model):
                 if self.is_transfer != True:
                     raise UserError('Cannot drag and drop, please use transfer to planning button')
 
+            elif self.stage_id.is_planning and nstage_id.is_closed and is_system:
+                raise UserError('Cannot drag and drop, transferred planning to closed')
+
+
             if self.is_approve_status != 3:
                 # if self.stage_id.id > nstage_id.id:
-                if self.stage_id.sequence > nstage_id.sequence and  self.stage_id.is_approval_reqired==True  and self.env.uid != 2:
+                if self.stage_id.sequence > nstage_id.sequence and  self.stage_id.is_approval_reqired==True  and self.env.uid not in (2,6):
                     raise UserError('Access denied!, Please contact administrator to change the stage')
                 # elif self.stage_id.id > 4 and nstage_id.id < 5 and self.env.uid != 2:
                 #     raise UserError('Access denied!, Please contact administrator to change the stage')

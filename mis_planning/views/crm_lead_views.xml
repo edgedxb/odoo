@@ -16,6 +16,8 @@
 
             </field>
 
+
+
             <xpath expr="//button[@name='action_set_won_rainbowman']" position="replace">
                 <field name="planning_id" invisible="1"/>
                 <field name="is_won" invisible="1"/>
@@ -33,6 +35,9 @@
                             type="object" class="oe_highlight"
                             attrs="{'invisible': ['|', ('is_closed', '!=', False), ('is_won', '!=', False), ('is_planning','!=', False)]}"/>
                 <button class="oe_highlight" name="action_transfer2planning" type="object" string="Transferred to Planning" style="width: 200px;" attrs="{'invisible': [('is_won', '!=', True)]}"/>
+            </xpath>
+             <xpath expr="//button[@name='action_set_lost']" position="replace">
+                <button name="action_set_lost" string="Mark as Lost" type="object" attrs="{'invisible': ['|', ('type', '=', 'opportunity'), '&amp;', ('probability', '=', 0), ('active', '=', False), ('is_won', '=', True)]}"/>
             </xpath>
              <field name="phone" position="after">
 
@@ -61,8 +66,6 @@
                  <br/>
 
              </field-->
-
-
         </field>
     </record>
 
@@ -76,7 +79,6 @@
                 <field name="is_closed"/>
                 <field name="is_approval_reqired"/>
              </field>
-
         </field>
     </record>
 
@@ -90,7 +92,6 @@
                 <field name="is_closed"/>
                 <field name="is_approval_reqired"/>
              </field>
-
         </field>
     </record>
 
