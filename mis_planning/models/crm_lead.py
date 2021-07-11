@@ -171,7 +171,7 @@ class MisCRMLead(models.Model):
                 if self.is_transfer != True:
                     raise UserError('Cannot drag and drop, please use transfer to planning button')
 
-            elif self.stage_id.is_planning and nstage_id.is_closed and is_system:
+            elif self.stage_id.is_planning and nstage_id.is_closed and self.is_system:
                 raise UserError('Cannot drag and drop, transferred planning to closed')
 
 

@@ -25,6 +25,7 @@
                  <field name="is_closed" invisible="1"/>
                 <field name="is_approve_status" invisible="1"/>
                 <field name="is_transfer" invisible="1"/>
+                 <field name="is_system" invisible="1"/>
 
                 <button name="button_approve" type="object"  string="Approve" class="oe_highlight" attrs="{'invisible': ['|', '|', ('stage_id','not in', (4,5)), ('uid', '!=',2), ('is_approve_status', '!=',1)]}"  groups="account.group_account_manager"/>
 
@@ -37,7 +38,7 @@
                 <button class="oe_highlight" name="action_transfer2planning" type="object" string="Transferred to Planning" style="width: 200px;" attrs="{'invisible': [('is_won', '!=', True)]}"/>
             </xpath>
              <xpath expr="//button[@name='action_set_lost']" position="replace">
-                <button name="action_set_lost" string="Mark as Lost" type="object" attrs="{'invisible': ['|', ('type', '=', 'opportunity'), '&amp;', ('probability', '=', 0), ('active', '=', False), ('is_won', '=', True)]}"/>
+                <button name="action_set_lost" string="Mark as wwwwwwwwwww Lost" type="object" attrs="{'invisible': ['|', ('type', '=', 'opportunity'), '&amp;', ('probability', '=', 0), ('active', '=', False), ('is_won', '=', True)]}"/>
             </xpath>
              <field name="phone" position="after">
 
