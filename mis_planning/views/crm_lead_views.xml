@@ -37,7 +37,7 @@
                             attrs="{'invisible': ['|', ('is_closed', '!=', False), ('is_won', '!=', False), ('is_planning','!=', False)]}"/>
                 <button class="oe_highlight" name="action_transfer2planning" type="object" string="Transferred to Planning" style="width: 200px;" attrs="{'invisible': [('is_won', '!=', True)]}"/>
             </xpath>
-             <xpath expr="//button[@name='action_set_lost']" position="replace">
+             <xpath expr="//button[@string='Mark Lost']" position="replace">
                 <button name="action_set_lost" string="Mark as wwwwwwwwwww Lost" type="object" attrs="{'invisible': ['|', ('type', '=', 'opportunity'), '&amp;', ('probability', '=', 0), ('active', '=', False), ('is_won', '=', True)]}"/>
             </xpath>
              <field name="phone" position="after">
