@@ -16,6 +16,8 @@
 
             </field>
 
+
+
             <xpath expr="//button[@name='action_set_won_rainbowman']" position="replace">
                 <field name="planning_id" invisible="1"/>
                 <field name="is_won" invisible="1"/>
@@ -23,6 +25,7 @@
                  <field name="is_closed" invisible="1"/>
                 <field name="is_approve_status" invisible="1"/>
                 <field name="is_transfer" invisible="1"/>
+                 <field name="is_system" invisible="1"/>
 
                 <button name="button_approve" type="object"  string="Approve" class="oe_highlight" attrs="{'invisible': ['|', '|', ('stage_id','not in', (4,5)), ('uid', '!=',2), ('is_approve_status', '!=',1)]}"  groups="account.group_account_manager"/>
 
@@ -34,8 +37,8 @@
                             attrs="{'invisible': ['|', ('is_closed', '!=', False), ('is_won', '!=', False), ('is_planning','!=', False)]}"/>
                 <button class="oe_highlight" name="action_transfer2planning" type="object" string="Transferred to Planning" style="width: 200px;" attrs="{'invisible': [('is_won', '!=', True)]}"/>
             </xpath>
-             <field name="phone" position="after">
 
+             <field name="phone" position="after">
                  <field name="job_startdate" attrs="{'invisible': [('stage_id', 'not in', (4,5))], 'required':[('is_won', '=', True), ('is_transfer', '=', True)], 'readonly':[('is_transfer', '=', True), ('uid', '!=', 2)]}"/>
                  <field name="job_enddate" attrs="{'invisible': [('stage_id', 'not in', (4,5))], 'required':[('is_won', '=', True), ('is_transfer', '=', True)], 'readonly':[('is_transfer', '=', True), ('uid', '!=', 2)]}"/>
                  <field name="job_totalhours" attrs="{'invisible': [('stage_id', 'not in', (4,5))]}"/>
@@ -61,8 +64,6 @@
                  <br/>
 
              </field-->
-
-
         </field>
     </record>
 
@@ -76,7 +77,6 @@
                 <field name="is_closed"/>
                 <field name="is_approval_reqired"/>
              </field>
-
         </field>
     </record>
 
@@ -90,7 +90,6 @@
                 <field name="is_closed"/>
                 <field name="is_approval_reqired"/>
              </field>
-
         </field>
     </record>
 
