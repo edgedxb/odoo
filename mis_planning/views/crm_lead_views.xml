@@ -37,11 +37,8 @@
                             attrs="{'invisible': ['|', ('is_closed', '!=', False), ('is_won', '!=', False), ('is_planning','!=', False)]}"/>
                 <button class="oe_highlight" name="action_transfer2planning" type="object" string="Transferred to Planning" style="width: 200px;" attrs="{'invisible': [('is_won', '!=', True)]}"/>
             </xpath>
-             <xpath expr="//button[@name='action_set_lost']" position="replace">
-<!--                <button name="action_set_lost" string="Mark as wwwwwwwwwww Lost" type="object" attrs="{'invisible': ['|', ('type', '=', 'opportunity'), '&amp;', ('probability', '=', 0), ('active', '=', False), ('is_won', '=', True)]}"/>-->
-            </xpath>
-             <field name="phone" position="after">
 
+             <field name="phone" position="after">
                  <field name="job_startdate" attrs="{'invisible': [('stage_id', 'not in', (4,5))], 'required':[('is_won', '=', True), ('is_transfer', '=', True)], 'readonly':[('is_transfer', '=', True), ('uid', '!=', 2)]}"/>
                  <field name="job_enddate" attrs="{'invisible': [('stage_id', 'not in', (4,5))], 'required':[('is_won', '=', True), ('is_transfer', '=', True)], 'readonly':[('is_transfer', '=', True), ('uid', '!=', 2)]}"/>
                  <field name="job_totalhours" attrs="{'invisible': [('stage_id', 'not in', (4,5))]}"/>
