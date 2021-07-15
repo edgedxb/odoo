@@ -39,6 +39,7 @@
             </xpath>
 
              <field name="phone" position="after">
+
                  <field name="job_startdate" attrs="{'invisible': [('stage_id', 'not in', (4,5))], 'required':[('is_won', '=', True), ('is_transfer', '=', True)], 'readonly':[('is_transfer', '=', True), ('uid', '!=', 2)]}"/>
                  <field name="job_enddate" attrs="{'invisible': [('stage_id', 'not in', (4,5))], 'required':[('is_won', '=', True), ('is_transfer', '=', True)], 'readonly':[('is_transfer', '=', True), ('uid', '!=', 2)]}"/>
                  <field name="job_totalhours" attrs="{'invisible': [('stage_id', 'not in', (4,5))]}"/>
