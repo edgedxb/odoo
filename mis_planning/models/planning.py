@@ -49,7 +49,8 @@ class MisPlanning(models.Model):
     building_name = fields.Char(related='crm_id.building_name', string='Building Name')
     scope = fields.Text(related='crm_id.scope', string='Scope')
     job_status_id = fields.Many2one('mis.planning.status')
-    journal_id = fields.Many2one('account.journal', domain=[('id', 'in', (9,7,12))], string="Payment")
+    journal_id = fields.Many2one('account.journal', domain=[('id', 'in', (9,7,12,30))], string="Payment")
+    job_closingdate = fields.Date(string='Job Closing Date')
     paid_amount = fields.Float(string='Amount', default=0.0)
     is_invoice = fields.Boolean(string='Is Invoice?', related='job_status_id.is_invoice')
     payment_id = fields.Many2one('account.payment', string='Payment', readonly=True, store=True)
@@ -166,7 +167,7 @@ class MisPlanning(models.Model):
                         for rec in objsale:
                             for line in rec.order_line:
                                 create_vals = (0, 0, {
-                                    'date':  datetime.now(),
+                                    'date':  self.job_closingdate,
                                     'name': line.product_id.name,
                                     'ref': 'Auto Invoice - ' + strname,
                                     'tax_ids': line.tax_id.ids,
@@ -178,10 +179,10 @@ class MisPlanning(models.Model):
                                # totalamt += line.price_total
                                 move_line_vals.append(create_vals)
 
-                                move_vals = {'date':  datetime.now(),
+                                move_vals = {'date':  self.job_closingdate,
                                              'partner_id': slot.partner_id.id,
                                              'invoice_origin': 'CRM ID : ' + str(slot.crm_id.id) +' ' + strname,
-                                             'invoice_date':  datetime.now(),
+                                             'invoice_date':  self.job_closingdate,
                                              'journal_id': 1,
                                              'invoice_user_id': slot.crm_id.user_id.id,
                                              'ref': 'Auto Invoice - ' + strname,
@@ -201,7 +202,7 @@ class MisPlanning(models.Model):
                         postedinvoice = objacmove.post()
 
                         if self.paid_amount>0:
-                            payment_vals = {'payment_date': datetime.now(),
+                            payment_vals = {'payment_date': self.job_closingdate,
                                             'partner_id': slot.partner_id.id,
                                             'invoice_ids': [objacmove.id,],
                                             'payment_type': 'inbound',
