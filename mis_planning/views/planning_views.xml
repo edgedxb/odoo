@@ -13,8 +13,10 @@
                 <field name="building_name"/>
                 <field name="scope"/>
                 <field name="job_status_id" />
+
                 <field name="is_invoice" invisible="1"/>
                 <field name="journal_id" attrs="{'invisible': [('is_invoice', '=', False)], 'required': [('is_invoice', '=', True)]}"/>
+                <field name="job_closingdate" attrs="{'invisible': [('is_invoice', '=', False)], 'required': [('is_invoice', '=', True)]}"/>
                 <field name="paid_amount" attrs="{'invisible': [('is_invoice', '=', False)], 'required': [('is_invoice', '=', True)]}"/>
             </field>
             <field name="start_datetime" position="replace">
