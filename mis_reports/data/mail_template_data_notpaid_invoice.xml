@@ -82,22 +82,5 @@
 
         </record>
 
-        <record id = "ir_cron_module_notpaid_invoice_email" model = "ir.cron">
-            <field name = "name">Not Paid Invoice</field>
-            <field eval = "True" name = "auto_notpaid_inv_email"/>
-            <field name = "interval_number"> 1 </field>
-            <field name = "nextcall" eval = "(DateTime.now () + timedelta (days = 0)).Strftime ('% Y -% m-% d 18:29:59')"/>
-            <field name = "interval_type"> days </field>
-            <field name = "numbercall"> - 1 </field>
-            <field eval = "True" name = "doall"/>
-            <field name = "model_id" ref = "mis_reports.model_notpaid_invoices"/>
-            <field name = "state"> code </field>
-            <field name = "code">
-                model._send_notpaid_email_notification ()
-            </field>
-        </record>
-
-
-
     </data>
 </odoo>
