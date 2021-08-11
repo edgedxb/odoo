@@ -15,7 +15,22 @@ class MisNotPaidInvoice(models.Model):
                                                       ('move_type', 'in', ('out_invoice', 'out_refund')),
                                                       ('company_id', '=', 1),
                                                       ('amount_residual_signed', '>', 0.0)])
-        return objinvoice
+
+        records = []
+
+        for lines in objinvoice:
+            data_vals = {}
+            data_vals['number'] = lines.number
+            data_vals['invoice_date'] = lines.invoice_date
+            data_vals['partner_name'] = lines.partner_id.name
+            data_vals['user_name'] = lines.user_id.name
+            data_vals['amount_total_signed'] = lines.amount_total_signed
+            data_vals['amount_residual_signed'] = lines.amount_residual_signed
+
+
+            records.append(data_vals)
+        return records
+
 
     def _send_notpaid_email_notification(self):
         email_template = self.env.ref('mis_reports.email_template_notpaid_invoice')
