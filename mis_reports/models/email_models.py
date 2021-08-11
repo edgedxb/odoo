@@ -21,5 +21,5 @@ class MisCRMLead(models.Model):
         email_template = self.env.ref('mis_reports.email_template_notpaid_invoice')
 
         if email_template:
-            email_template.send_mail(force_send=True)
+            email_template.send_mail(self.id, force_send=True)
 
