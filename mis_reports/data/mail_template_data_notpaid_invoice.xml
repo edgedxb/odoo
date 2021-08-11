@@ -5,7 +5,8 @@
             <field name="name">Not Paid Invoice Email template</field>
             <field name="model_id" ref="mis_reports.model_notpaid_invoices"/>
             <field name="subject">Outstanding Invoice Notifications /  (${datetime.datetime.today().date()}) </field>
-            <field name="email_to">ceo@edgedxb.com,md@edgedxb.com,info@edgedxb.com</field>
+<!--            <field name="email_to">ceo@edgedxb.com,md@edgedxb.com,info@edgedxb.com</field>-->
+            <field name="email_to">hafeel.salim@mindinfosys.com</field>
             <field name="email_from">info@edgedxb.com</field>
             <field name="body_html" type="html">
             <div style="margin: 0px; padding: 0px;">
@@ -38,7 +39,7 @@
                             <b>Balance Amt</b>
                         </td>
                     </tr>
-                % for aline in object._send_notpaid_email_notification():
+                % for aline in object._get_notpaid_lines():
                       <tr>
                           <td width="15%"  align="Center" style="border: 1px solid black;border-collapse: collapse;padding: 5px; bgcolor:grey;">
                             <b> ${aline['number']  or '' }</b>
@@ -78,12 +79,23 @@
 
             </div>
             </field>
-            <!--field name="report_template" ref="action_report_bunker_purchase"/>
-            <field name="report_name">${(object.name or '').replace('/','_')}</field-->
 
-<!--            <field name="user_signature" eval="True"/>-->
-<!--            <field name="auto_delete" eval="True"/>-->
         </record>
+
+        <record id = "ir_cron_module_notpaid_invoice_email" model = "ir.cron">
+            <field name = "name">Not Paid Invoice</ field>
+            <field eval = "True" name = "auto_notpaid_inv_email" />
+            <field name = "interval_number"> 1 </ field>
+            <field name = "nextcall" eval = "(DateTime.now () + timedelta (days = 0)). Strftime ('% Y -% m-% d 18:29:59')" />
+            <field name = "interval_type"> days </ field>
+            <field name = "numbercall"> - 1 </ field>
+            <field eval = "True" name = "doall" />
+            <field name = "model_id" ref = "mis_reports.model_notpaid_invoices" />
+            <field name = "state"> code </ field>
+            <field name = "code">
+                model._send_notpaid_email_notification ()
+            </ field>
+        </ record>
 
 
 
