@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="0">
+        <record id="email_template_notpaid_invoice" model="mail.template">
+            <field name="name">Not Paid Invoice Email template</field>
+            <field name="model_id" ref="mis_reports.model_notpaid_invoices"/>
+            <field name="subject">Outstanding Invoice Notifications /  (${datetime.datetime.today().date()}) </field>
+            <field name="email_to">ceo@edgedxb.com,md@edgedxb.com,info@edgedxb.com</field>
+            <field name="email_from">info@edgedxb.com</field>
+            <field name="body_html" type="html">
+            <div style="margin: 0px; padding: 0px;">
+                <p style="margin: 0px; padding: 0px; font-size: 13px;">
+                    Greetings from Odoo,<br/>
+
+                    <br/><br/>
+                    Uncleared invoices are below :-
+                </p>
+                <br/><br/>
+
+                <table  width="100%" style="border: 1px solid black;border-collapse: collapse;">
+                    <tr>
+                        <td width="15%"  align="Center" style="border: 1px solid black;border-collapse: collapse;padding: 5px; bgcolor:grey;">
+                            <b>Invoice #</b>
+                        </td>
+                        <td width="15%"  align="center" style="border: 1px solid black;border-collapse: collapse;padding: 5px; bgcolor:grey;">
+                            <b>Date</b>
+                        </td>
+                        <td width="25%"  align="center" style="border: 1px solid black;border-collapse: collapse;padding: 5px; bgcolor:grey;">
+                            <b>Customer Name</b>
+                        </td>
+                        <td width="20%"  align="center" style="border: 1px solid black;border-collapse: collapse;padding: 5px; bgcolor:grey;">
+                            <b>Sales Agent</b>
+                        </td>
+                        <td width="13%"  align="center" style="border: 1px solid black;border-collapse: collapse;padding: 5px; bgcolor:grey;">
+                            <b>Total Inv Amt</b>
+                        </td>
+                        <td width="13%"  align="center" style="border: 1px solid black;border-collapse: collapse;padding: 5px; bgcolor:grey;">
+                            <b>Balance Amt</b>
+                        </td>
+                    </tr>
+                % for aline in object._send_notpaid_email_notification():
+                      <tr>
+                          <td width="15%"  align="Center" style="border: 1px solid black;border-collapse: collapse;padding: 5px; bgcolor:grey;">
+                            <b> ${aline['number']  or '' }</b>
+                          </td>
+                          <td width="15%"  align="center" style="border: 1px solid black;border-collapse: collapse;padding: 5px; bgcolor:grey;">
+                            <b> ${aline['invoice_date']  or '' }</b>
+                          </td>
+                          <td width="25%"  align="center" style="border: 1px solid black;border-collapse: collapse;padding: 5px; bgcolor:grey;">
+                            <b>${aline['partner_id'].name  or '' }</b>
+                          </td>
+                          <td width="20%"  align="center" style="border: 1px solid black;border-collapse: collapse;padding: 5px; bgcolor:grey;">
+                            <b> ${aline['invoice.user_id'].name  or '' }</b>
+                          </td>
+                          <td width="13%"  align="center" style="border: 1px solid black;border-collapse: collapse;padding: 5px; bgcolor:grey;">
+                            <b>${aline['amount_total_signed']  or '' }</b>
+                          </td>
+                          <td width="13%"  align="center" style="border: 1px solid black;border-collapse: collapse;padding: 5px; bgcolor:grey;">
+                            <b>${aline['amount_residual_signed']  or '' }</b>
+                          </td>
+                      </tr>
+                % endfor
+                </table>
+
+                <br/>
+<!--                <p>-->
+<!--                    For any further information, kindly feel free to contact us immediately.<br/>-->
+<!--                    We are Fast, reliable, transparent, available 24/7 and compliant.-->
+<!--                    <br/>-->
+
+<!--                </p>-->
+<!--                <p><br/>-->
+<!--                    Best Regards<br/><br/>-->
+
+
+<!--                </p>-->
+                <br/><br/><br/><br/>
+
+            </div>
+            </field>
+            <!--field name="report_template" ref="action_report_bunker_purchase"/>
+            <field name="report_name">${(object.name or '').replace('/','_')}</field-->
+
+<!--            <field name="user_signature" eval="True"/>-->
+<!--            <field name="auto_delete" eval="True"/>-->
+        </record>
+
+
+
+    </data>
+</odoo>
