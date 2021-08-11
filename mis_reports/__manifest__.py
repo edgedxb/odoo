@@ -14,7 +14,7 @@
 #        'reports/purchase_report_templates.xml',
         'reports/payment_report_template.xml',
         'reports/sale_template.xml',
-        'data/mail_template_data.xml',
+        'data/mail_template_data_notpaid_invoice.xml',
     ],
     'demo': [],
     'license': 'AGPL-3',
