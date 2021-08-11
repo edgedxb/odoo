@@ -7,7 +7,7 @@ from datetime import datetime, time, timedelta
 from dateutil.relativedelta import relativedelta
 from odoo.exceptions import UserError, ValidationError
 
-class MisCRMLead(models.Model):
+class MisNotPaidInvoice(models.Model):
     _name = 'notpaid.invoices'
 
     def _get_notpaid_lines(self):

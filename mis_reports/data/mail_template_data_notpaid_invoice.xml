@@ -39,28 +39,28 @@
                             <b>Balance Amt</b>
                         </td>
                     </tr>
-                % for aline in object._get_notpaid_lines():
-                      <tr>
-                          <td width="15%"  align="Center" style="border: 1px solid black;border-collapse: collapse;padding: 5px; bgcolor:grey;">
-                            <b> ${aline['number']  or '' }</b>
-                          </td>
-                          <td width="15%"  align="center" style="border: 1px solid black;border-collapse: collapse;padding: 5px; bgcolor:grey;">
-                            <b> ${aline['invoice_date']  or '' }</b>
-                          </td>
-                          <td width="25%"  align="center" style="border: 1px solid black;border-collapse: collapse;padding: 5px; bgcolor:grey;">
-                            <b>${aline['partner_id'].name  or '' }</b>
-                          </td>
-                          <td width="20%"  align="center" style="border: 1px solid black;border-collapse: collapse;padding: 5px; bgcolor:grey;">
-                            <b> ${aline['invoice.user_id'].name  or '' }</b>
-                          </td>
-                          <td width="13%"  align="center" style="border: 1px solid black;border-collapse: collapse;padding: 5px; bgcolor:grey;">
-                            <b>${aline['amount_total_signed']  or '' }</b>
-                          </td>
-                          <td width="13%"  align="center" style="border: 1px solid black;border-collapse: collapse;padding: 5px; bgcolor:grey;">
-                            <b>${aline['amount_residual_signed']  or '' }</b>
-                          </td>
-                      </tr>
-                % endfor
+<!--                % for aline in object._get_notpaid_lines():-->
+<!--                      <tr>-->
+<!--                          <td width="15%"  align="Center" style="border: 1px solid black;border-collapse: collapse;padding: 5px; bgcolor:grey;">-->
+<!--                            <b> ${aline['number']  or '' }</b>-->
+<!--                          </td>-->
+<!--                          <td width="15%"  align="center" style="border: 1px solid black;border-collapse: collapse;padding: 5px; bgcolor:grey;">-->
+<!--                            <b> ${aline['invoice_date']  or '' }</b>-->
+<!--                          </td>-->
+<!--                          <td width="25%"  align="center" style="border: 1px solid black;border-collapse: collapse;padding: 5px; bgcolor:grey;">-->
+<!--                            <b>${aline['partner_id'].name  or '' }</b>-->
+<!--                          </td>-->
+<!--                          <td width="20%"  align="center" style="border: 1px solid black;border-collapse: collapse;padding: 5px; bgcolor:grey;">-->
+<!--                            <b> ${aline['invoice.user_id'].name  or '' }</b>-->
+<!--                          </td>-->
+<!--                          <td width="13%"  align="center" style="border: 1px solid black;border-collapse: collapse;padding: 5px; bgcolor:grey;">-->
+<!--                            <b>${aline['amount_total_signed']  or '' }</b>-->
+<!--                          </td>-->
+<!--                          <td width="13%"  align="center" style="border: 1px solid black;border-collapse: collapse;padding: 5px; bgcolor:grey;">-->
+<!--                            <b>${aline['amount_residual_signed']  or '' }</b>-->
+<!--                          </td>-->
+<!--                      </tr>-->
+<!--                % endfor-->
                 </table>
 
                 <br/>
