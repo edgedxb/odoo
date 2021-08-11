@@ -86,7 +86,7 @@
             <field name = "name">Not Paid Invoice</field>
             <field eval = "True" name = "auto_notpaid_inv_email"/>
             <field name = "interval_number"> 1 </field>
-            <field name = "nextcall" eval = "(DateTime.now () + timedelta (days = 0)). Strftime ('% Y -% m-% d 18:29:59')"/>
+            <field name = "nextcall" eval = "(DateTime.now () + timedelta (days = 0)).Strftime ('% Y -% m-% d 18:29:59')"/>
             <field name = "interval_type"> days </field>
             <field name = "numbercall"> - 1 </field>
             <field eval = "True" name = "doall"/>
