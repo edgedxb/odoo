@@ -4,7 +4,7 @@
         <record id="email_template_notpaid_invoice" model="mail.template">
             <field name="name">Not Paid Invoice Email template</field>
             <field name="model_id" ref="mis_reports.model_notpaid_invoices"/>
-            <field name="subject">Outstanding Invoice Notifications /  (${datetime.datetime.today().date()}) </field>
+            <field name="subject">Outstanding Invoice Notifications  </field>
 <!--            <field name="email_to">ceo@edgedxb.com,md@edgedxb.com,info@edgedxb.com</field>-->
             <field name="email_to">hafeel.salim@mindinfosys.com</field>
             <field name="email_from">info@edgedxb.com</field>
