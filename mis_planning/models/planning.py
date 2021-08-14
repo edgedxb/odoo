@@ -162,6 +162,12 @@ class MisPlanning(models.Model):
                     if not objsale:
                         raise UserError('Missing Confirmed sales order in the CRM!')
 
+                    for rec in objsale:
+
+                        if len(rec.order_line)==0:
+                            raise UserError('Missing sales order line in %s' %rec.name)
+
+
                     move_line_vals = []
                     if objsale:
                         for rec in objsale:
