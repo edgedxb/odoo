@@ -79,9 +79,10 @@ class MisCRMLead(models.Model):
     @api.onchange('job_startdate')
     def _onchange_startdate(self):
         for rec in self:
-            stdate =rec.job_startdate
-            stdate=stdate + timedelta(hours = 1)
-            rec.job_enddate=stdate
+            if rec.job_startdate:
+                stdate =rec.job_startdate
+                stdate=stdate + timedelta(hours = 1)
+                rec.job_enddate=stdate
 
 
     @api.depends('job_startdate', 'job_enddate')
