@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="0">
+        <record id="email_template_notpaid_invoice_summary" model="mail.template">
+            <field name="name">Not Paid Invoice Summary Email template</field>
+            <field name="model_id" ref="mis_reports.model_notpaid_invoices_summary"/>
+            <field name="subject">${object.subject_line or ''} </field>
+<!--            <field name="email_to">ceo@edgedxb.com,md@edgedxb.com,info@edgedxb.com</field>-->
+            <field name="email_to">ceo@edgedxb.com,md@edgedxb.com,info@edgedxb.com</field>
+            <field name="email_from">info@edgedxb.com</field>
+            <field name="body_html" type="html">
+            <div style="margin: 0px; padding: 0px;">
+                <p style="margin: 0px; padding: 0px; font-size: 13px;">
+                    Dear All<br/>
+                    Greetings from Odoo,<br/>
+
+                    <br/><br/>
+                    Uncleared invoices Summeries are below :-
+                </p>
+                <br/><br/>
+
+                <table  width="65%" style="border: 1px solid black;border-collapse: collapse;">
+                    <tr>
+
+
+                        <td width="35%"  align="center" style="border: 1px solid black;border-collapse: collapse;padding: 5px; bgcolor:grey;">
+                            <b>Sales Agent</b>
+                        </td>
+                        <td width="15%"  align="center" style="border: 1px solid black;border-collapse: collapse;padding: 5px; bgcolor:grey;">
+                            <b>Total Inv Amt</b>
+                        </td>
+                        <td width="15%"  align="center" style="border: 1px solid black;border-collapse: collapse;padding: 5px; bgcolor:grey;">
+                            <b>Balance Amt</b>
+                        </td>
+                    </tr>
+                     ${object.body_text |safe}
+
+                </table>
+
+                <br/>
+
+                <br/><br/><br/><br/>
+
+            </div>
+            </field>
+
+        </record>
+
+    </data>
+</odoo>
