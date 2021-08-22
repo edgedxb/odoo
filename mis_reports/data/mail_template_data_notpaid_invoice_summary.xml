@@ -3,7 +3,7 @@
     <data noupdate="0">
         <record id="email_template_notpaid_invoice_summary" model="mail.template">
             <field name="name">Not Paid Invoice Summary Email template</field>
-            <field name="model_id" ref="mis_reports.model_notpaid_invoices_summary"/>
+            <field name="model_id" ref="mis_reports.model_notpaid_invoices"/>
             <field name="subject">${object.subject_line or ''} </field>
 <!--            <field name="email_to">ceo@edgedxb.com,md@edgedxb.com,info@edgedxb.com</field>-->
             <field name="email_to">ceo@edgedxb.com,md@edgedxb.com,info@edgedxb.com</field>
