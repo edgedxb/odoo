@@ -80,15 +80,15 @@ class MisNotPaidInvoice(models.TransientModel):
                      """)
         res_sum = self._cr.dictfetchall()
 
-
+        strbody = ''
         for sr in res_sum:
             objusers = self.env['res.users'].search([('id', '=', sr['invoice_user_id'])])
-            strbody=''
+
             strbody+="<tr><td style='border: 1px solid black;border-collapse: collapse;padding: 5px;text-align: center;'><b>" + str(objusers.name) +"</b></td>"
             strbody += "<td style='border: 1px solid black;border-collapse: collapse;padding: 5px;'><b>" + str(
-                "{:.2f}".format(sr.totinvoice)) + "</b></td>"
+                "{:.2f}".format(sr['totinvoice'])) + "</b></td>"
             strbody += "<td style='border: 1px solid black;border-collapse: collapse;padding: 5px;'><b>" + str(
-                "{:.2f}".format(sr.totbalance)) + "</b></td>"
+                "{:.2f}".format(sr['totbalance'])) + "</b></td>"
             strbody += "</tr>"
         return strbody
 
@@ -117,7 +117,7 @@ class MisNotPaidInvoice(models.TransientModel):
         email_template = self.env.ref('mis_reports.email_template_notpaid_invoice')
 
 
-        email_template.send_mail(objnotification.id, force_send=True)
+        #email_template.send_mail(objnotification.id, force_send=True)
 
         email_summary_temp = self.env.ref('mis_reports.email_template_notpaid_invoice_summary')
         objnotification.body_text=self._get_notpaid_summary_byagent
@@ -146,6 +146,6 @@ class MisNotPaidInvoice(models.TransientModel):
                 objnotification.subject_line = str(objusers.name) + "'s Customers Outstanding Invoice Notifications - " + str(objnotification.report_date)
 
                 objnotification.body_text = self._get_notpaid_lines_byagent(sagent)
-                email_template.send_mail(objnotification.id, force_send=True)
+                #email_template.send_mail(objnotification.id, force_send=True)
 
 
