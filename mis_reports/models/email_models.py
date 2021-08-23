@@ -146,7 +146,7 @@ class MisNotPaidInvoice(models.TransientModel):
         objnotification.report_date = objnotification.report_date + timedelta(hours=4)
 
         email_summary_temp = self.env.ref('mis_reports.email_template_notpaid_invoice_summary')
-        objnotification.body_text = self._get_notpaid_summary_byagent
+        objnotification.body_text = self._get_notpaid_summary_byagent()
         objnotification.subject_line = "Outstanding Invoice Summary by Agent  Notifications - " + str(
             objnotification.report_date)
         email_summary_temp.send_mail(objnotification.id, force_send=True)
