@@ -82,6 +82,7 @@ class MisNotPaidInvoice(models.TransientModel):
 
         strbody = ''
         for sr in res_sum:
+            raise UserError( sr['invoice_user_id'])
             objusers = self.env['res.users'].search([('id', '=', sr['invoice_user_id'])])
 
             strbody+="<tr><td style='border: 1px solid black;border-collapse: collapse;padding: 5px;text-align: center;'><b>" + str(objusers.name) +"</b></td>"
