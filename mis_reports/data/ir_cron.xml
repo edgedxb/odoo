@@ -1,5 +1,5 @@
 <odoo>
-    <data>
+    <data  noupdate="1">
         <record id="ir_cron_module_notpaid_invoice_email" model="ir.cron">
             <field name="name">Not Paid Invoice</field>
             <field name="active" eval="True"/>
