@@ -128,10 +128,10 @@ class MisNotPaidInvoice(models.TransientModel):
 
             objusers = self.env['res.users'].search([('id', '=', sr['invoice_user_id'])])
 
-            strbody+="<tr><td style='border: 1px solid black;border-collapse: collapse;padding: 5px;text-align: center;'><b>" + str(objusers.name) +"</b></td>"
-            strbody += "<td style='border: 1px solid black;border-collapse: collapse;padding: 5px;'><b>" + str(
+            strbody+="<tr><td style='border: 1px solid black;border-collapse: collapse;padding: 5px;text-align: left;'><b>" + str(objusers.name) +"</b></td>"
+            strbody += "<td style='border: 1px solid black;border-collapse: collapse;padding: 5px;;text-align: right;'><b>" + str(
                 "{:.2f}".format(sr['totinvoice'])) +  "</b></td>"
-            strbody += "<td style='border: 1px solid black;border-collapse: collapse;padding: 5px;'><b>" + str(
+            strbody += "<td style='border: 1px solid black;border-collapse: collapse;padding: 5px;;text-align: right;'><b>" + str(
                 "{:.2f}".format(sr['totbalance'])) +  "</b></td>"
             strbody += "</tr>"
         return strbody
