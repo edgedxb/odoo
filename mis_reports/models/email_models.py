@@ -76,7 +76,7 @@ class MisNotPaidInvoice(models.TransientModel):
         self._cr.execute("""
                          select invoice_user_id, sum(amount_total_signed) as totinvoice,sum(amount_residual_signed) as totbalance 
                          from account_move where state='posted' and type in ('out_invoice', 'out_refund') 
-                         and company_id=1 and amount_residual_signed>0 group by invoice_user_id   
+                         and company_id=1 and amount_residual_signed>0.0 group by invoice_user_id   
                      """)
         res_sum = self._cr.dictfetchall()
 
@@ -109,19 +109,10 @@ class MisNotPaidInvoice(models.TransientModel):
         objnotification.body_text=self._get_notpaid_lines()
         objnotification.report_date =objnotification.report_date+ timedelta(hours=4)
         objnotification.subject_line = "Outstanding Invoice Notifications - " + str(objnotification.report_date)
-
-        # raise UserError(objnotification.body_text)
-
-
         email_template = self.env.ref('mis_reports.email_template_notpaid_invoice')
+        email_template.send_mail(objnotification.id, force_send=True)
 
 
-        #email_template.send_mail(objnotification.id, force_send=True)
-
-        email_summary_temp = self.env.ref('mis_reports.email_template_notpaid_invoice_summary')
-        objnotification.body_text=self._get_notpaid_summary_byagent
-        objnotification.subject_line = "Outstanding Invoice Summary by Agent  Notifications - " + str(objnotification.report_date)
-        email_summary_temp.send_mail(objnotification.id, force_send=True)
 
 
         self._cr.execute("""
@@ -145,6 +136,24 @@ class MisNotPaidInvoice(models.TransientModel):
                 objnotification.subject_line = str(objusers.name) + "'s Customers Outstanding Invoice Notifications - " + str(objnotification.report_date)
 
                 objnotification.body_text = self._get_notpaid_lines_byagent(sagent)
-                #email_template.send_mail(objnotification.id, force_send=True)
+                email_template.send_mail(objnotification.id, force_send=True)
+
+    def _send_notpaid_summary_email_notification(self):
+
+        vals = {'body_text': ' ',
+                'email_to': 'ceo@edgedxb.com,md@edgedxb.com,info@edgedxb.com',
+                'sales_Agent': 'Dear All ',
+
+                }
+        objnotification = self.env['notpaid.invoices'].create(vals)
+
+        objnotification.report_date = objnotification.report_date + timedelta(hours=4)
+
+        email_summary_temp = self.env.ref('mis_reports.email_template_notpaid_invoice_summary')
+        objnotification.body_text = self._get_notpaid_summary_byagent
+        objnotification.subject_line = "Outstanding Invoice Summary by Agent  Notifications - " + str(
+            objnotification.report_date)
+        email_summary_temp.send_mail(objnotification.id, force_send=True)
+
 
 
