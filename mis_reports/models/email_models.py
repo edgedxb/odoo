@@ -121,16 +121,18 @@ class MisNotPaidInvoice(models.TransientModel):
                          from account_move where state='posted' and type in ('out_invoice', 'out_refund') 
                          and company_id=1 and amount_residual_signed>0.0 group by invoice_user_id   
                      """)
-
+        res_sum = self._cr.dictfetchall()
 
         strbody = ''
-        for invoice_user_id,totinvoice,totbalance   in self._cr.dictfetchall():
+        for sr in res_sum:
 
-            objusers = self.env['res.users'].search([('id', '=', invoice_user_id)])
+            objusers = self.env['res.users'].search([('id', '=', sr['invoice_user_id'])])
 
-            strbody+="<tr><td style='border: 1px solid black;border-collapse: collapse;padding: 5px;text-align: center;'><b>" + 'str(objusers.name)' +"</b></td>"
-            strbody += "<td style='border: 1px solid black;border-collapse: collapse;padding: 5px;'><b>" +  "</b></td>"
-            strbody += "<td style='border: 1px solid black;border-collapse: collapse;padding: 5px;'><b>" +  "</b></td>"
+            strbody+="<tr><td style='border: 1px solid black;border-collapse: collapse;padding: 5px;text-align: center;'><b>" + str(objusers.name) +"</b></td>"
+            strbody += "<td style='border: 1px solid black;border-collapse: collapse;padding: 5px;'><b>" + str(
+                "{:.2f}".format(sr['totinvoice'])) +  "</b></td>"
+            strbody += "<td style='border: 1px solid black;border-collapse: collapse;padding: 5px;'><b>" + str(
+                "{:.2f}".format(sr['totbalance'])) +  "</b></td>"
             strbody += "</tr>"
         return strbody
 
@@ -146,7 +148,7 @@ class MisNotPaidInvoice(models.TransientModel):
         objnotification.report_date = objnotification.report_date + timedelta(hours=4)
 
         email_summary_temp = self.env.ref('mis_reports.email_template_notpaid_invoice_summary')
-        objnotification.body_text = self._get_notpaid_summary_byagent()
+        objnotification.body_text = self._get_notpaid_summary_byagent
         objnotification.subject_line = "Outstanding Invoice Summary by Agent  Notifications - " + str(
             objnotification.report_date)
         email_summary_temp.send_mail(objnotification.id, force_send=True)
