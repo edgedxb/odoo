@@ -55,6 +55,7 @@
                 <field name="unit_number"/>
                 <field name="building_name"/>
                 <field name="scope"/>
+                <field name="cst_nextactivity_date" required="1"/>
             </field>
             <field name="user_id" position="before">
                 <field name="source_id" required="1"/>
