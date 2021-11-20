@@ -92,6 +92,7 @@
                 <field name="is_planning"/>
                 <field name="is_closed"/>
                 <field name="is_approval_reqired"/>
+                 <field name="is_revenue_stage"/>
              </field>
         </field>
     </record>
