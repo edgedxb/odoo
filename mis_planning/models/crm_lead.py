@@ -11,6 +11,7 @@ class MisCrmStage(models.Model):
     is_planning = fields.Boolean('Is Planning')
     is_closed = fields.Boolean('Is Closed')
     is_approval_reqired = fields.Boolean('Is Approval Required', default=False)
+    is_revenue_stage = fields.Boolean('Is Revenue Stage', default=False)
 
 class MisCRMLead(models.Model):
     _inherit = 'crm.lead'
