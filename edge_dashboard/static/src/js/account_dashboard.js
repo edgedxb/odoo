@@ -640,14 +640,19 @@ odoo.define('AccountingDashboard.AccountingDashboard', function (require) {
                     })
                         .then(function (result) {
                             var agentname = result['agentname'];
-                            var dates = result['dates'];
-                            var amount;
-                            var salesamount = result['salesamount'];
-                            for (var k = 0; k < salesamount.length; k++) {
-                                amount = self.format_currency(currency, salesamount[k]);
+                            //var dates = result['dates'];
+                            var today_amt = result['today_amt'];
+                            var thismonth = result['thismonth'];
+                            var amount_thismonth;
+                            var amount_today;
+                            //var salesamount = result['salesamount'];
+                            $('#crm_sales_list').append('<li><div>Name</div><div>This Month Amt</div><div>Today Amt</div></li>');
+                            for (var k = 0; k < thismonth.length; k++) {
+                                amount_thismonth = self.format_currency(currency, thismonth[k]);
+                                amount_today = self.format_currency(currency, today_amt[k]);
                                 //                                $('#charts').append('<li><a ' + banks[k] + '" data-user-id="' + banks[k] + '">' + banks[k] + '</a>'+  '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' + '<span>'+ balance[k] +'</span>' + '</li>' );
                                 //$('#fixed_deposit_list').append('<li><div>' + depositname[k] + '</div><div>' + amount + '</div></li>');
-                                $('#crm_sales_list').append('<li><div>' + dates[k] + '</div><div>' + agentname[k] + '</div><div>' + amount + '</div></li>');
+                                $('#crm_sales_list').append('<li><div>' + agentname[k] + '</div><div>' + amount_thismonth + '</div><div>' + amount_today + '</div></li>');
                                 //                                $('#current_bank_balance').append('<li>' + banks[k] +'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'+ balance[k] +  '</li>' );
                                 //$('#drop_charts_balance').append('<li>' + depositamount[k].toFixed(2) + '</li>');
                             }

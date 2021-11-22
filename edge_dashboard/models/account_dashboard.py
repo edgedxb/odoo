@@ -1142,10 +1142,16 @@ class DashBoard(models.Model):
     @api.model
     def total_crm_rpt1(self, *post):
 
-        self._cr.execute((''' select datestr,to_char(datestr,'Day') daystr,COALESCE(sum(planned_revenue),0.0) as totalamt  from
-               (select to_date(to_char(job_enddate, 'YYYY/MM/DD'), 'YYYY/MM/DD')  as datestr,planned_revenue 
-               from crm_lead where stage_id in (select id from crm_stage where is_revenue_stage=true) and won_status <>'lost' and job_enddate>(now()+ INTERVAL '-1 day')) t where datestr =to_date(to_char(now(), 'YYYY/MM/DD'), 'YYYY/MM/DD') 
-               group by datestr order by datestr '''))
+        # self._cr.execute((''' select datestr,to_char(datestr,'Day') daystr,COALESCE(sum(planned_revenue),0.0) as totalamt  from
+        #        (select to_date(to_char(job_enddate, 'YYYY/MM/DD'), 'YYYY/MM/DD')  as datestr,planned_revenue
+        #        from crm_lead where stage_id in (select id from crm_stage where is_revenue_stage=true) and won_status <>'lost' and job_enddate>(now()+ INTERVAL '-1 day')) t where datestr =to_date(to_char(now(), 'YYYY/MM/DD'), 'YYYY/MM/DD')
+        #        group by datestr order by datestr '''))
+
+        self._cr.execute((''' select datestr,to_char(datestr,'Day') daystr,COALESCE(sum(planned_revenue),0.0) as totalamt  from					   
+(select  to_date(to_char(start_datetime, 'YYYY/MM/DD'), 'YYYY/MM/DD')  as datestr,planned_revenue from planning_slot ps,crm_lead cl where ps.crm_id=cl.id)
+ t where datestr =to_date(to_char(now(), 'YYYY/MM/DD'), 'YYYY/MM/DD') 
+                       group by datestr order by datestr '''))
+
         record = self._cr.dictfetchall()
         totalamt=0.0
         datestr=date.today()+timedelta(days=0)
@@ -1177,10 +1183,15 @@ class DashBoard(models.Model):
     @api.model
     def total_crm_rpt2(self, *post):
 
-        self._cr.execute((''' select datestr,to_char(datestr,'Day') daystr,COALESCE(sum(planned_revenue),0.0) as totalamt  from
-                   (select to_date(to_char(job_enddate, 'YYYY/MM/DD'), 'YYYY/MM/DD')  as datestr,planned_revenue 
-                   from crm_lead where stage_id in (select id from crm_stage where is_revenue_stage=true) and  won_status <>'lost' and job_enddate>(now()+ INTERVAL '0 day')) t where datestr =to_date(to_char((now()+ INTERVAL '1 day'), 'YYYY/MM/DD'), 'YYYY/MM/DD')
-                   group by datestr order by datestr '''))
+        # self._cr.execute((''' select datestr,to_char(datestr,'Day') daystr,COALESCE(sum(planned_revenue),0.0) as totalamt  from
+        #            (select to_date(to_char(job_enddate, 'YYYY/MM/DD'), 'YYYY/MM/DD')  as datestr,planned_revenue
+        #            from crm_lead where stage_id in (select id from crm_stage where is_revenue_stage=true) and  won_status <>'lost' and job_enddate>(now()+ INTERVAL '0 day')) t where datestr =to_date(to_char((now()+ INTERVAL '1 day'), 'YYYY/MM/DD'), 'YYYY/MM/DD')
+        #            group by datestr order by datestr '''))
+
+        self._cr.execute((''' select datestr,to_char(datestr,'Day') daystr,COALESCE(sum(planned_revenue),0.0) as totalamt  from					   
+(select  to_date(to_char(start_datetime, 'YYYY/MM/DD'), 'YYYY/MM/DD')  as datestr,planned_revenue from planning_slot ps,crm_lead cl where ps.crm_id=cl.id)
+ t where datestr =to_date(to_char((now()+ INTERVAL '1 day'), 'YYYY/MM/DD'), 'YYYY/MM/DD') 
+                       group by datestr order by datestr '''))
         record = self._cr.dictfetchall()
         totalamt=0.0
         datestr=date.today()+timedelta(days=1)
@@ -1211,10 +1222,10 @@ class DashBoard(models.Model):
     @api.model
     def total_crm_rpt3(self, *post):
 
-        self._cr.execute((''' select datestr,to_char(datestr,'Day') daystr,COALESCE(sum(planned_revenue),0.0) as totalamt  from
-                   (select to_date(to_char(job_enddate, 'YYYY/MM/DD'), 'YYYY/MM/DD')  as datestr,planned_revenue 
-                   from crm_lead where stage_id in (select id from crm_stage where is_revenue_stage=true)  and won_status <>'lost' and job_enddate>(now()+ INTERVAL '1 day')) t where datestr =to_date(to_char((now()+ INTERVAL '2 day'), 'YYYY/MM/DD'), 'YYYY/MM/DD')
-                   group by datestr order by datestr '''))
+        self._cr.execute((''' select datestr,to_char(datestr,'Day') daystr,COALESCE(sum(planned_revenue),0.0) as totalamt  from					   
+(select  to_date(to_char(start_datetime, 'YYYY/MM/DD'), 'YYYY/MM/DD')  as datestr,planned_revenue from planning_slot ps,crm_lead cl where ps.crm_id=cl.id)
+ t where datestr =to_date(to_char((now()+ INTERVAL '2 day'), 'YYYY/MM/DD'), 'YYYY/MM/DD') 
+                       group by datestr order by datestr '''))
         record = self._cr.dictfetchall()
         totalamt=0.0
         datestr=date.today()+timedelta(days=2)
@@ -1243,10 +1254,10 @@ class DashBoard(models.Model):
     @api.model
     def total_crm_rpt4(self, *post):
 
-        self._cr.execute((''' select datestr,to_char(datestr,'Day') daystr,COALESCE(sum(planned_revenue),0.0) as totalamt  from
-                   (select to_date(to_char(job_enddate, 'YYYY/MM/DD'), 'YYYY/MM/DD')  as datestr,planned_revenue 
-                   from crm_lead where stage_id in (select id from crm_stage where is_revenue_stage=true)  and won_status <>'lost' and job_enddate>(now()+ INTERVAL '2 day')) t where datestr =to_date(to_char((now()+ INTERVAL '3 day'), 'YYYY/MM/DD'), 'YYYY/MM/DD')
-                   group by datestr order by datestr '''))
+        self._cr.execute((''' select datestr,to_char(datestr,'Day') daystr,COALESCE(sum(planned_revenue),0.0) as totalamt  from					   
+(select  to_date(to_char(start_datetime, 'YYYY/MM/DD'), 'YYYY/MM/DD')  as datestr,planned_revenue from planning_slot ps,crm_lead cl where ps.crm_id=cl.id)
+ t where datestr =to_date(to_char((now()+ INTERVAL '3 day'), 'YYYY/MM/DD'), 'YYYY/MM/DD') 
+                       group by datestr order by datestr '''))
         record = self._cr.dictfetchall()
         totalamt=0.0
         datestr=date.today()+timedelta(days=3)
@@ -1277,9 +1288,9 @@ class DashBoard(models.Model):
     @api.model
     def total_crm_rpt5(self, *post):
 
-        self._cr.execute((''' select datestr,to_char(datestr,'Day') daystr,COALESCE(sum(planned_revenue),0.0) as totalamt  from
-                       (select to_date(to_char(job_enddate, 'YYYY/MM/DD'), 'YYYY/MM/DD')  as datestr,planned_revenue 
-                       from crm_lead where stage_id in (select id from crm_stage where is_revenue_stage=true)  and won_status <>'lost' and job_enddate>(now()+ INTERVAL '3 day')) t where datestr =to_date(to_char((now()+ INTERVAL '4 day'), 'YYYY/MM/DD'), 'YYYY/MM/DD')
+        self._cr.execute((''' select datestr,to_char(datestr,'Day') daystr,COALESCE(sum(planned_revenue),0.0) as totalamt  from					   
+(select  to_date(to_char(start_datetime, 'YYYY/MM/DD'), 'YYYY/MM/DD')  as datestr,planned_revenue from planning_slot ps,crm_lead cl where ps.crm_id=cl.id)
+ t where datestr =to_date(to_char((now()+ INTERVAL '4 day'), 'YYYY/MM/DD'), 'YYYY/MM/DD') 
                        group by datestr order by datestr '''))
         record = self._cr.dictfetchall()
         totalamt=0.0
@@ -1309,10 +1320,10 @@ class DashBoard(models.Model):
     @api.model
     def total_crm_rpt6(self, *post):
 
-        self._cr.execute((''' select datestr,to_char(datestr,'Day') daystr,COALESCE(sum(planned_revenue),0.0) as totalamt  from
-                           (select to_date(to_char(job_enddate, 'YYYY/MM/DD'), 'YYYY/MM/DD')  as datestr,planned_revenue 
-                           from crm_lead where stage_id in (select id from crm_stage where is_revenue_stage=true)  and won_status <>'lost' and job_enddate>(now()+ INTERVAL '4 day')) t where datestr =to_date(to_char((now()+ INTERVAL '5 day'), 'YYYY/MM/DD'), 'YYYY/MM/DD') 
-                           group by datestr order by datestr '''))
+        self._cr.execute((''' select datestr,to_char(datestr,'Day') daystr,COALESCE(sum(planned_revenue),0.0) as totalamt  from					   
+(select  to_date(to_char(start_datetime, 'YYYY/MM/DD'), 'YYYY/MM/DD')  as datestr,planned_revenue from planning_slot ps,crm_lead cl where ps.crm_id=cl.id)
+ t where datestr =to_date(to_char((now()+ INTERVAL '5 day'), 'YYYY/MM/DD'), 'YYYY/MM/DD') 
+                       group by datestr order by datestr '''))
         record = self._cr.dictfetchall()
         totalamt = 0.0
         datestr = date.today()+ timedelta(days=5)
@@ -1344,10 +1355,10 @@ class DashBoard(models.Model):
     @api.model
     def total_crm_rpt7(self, *post):
 
-        self._cr.execute((''' select datestr,to_char(datestr,'Day') daystr,COALESCE(sum(planned_revenue),0.0) as totalamt  from
-                           (select to_date(to_char(job_enddate, 'YYYY/MM/DD'), 'YYYY/MM/DD')  as datestr,planned_revenue 
-                           from crm_lead where stage_id in (select id from crm_stage where is_revenue_stage=true)  and won_status <>'lost' and job_enddate>(now()+ INTERVAL '5 day')) t where datestr =to_date(to_char((now()+ INTERVAL '6 day'), 'YYYY/MM/DD'), 'YYYY/MM/DD')
-                           group by datestr order by datestr '''))
+        self._cr.execute((''' select datestr,to_char(datestr,'Day') daystr,COALESCE(sum(planned_revenue),0.0) as totalamt  from					   
+(select  to_date(to_char(start_datetime, 'YYYY/MM/DD'), 'YYYY/MM/DD')  as datestr,planned_revenue from planning_slot ps,crm_lead cl where ps.crm_id=cl.id)
+ t where datestr =to_date(to_char((now()+ INTERVAL '6 day'), 'YYYY/MM/DD'), 'YYYY/MM/DD') 
+                       group by datestr order by datestr '''))
         record = self._cr.dictfetchall()
         totalamt = 0.0
         datestr = date.today()+ timedelta(days=6)
@@ -1378,16 +1389,27 @@ class DashBoard(models.Model):
     @api.model
     def get_pie_month_target(self, *post):
 
-        query = '''
-select 'This Month' as thismonth,COALESCE(sum(planned_revenue),0.0) as totalamt  from
-               (select to_date(to_char(job_enddate, 'YYYY/MM/DD'), 'YYYY/MM/DD')  as datestr,planned_revenue 
-               from crm_lead where stage_id in (select id from crm_stage where is_revenue_stage=true)) t where DATE_TRUNC('month',datestr)=DATE_TRUNC('month',now()) and DATE_TRUNC('year',datestr)= DATE_TRUNC('year',now()) 
-               group by thismonth 
-			   
+#         query = '''
+# select 'This Month' as thismonth,COALESCE(sum(planned_revenue),0.0) as totalamt  from
+#                (select to_date(to_char(job_enddate, 'YYYY/MM/DD'), 'YYYY/MM/DD')  as datestr,planned_revenue
+#                from crm_lead where stage_id in (select id from crm_stage where is_revenue_stage=true)) t where DATE_TRUNC('month',datestr)=DATE_TRUNC('month',now()) and DATE_TRUNC('year',datestr)= DATE_TRUNC('year',now())
+#                group by thismonth
+#
+# 			   union select 'Balance',(455000-(select COALESCE(sum(planned_revenue),0.0) as totalamt  from
+#                (select to_date(to_char(job_enddate, 'YYYY/MM/DD'), 'YYYY/MM/DD')  as datestr,planned_revenue
+#                from crm_lead where stage_id in (select id from crm_stage where is_revenue_stage=true)) t where DATE_TRUNC('month',datestr)=DATE_TRUNC('month',now()) and DATE_TRUNC('year',datestr)= DATE_TRUNC('year',now())
+#                ));'''
+
+        query = '''select 'This Month' as thismonth,COALESCE(sum(planned_revenue),0.0) as totalamt  from
+               (select to_date(to_char(job_enddate, 'YYYY/MM/DD'), 'YYYY/MM/DD')  as datestr,planned_revenue
+               from crm_lead where stage_id in (select id from crm_stage where is_revenue_stage=true)) t where DATE_TRUNC('month',datestr)=DATE_TRUNC('month',now()) and DATE_TRUNC('year',datestr)= DATE_TRUNC('year',now())
+               group by thismonth
+
 			   union select 'Balance',(455000-(select COALESCE(sum(planned_revenue),0.0) as totalamt  from
-               (select to_date(to_char(job_enddate, 'YYYY/MM/DD'), 'YYYY/MM/DD')  as datestr,planned_revenue 
-               from crm_lead where stage_id in (select id from crm_stage where is_revenue_stage=true)) t where DATE_TRUNC('month',datestr)=DATE_TRUNC('month',now()) and DATE_TRUNC('year',datestr)= DATE_TRUNC('year',now()) 
+               (select to_date(to_char(job_enddate, 'YYYY/MM/DD'), 'YYYY/MM/DD')  as datestr,planned_revenue
+               from crm_lead where stage_id in (select id from crm_stage where is_revenue_stage=true)) t where DATE_TRUNC('month',datestr)=DATE_TRUNC('month',now()) and DATE_TRUNC('year',datestr)= DATE_TRUNC('year',now())
                ));'''
+
        ## raise UserError(query)
         self._cr.execute(query)
         docs = self._cr.dictfetchall()
@@ -1469,13 +1491,17 @@ DATE_TRUNC('month',date)=DATE_TRUNC('month',now()) and DATE_TRUNC('year',date)= 
     @api.model
     def total_crm_pie_summary_today(self, *post):
 
+        # query = '''
+        # select 'This Month' as thismonth,COALESCE(sum(planned_revenue),0.00) as totalamt  from
+        #                (select to_date(to_char(job_enddate, 'YYYY/MM/DD'), 'YYYY/MM/DD')  as datestr,planned_revenue
+        #                from crm_lead where stage_id in (select id from crm_stage where is_revenue_stage=true)) t where DATE_TRUNC('month',datestr)=DATE_TRUNC('month',now()) and DATE_TRUNC('year',datestr)= DATE_TRUNC('year',now()) and DATE_TRUNC('day',datestr)= DATE_TRUNC('day',now())
+        #                group by thismonth
+        #
+        # 			  ;'''
         query = '''
-        select 'This Month' as thismonth,COALESCE(sum(planned_revenue),0.00) as totalamt  from
-                       (select to_date(to_char(job_enddate, 'YYYY/MM/DD'), 'YYYY/MM/DD')  as datestr,planned_revenue 
-                       from crm_lead where stage_id in (select id from crm_stage where is_revenue_stage=true)) t where DATE_TRUNC('month',datestr)=DATE_TRUNC('month',now()) and DATE_TRUNC('year',datestr)= DATE_TRUNC('year',now()) and DATE_TRUNC('day',datestr)= DATE_TRUNC('day',now()) 
-                       group by thismonth 
-
-        			  ;'''
+        select  'This Month' as thismonth, COALESCE(sum(planned_revenue),0.0) as totalamt from 
+(select  to_date(to_char(start_datetime, 'YYYY/MM/DD'), 'YYYY/MM/DD')  as datestr,planned_revenue from planning_slot ps,crm_lead cl where ps.crm_id=cl.id)
+ t where DATE_TRUNC('month',datestr)=DATE_TRUNC('month',now()) and DATE_TRUNC('year',datestr)= DATE_TRUNC('year',now());'''
         ## raise UserError(query)
         self._cr.execute(query)
         docs = self._cr.dictfetchall()
@@ -1505,10 +1531,13 @@ DATE_TRUNC('month',date)=DATE_TRUNC('month',now()) and DATE_TRUNC('year',date)= 
         # else:
         #     states_arg = """ parent_state in ('posted', 'draft')"""
 
-        self._cr.execute((''' select datestr,to_char(datestr,'Day') daystr,COALESCE(sum(planned_revenue),0.0) as totalamt  from
-        (select to_date(to_char(job_enddate, 'YYYY/MM/DD'), 'YYYY/MM/DD')  as datestr,planned_revenue 
-        from crm_lead where stage_id in (select id from crm_stage where is_revenue_stage=true)) t where datestr <(now()+ INTERVAL '+6 day') 
-        group by datestr order by datestr '''))
+        # self._cr.execute((''' select datestr,to_char(datestr,'Day') daystr,COALESCE(sum(planned_revenue),0.0) as totalamt  from
+        # (select to_date(to_char(job_enddate, 'YYYY/MM/DD'), 'YYYY/MM/DD')  as datestr,planned_revenue
+        # from crm_lead where stage_id in (select id from crm_stage where is_revenue_stage=true)) t where datestr <(now()+ INTERVAL '+6 day')
+        # group by datestr order by datestr '''))
+        self._cr.execute((''' select  datestr,to_char(datestr,'Day') daystr, COALESCE(sum(planned_revenue),0.0) as totalamt from 
+(select  to_date(to_char(start_datetime, 'YYYY/MM/DD'), 'YYYY/MM/DD')  as datestr,planned_revenue from planning_slot ps,crm_lead cl where ps.crm_id=cl.id)
+t where datestr <(now()+ INTERVAL '+6 day')  group by datestr order by datestr '''))
         record = self._cr.dictfetchall()
 
         datestr = [item['datestr'] for item in record]
@@ -1604,27 +1633,54 @@ DATE_TRUNC('month',date)=DATE_TRUNC('month',now()) and DATE_TRUNC('year',date)= 
         else:
             states_arg = """ parent_state in ('posted', 'draft')"""
 
-        self._cr.execute(('''select p.name,s1.* from res_partner p,
-(select u.partner_id, s.* from res_users u,
-(select user_id,datestr,sum(planned_revenue) as totalamt  from
-               (select user_id, to_date(to_char(won_date, 'YYYY/MM/DD'), 'YYYY/MM/DD')  as datestr,planned_revenue 
-               from crm_lead where stage_id in (select id from crm_stage where is_revenue_stage=true) and won_date<now()) t where DATE_TRUNC('month',datestr)=DATE_TRUNC('month',now()) and DATE_TRUNC('year',datestr)= DATE_TRUNC('year',now()) and DATE_TRUNC('day',datestr)= DATE_TRUNC('day',now()) 
-               group by datestr,user_id) s where u.id=s.user_id) s1 where s1.partner_id=p.id order by s1.datestr desc, p.name
+#         self._cr.execute(('''select p.name,s1.* from res_partner p,
+# (select u.partner_id, s.* from res_users u,
+# (select user_id,datestr,sum(planned_revenue) as totalamt  from
+#                (select user_id, to_date(to_char(won_date, 'YYYY/MM/DD'), 'YYYY/MM/DD')  as datestr,planned_revenue
+#                from crm_lead where stage_id in (select id from crm_stage where is_revenue_stage=true) and won_date<now()) t where DATE_TRUNC('month',datestr)=DATE_TRUNC('month',now()) and DATE_TRUNC('year',datestr)= DATE_TRUNC('year',now()) and DATE_TRUNC('day',datestr)= DATE_TRUNC('day',now())
+#                group by datestr,user_id) s where u.id=s.user_id) s1 where s1.partner_id=p.id order by s1.datestr desc, p.name
+#
+#                                 '''))
 
-                                '''))
+        self._cr.execute(('''
+            select p.name,s1.* from res_partner p,
+(select u.partner_id, s.* from res_users u,
+(select m.*, COALESCE(d1.today_amt,0.0) as today_amt from 
+(select  user_id, COALESCE(sum(planned_revenue),0.0) as thismonth from 
+(select  cl.user_id,to_date(to_char(start_datetime, 'YYYY/MM/DD'), 'YYYY/MM/DD')  as datestr,planned_revenue 
+ from planning_slot ps,crm_lead cl where ps.crm_id=cl.id )
+ t where DATE_TRUNC('month',datestr)=DATE_TRUNC('month',now()) and DATE_TRUNC('year',datestr)= DATE_TRUNC('year',now()) group by user_id)
+ m
+ left join 
+ (
+	 select  user_id, COALESCE(sum(planned_revenue),0.0) as today_amt from 
+(select  cl.user_id,to_date(to_char(start_datetime, 'YYYY/MM/DD'), 'YYYY/MM/DD')  as datestr,planned_revenue 
+ from planning_slot ps,crm_lead cl where ps.crm_id=cl.id )
+ t where DATE_TRUNC('month',datestr)=DATE_TRUNC('month',now()) and DATE_TRUNC('year',datestr)= DATE_TRUNC('year',now()) and 
+	  DATE_TRUNC('day',datestr)= DATE_TRUNC('day',now())
+	 group by user_id
+ ) d1 on m.user_id=d1.user_id)
+ s where u.id=s.user_id
+ ) s1 where s1.partner_id=p.id order by  p.name
+
+                                        '''))
 
         record = self._cr.dictfetchall()
 
         agentname = [item['name'] for item in record]
-        dates = [item['datestr'] for item in record]
+        today_amt = [item['today_amt'] for item in record]
+        thismonth = [item['thismonth'] for item in record]
 
-        salesamount = [item['totalamt'] for item in record]
+        # dates = [item['datestr'] for item in record]
+
+        # salesamount = [item['totalamt'] for item in record]
 
         records = {
             'agentname': agentname,
-            'dates': dates,
-            'salesamount': salesamount,
-
+            'today_amt': today_amt,
+            'thismonth': thismonth,
+            # 'dates': dates,
+            # 'salesamount': salesamount,
         }
         return records
 
