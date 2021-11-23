@@ -1646,15 +1646,13 @@ t where datestr <(now()+ INTERVAL '+6 day')  group by datestr order by datestr '
             select p.name,s1.* from res_partner p,
 (select u.partner_id, s.* from res_users u,
 (select m.*, COALESCE(d1.today_amt,0.0) as today_amt from 
-(select  user_id, COALESCE(sum(planned_revenue),0.0) as thismonth from 
-(select  cl.user_id,to_date(to_char(start_datetime, 'YYYY/MM/DD'), 'YYYY/MM/DD')  as datestr,planned_revenue 
- from planning_slot ps,crm_lead cl where ps.crm_id=cl.id )
- t where DATE_TRUNC('month',datestr)=DATE_TRUNC('month',now()) and DATE_TRUNC('year',datestr)= DATE_TRUNC('year',now()) group by user_id)
+( select invoice_user_id as user_id,sum(amount_total) as thismonth from account_move where  DATE_TRUNC('month',date)=DATE_TRUNC('month',now()) 
+ and DATE_TRUNC('year',date)= DATE_TRUNC('year',now()) group by invoice_user_id)
  m
  left join 
  (
 	 select  user_id, COALESCE(sum(planned_revenue),0.0) as today_amt from 
-(select  cl.user_id,to_date(to_char(start_datetime, 'YYYY/MM/DD'), 'YYYY/MM/DD')  as datestr,planned_revenue 
+(select  cl.user_id,to_date(to_char(cl.write_date, 'YYYY/MM/DD'), 'YYYY/MM/DD')  as datestr,planned_revenue 
  from planning_slot ps,crm_lead cl where ps.crm_id=cl.id )
  t where DATE_TRUNC('month',datestr)=DATE_TRUNC('month',now()) and DATE_TRUNC('year',datestr)= DATE_TRUNC('year',now()) and 
 	  DATE_TRUNC('day',datestr)= DATE_TRUNC('day',now())
