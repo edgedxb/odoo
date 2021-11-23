@@ -1651,14 +1651,10 @@ t where datestr <(now()+ INTERVAL '+6 day')  group by datestr order by datestr '
  m
  left join 
  (
-	 select  user_id, COALESCE(sum(planned_revenue),0.0) as today_amt from 
-(select  cl.user_id,to_date(to_char(cl.write_date, 'YYYY/MM/DD'), 'YYYY/MM/DD')  as datestr,planned_revenue 
- from planning_slot ps,crm_lead cl where ps.crm_id=cl.id )
- t where DATE_TRUNC('month',datestr)=DATE_TRUNC('month',now()) and DATE_TRUNC('year',datestr)= DATE_TRUNC('year',now()) and 
-	  DATE_TRUNC('day',datestr)= DATE_TRUNC('day',now())
+	 select  user_id,COALESCE(sum(planned_revenue),0.0) as today_amt 
+ from crm_lead where DATE_TRUNC('month',won_date)=DATE_TRUNC('month',now()) and DATE_TRUNC('year',won_date)= DATE_TRUNC('year',now()) and 
+	  DATE_TRUNC('day',won_date)= DATE_TRUNC('day',now())
 	 group by user_id
- ) d1 on m.user_id=d1.user_id)
- s where u.id=s.user_id
  ) s1 where s1.partner_id=p.id order by  p.name
 
                                         '''))
