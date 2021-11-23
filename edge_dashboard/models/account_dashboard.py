@@ -1643,7 +1643,7 @@ t where datestr <(now()+ INTERVAL '+6 day')  group by datestr order by datestr '
 #                                 '''))
 
         self._cr.execute(('''
-            select p.name,s1.* from res_partner p,
+ 	            select p.name,s1.* from res_partner p,
 (select u.partner_id, s.* from res_users u,
 (select m.*, COALESCE(d1.today_amt,0.0) as today_amt from 
 ( select invoice_user_id as user_id,sum(amount_total) as thismonth from account_move where  state='posted' and journal_id=1 and DATE_TRUNC('month',date)=DATE_TRUNC('month',now()) 
@@ -1651,9 +1651,7 @@ t where datestr <(now()+ INTERVAL '+6 day')  group by datestr order by datestr '
  m
  left join 
  (
-	 select  user_id, COALESCE(sum(planned_revenue),0.0) as today_amt from 
-(
-select  user_id,COALESCE(sum(planned_revenue),0.0) as today_amt 
+	 select  user_id,COALESCE(sum(planned_revenue),0.0) as today_amt 
  from crm_lead where DATE_TRUNC('month',won_date)=DATE_TRUNC('month',now()) and DATE_TRUNC('year',won_date)= DATE_TRUNC('year',now()) and 
 	  DATE_TRUNC('day',won_date)= DATE_TRUNC('day',now())
 	 group by user_id
