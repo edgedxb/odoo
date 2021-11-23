@@ -652,7 +652,7 @@ odoo.define('AccountingDashboard.AccountingDashboard', function (require) {
                                 amount_today = self.format_currency(currency, today_amt[k]);
                                 //                                $('#charts').append('<li><a ' + banks[k] + '" data-user-id="' + banks[k] + '">' + banks[k] + '</a>'+  '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' + '<span>'+ balance[k] +'</span>' + '</li>' );
                                 //$('#fixed_deposit_list').append('<li><div>' + depositname[k] + '</div><div>' + amount + '</div></li>');
-                                $('#crm_sales_list').append('<li><div>' + agentname[k] + '</div><div>' + amount_thismonth + '</div><div>' + amount_today + '</div></li>');
+                                $('#crm_sales_list').append('<li><div>' + agentname[k] + '</div><div align="right">' + amount_thismonth + '</div><div align="right">' + amount_today + '</div></li>');
                                 //                                $('#current_bank_balance').append('<li>' + banks[k] +'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'+ balance[k] +  '</li>' );
                                 //$('#drop_charts_balance').append('<li>' + depositamount[k].toFixed(2) + '</li>');
                             }

@@ -212,8 +212,9 @@
                     </div>
 
 					<div class="col-md-6" id="col-graph">
-                        <div class="card">
-                                <div class="card-body p-0" style=" height: 287px; overflow-y: auto; ">
+                        <div class="row col-md-12">
+                            <div class="col-md-6 card">
+                                <div class="card-body p-0" style="height: 587px; overflow-y: auto; ">
                                     <div class="card-header" style=" padding: 17px 1.5rem !important; display: flex !IMPORTANT; justify-content: space-between; align-items: center; ">
                                         <div class="card-title">
                                             <h3 class="custom-h3 card-title">
@@ -228,13 +229,13 @@
                                         </div>
                                     </div>
 
-                                    <div class="card-body p-0" style=" height: 100px;">
+                                    <div class="card-body p-0" style=" height: 500px;">
                                         <ul id="crm_sales_list"></ul>
                                     </div>
                                 </div>
                             </div>
-                        <div class="row col-md-12">
-                            <div class="col-md-12" id="col-graph">
+
+                            <div class="col-md-6" id="col-graph">
                                 <div class="card">
                                     <div class="card-header">
                                         <div class="card-title">
@@ -279,7 +280,9 @@
                                 </div>
                             </div>
 
+
                         </div>
+
 
 
                         </div>
