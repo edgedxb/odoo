@@ -1646,8 +1646,8 @@ t where datestr <(now()+ INTERVAL '+6 day')  group by datestr order by datestr '
             select p.name,s1.* from res_partner p,
 (select u.partner_id, s.* from res_users u,
 (select m.*, COALESCE(d1.today_amt,0.0) as today_amt from 
-( select invoice_user_id as user_id,sum(amount_total) as thismonth from account_move where  DATE_TRUNC('month',date)=DATE_TRUNC('month',now()) 
- and DATE_TRUNC('year',date)= DATE_TRUNC('year',now()) group by invoice_user_id)
+( select invoice_user_id as user_id,sum(amount_total) as thismonth from account_move where  state='posted' and journal_id=1 and DATE_TRUNC('month',date)=DATE_TRUNC('month',now()) 
+ and DATE_TRUNC('year',date)= DATE_TRUNC('year',now())  group by invoice_user_id)
  m
  left join 
  (

@@ -252,6 +252,8 @@
                                                     <canvas id="horizontalbarChart" width="200" height="200"></canvas>
                                                 </div>
                                             </div>
+                                        </div>
+                                        <div class="row">
                                             <div  class="col-md-6">
                                                 <br/><br/><br/>
                                                 <span id="scr_this_month_target"/><br/>
