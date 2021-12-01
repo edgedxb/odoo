@@ -38,9 +38,9 @@ class DashBoard(models.Model):
         year = todays_date.year
         month = todays_date.month
         dayin = todays_date.day
-        start_date = date(year, month, 1)
-        end_date = date(year, month + 1, 1)
-        print (todays_date.weekday())
+        # start_date = date(year, month, 1)
+        # end_date = date(year, month + 1, 1)
+        # print (todays_date.weekday())
         count = 0
         dt = date(year, month, 1)
         while dt.year == year and dt.month == month and dt.day<=dayin:
