@@ -1661,7 +1661,7 @@ t where datestr <(now()+ INTERVAL '+6 day')  group by datestr order by datestr '
 #
 #
 #                                         '''))
-            self._cr.execute(('''
+        self._cr.execute(('''
          	            select f1.* from 
 (select m.*,COALESCE(d1.today_amt,0.0) as today_amt,COALESCE(d2.thismonth,0.0) as thismonth from 
 (select u.id as user_id, u.partner_id,p.name from res_users u, res_partner p where u.partner_id=p.id) m
