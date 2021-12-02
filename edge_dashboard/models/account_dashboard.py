@@ -1642,24 +1642,43 @@ t where datestr <(now()+ INTERVAL '+6 day')  group by datestr order by datestr '
 #
 #                                 '''))
 
-        self._cr.execute(('''
- 	            select p.name,s1.* from res_partner p,
-(select u.partner_id, s.* from res_users u,
-(select m.*, COALESCE(d1.today_amt,0.0) as today_amt from 
-( select invoice_user_id as user_id,sum(amount_total) as thismonth from account_move where  state='posted' and journal_id=1 and DATE_TRUNC('month',date)=DATE_TRUNC('month',now()) 
- and DATE_TRUNC('year',date)= DATE_TRUNC('year',now())  group by invoice_user_id)
- m
- left join 
+#         self._cr.execute(('''
+#  	            select p.name,s1.* from res_partner p,
+# (select u.partner_id, s.* from res_users u,
+# (select m.*, COALESCE(d1.today_amt,0.0) as today_amt from
+# ( select invoice_user_id as user_id,sum(amount_total) as thismonth from account_move where  state='posted' and journal_id=1 and DATE_TRUNC('month',date)=DATE_TRUNC('month',now())
+#  and DATE_TRUNC('year',date)= DATE_TRUNC('year',now())  group by invoice_user_id)
+#  m
+#  left join
+#  (
+# 	 select  user_id,COALESCE(sum(planned_revenue),0.0) as today_amt
+#  from crm_lead where DATE_TRUNC('month',won_date)=DATE_TRUNC('month',now()) and DATE_TRUNC('year',won_date)= DATE_TRUNC('year',now()) and
+# 	  DATE_TRUNC('day',won_date)= DATE_TRUNC('day',now())
+# 	 group by user_id
+#  ) d1 on m.user_id=d1.user_id)
+#  s where u.id=s.user_id
+#  ) s1 where s1.partner_id=p.id order by  p.name
+#
+#
+#                                         '''))
+            self._cr.execute(('''
+         	            select f1.* from 
+(select m.*,COALESCE(d1.today_amt,0.0) as today_amt,COALESCE(d2.thismonth,0.0) as thismonth from 
+(select u.id as user_id, u.partner_id,p.name from res_users u, res_partner p where u.partner_id=p.id) m
+left join 
  (
 	 select  user_id,COALESCE(sum(planned_revenue),0.0) as today_amt 
  from crm_lead where DATE_TRUNC('month',won_date)=DATE_TRUNC('month',now()) and DATE_TRUNC('year',won_date)= DATE_TRUNC('year',now()) and 
 	  DATE_TRUNC('day',won_date)= DATE_TRUNC('day',now())
 	 group by user_id
- ) d1 on m.user_id=d1.user_id)
- s where u.id=s.user_id
- ) s1 where s1.partner_id=p.id order by  p.name
+ ) d1 on m.user_id=d1.user_id
+ 
+ left join
+ ( select invoice_user_id as user_id,sum(amount_total) as thismonth from account_move where  state='posted' and journal_id=1 and DATE_TRUNC('month',date)=DATE_TRUNC('month',now()) 
+ and DATE_TRUNC('year',date)= DATE_TRUNC('year',now())  group by invoice_user_id) d2 on d2.user_id=m.user_id) f1 where thismonth>0 or today_amt>0
+order by  name
 
-                                        '''))
+                                                '''))
 
         record = self._cr.dictfetchall()
 
