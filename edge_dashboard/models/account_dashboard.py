@@ -1675,7 +1675,7 @@ left join
  
  left join
  ( select invoice_user_id as user_id,sum(amount_total) as thismonth from account_move where  state='posted' and journal_id=1 and DATE_TRUNC('month',date)=DATE_TRUNC('month',now()) 
- and DATE_TRUNC('year',date)= DATE_TRUNC('year',now())  group by invoice_user_id) d2 on d2.user_id=m.user_id) f1 where thismonth_amt>0 and thismonth_amt>0
+ and DATE_TRUNC('year',date)= DATE_TRUNC('year',now())  group by invoice_user_id) d2 on d2.user_id=m.user_id) f1 where thismonth>0 or today_amt>0
 order by  name
 
                                                 '''))
