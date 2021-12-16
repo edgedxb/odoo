@@ -7,12 +7,9 @@ from odoo.exceptions import AccessError, UserError, ValidationError
 from odoo.tools.misc import formatLang, get_lang
 from odoo.osv import expression
 from odoo.tools import float_is_zero, float_compare
-
-
-
 from werkzeug.urls import url_encode
 class HelpdeskTicket(models.Model):
     _inherit = 'helpdesk.ticket'
 
-    # amount_total = fields.Monetary(string='Total', related="sale_order_id.amount_total")
+    amount_total = fields.Monetary(string='Total', related="sale_order_id.amount_total")
     user_id = fields.Many2one('res.users', string='Salesperson', related="sale_order_id.user_id")
