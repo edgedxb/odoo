@@ -2,7 +2,7 @@
     'name': 'Edge Helpdesk',
     'category': 'Operations/Helpdesk',
     'summary': 'Edgedxb Project, Tasks, After Sales',
-    'depends': ['helpdesk', 'sale_management'],
+    'depends': ['helpdesk', 'sale_management','helpdesk_sale'],
     'auto_install': True,
     'description': """
 Edge helpdesk tickets.
