@@ -11,7 +11,7 @@ from werkzeug.urls import url_encode
 class HelpdeskTicket(models.Model):
     _inherit = 'helpdesk.ticket'
 
-    currency_id = fields.Many2one("res.currency", related='sale_order_id.currency_id', string="Currency")
+    currency_id = fields.Many2one('res.currency', related='company_id.currency_id')
 
     amount_total = fields.Monetary(string='Total', related="sale_order_id.amount_total")
     user_id = fields.Many2one('res.users', string='Salesperson', related="sale_order_id.user_id")
