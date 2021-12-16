@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="edgedxb_helpdesk_ticket_view_form_inherit_helpdesk_invoicing" model="ir.ui.view">
+        <field name='name'>edgedxb.helpdesk.ticket.form.inherit.invoicing</field>
+        <field name="model">helpdesk.ticket</field>
+        <field name="inherit_id" ref="helpdesk.helpdesk_ticket_view_form"/>
+        <field name="arch" type="xml">
+            <field name='sale_order_id' position="after">
+                <field name="amount_total" widget="monetary"/>
+                <field name="user_id" options='{"no_open": True}' readonly="1"/>
+            </field>
+        </field>
+    </record>
+</odoo>
