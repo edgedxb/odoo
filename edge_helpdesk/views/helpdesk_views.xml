@@ -7,7 +7,20 @@
         <field name="arch" type="xml">
             <field name='sale_order_id' position="after">
                 <field name="amount_total" widget="monetary"/>
-                <field name="user_id" options='{"no_open": True}' readonly="1"/>
+                <field name="so_user_id" options='{"no_open": True}' readonly="1"/>
+            </field>
+        </field>
+    </record>
+    <record id="edgedxb_helpdesk_ticket_view_form_inherit_helpdesk_tree" model="ir.ui.view">
+        <field name='name'>edgedxb.helpdesk.ticket.form.inherit.tree</field>
+        <field name="model">helpdesk.ticket</field>
+        <field name="inherit_id" ref="helpdesk.helpdesk_tickets_view_tree"/>
+        <field name="arch" type="xml">
+
+            <field name='user_id' position="after">
+                <field name="sale_order_id" optional="show"/>
+                <field name="amount_total" widget="monetary"  optional="show"/>
+                <field name="so_user_id"  optional="show"/>
             </field>
         </field>
     </record>
