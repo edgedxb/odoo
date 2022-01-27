@@ -1,0 +1,28 @@
+<?xml version="1.0" ?>
+<odoo>
+
+    <!--Creating Email Template in Odoo-->
+    <data noupdate="1">
+        <record id="amc_contract_email_template" model="mail.template">
+            <field name="name">AMC Contract: Send by email</field>
+            <field name="model_id" ref="amc_contract_details.model_amc_contract"/>
+            <field name="email_from">${object.company_id.email |safe}</field>
+            <field name="email_to">${object.partner_id.email_id}</field>
+            <field name="subject">${object.contract_name}</field>
+            <field name="auto_delete" eval="True"/>
+           <field name="lang">${object.partner_id.lang}</field>
+            <field name="body_html" type="html">
+                <div style="margin: 0px; padding: 0px;">
+                    <p style="margin: 0px; padding: 0px; font-size: 13px;">
+                        Dear ${object.partner_id.name}
+                        <br /><br />
+                        Here is your contract with reference ${object.name}
+                        <br /><br />
+                        If you have queries feel free to ask.
+                    </p>
+                </div>
+            </field>
+        </record>
+    </data>
+
+</odoo>

@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_contract_tree" model="ir.ui.view">
+        <field name="name">view.contract.tree</field>
+        <field name="model">amc.contract</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+                <field name="contract_name"/>
+                <field name="partner_id"/>
+                <field name="sales_agent_id"/>
+                <field name="company_id" />
+                <field name="start_date"/>
+                <field name="end_date"/>
+                <field name="total_amount"/>
+                <field name="contract_state"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_contract_form" model="ir.ui.view">
+        <field name="name">view.contract.form</field>
+        <field name="model">amc.contract</field>
+        <field name="arch" type="xml">
+            <form attrs="{'readonly':[('contract_state', '!=', 'draft')]}">
+                <header>
+                    <button id="button_confirm" attrs="{'invisible': ['|',('id', '=', False),('contract_state', '!=', 'draft')]}" name="action_confirm" string="Confirm" class="btn-primary" type="object"/>
+
+
+                    <button id="button_cancel" attrs="{'invisible': [('contract_state', 'in', ['draft', 'cancel'])]}" name="action_cancel" string="Cancel" class="btn-primary" type="object"/>
+
+                    <button id="button_set_draft" attrs="{'invisible': [('contract_state', '!=', 'cancel')]}" name="action_set_draft" string="Set To Draft" class="btn-primary" type="object"/>
+
+                    <button id="button_send_by_email" attrs="{'invisible': [('id', '=', False)]}" name="action_send_by_email" string="Send By Email" class="btn-primary" type="object"/>
+
+                    <button id="button_callout" attrs="{'invisible': [('id', '=', False)]}" name="action_callout" string="Callout" class="btn-primary" type="object"/>
+
+
+                    <field name="contract_state" widget="statusbar" statusbar_visible="draft,cancel,confirm,valid,done"/>
+                </header>
+                <sheet>
+                    <widget name="web_ribbon" title="Cancelled" bg_color="bg-danger" attrs="{'invisible': [('contract_state', '!=', 'cancel')]}"/>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" readonly="1"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="contract_name" attrs="{'readonly': [('contract_state', 'not in', ['draft'])]}"/>
+                            <field name="partner_id" required='1' attrs="{'readonly': [('contract_state', 'not in', ['draft'])]}"/>
+                            <field name="area_id" required='1' attrs="{'readonly': [('contract_state', 'not in', ['draft'])]}"/>
+                            <field name="unit_no" required='1' attrs="{'readonly': [('contract_state', 'not in', ['draft'])]}"/>
+                            <field name="building_name" required='1' attrs="{'readonly': [('contract_state', 'not in', ['draft'])]}"/>
+                        </group>
+                        <group>
+                            <field name="sales_agent_id" required='1' attrs="{'readonly': [('contract_state', 'not in', ['draft'])]}"/>
+                            <field name="start_date" attrs="{'readonly': [('contract_state', 'not in', ['draft'])]}"/>
+                            <field name="end_date" attrs="{'readonly': [('contract_state', 'not in', ['draft'])]}"/>
+                            <field name="total_amount" readonly='1'/>
+                            <field name="company_id" attrs="{'readonly': [('contract_state', 'not in', ['draft'])]}"/>
+                            <field name="date" attrs="{'readonly': [('contract_state', 'not in', ['draft'])]}"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="AMC Details">
+                            <field name="contract_line_ids" attrs="{'readonly': [('contract_state', 'not in', ['draft'])]}">
+                                <tree editable="bottom">
+                                    <field name="product_id"/>
+                                    <field name="amount"/>
+                                    <field name="date"/>
+                                    <field name="scope"/>
+                                    <field name="lead_id" readonly='1'/>
+                                    <field name="planning_id" readonly='1'/>
+                                   <!--  <field name="invoice_id"/>
+                                    <field name="payment_id"/> -->
+                                </tree>
+                            </field>
+                            <group name="note_group" col="6" class="mt-2 mt-md-0">
+                                <group colspan="4">
+                                    <field name="description" nolabel="1" placeholder="Description..." attrs="{'readonly': [('contract_state', 'not in', ['draft'])]}"/>
+                                </group>
+                        </group>
+                        </page>
+                        <page string="Callback Details" id="callback_line_view_form">
+                            <field name="callout_line_ids" attrs="{'readonly': [('contract_state', 'not in', ['draft'])]}">
+                                <tree edit ='0'>
+                                    <field name="product_id" required='1'/>
+                                    <field name="amount" required='1'/>
+                                    <field name="date" required='1'/>
+                                    <field name="hours" required='1'/>
+                                    <field name="scope" required='1'/>
+                                    <field name="start_date"/>
+                                    <field name="end_date"/>
+                                    <field name="lead_id"/>
+                                    <field name="planning_id"/>
+                                   <!--  <field name="invoice_id"/>
+                                    <field name="payment_id"/> -->
+                                </tree>
+                            </field>
+                            <group name="note_group" col="6" class="mt-2 mt-md-0">
+                                <group colspan="4">
+                                    <field name="description" nolabel="1" placeholder="Description..." attrs="{'readonly': [('contract_state', 'not in', ['draft'])]}"/>
+                                </group>
+                        </group>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+            </form>
+        </field>
+    </record>
+    <record id="callback_line_view_form" model="ir.ui.view">
+            <field name="name">callback.line.view.form</field>
+            <field name="model">callback.contract.line</field>
+            <field name="arch" type="xml">
+                <form string="Callback Contract Items">
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="product_id"/>
+                                <field name="amount"/>
+                                <field name="date"/>
+                                <field name="hours"/>
+                                <field name="scope"/>
+                            </group>
+                            <group>
+                                <field name="start_date"/>
+                                <field name="end_date"/>
+                                <field name="lead_id" readonly='1'/>
+                                <field name="planning_id"/>
+                            </group>
+                        </group>
+                    </sheet>
+                    <header>
+                        <button id="button_create_crm"  name="action_create_crm" string="Create Crm" class="btn-primary" type="object"/>
+                    </header>
+                </form>
+            </field>
+        </record>
+        <record id="amc_contract_pivot" model="ir.ui.view">
+            <field name="name">AMC Contract Pivot</field>
+            <field name="model">amc.contract</field>
+            <field name="arch" type="xml">
+                <pivot string="AMC Contract Pivot">
+                    <field name="partner_id" type="row"/>
+                    <field name="start_date" type="col" interval="month"/>
+                </pivot>
+            </field>
+        </record>
+
+    <record id="view_contract_search" model="ir.ui.view">
+        <field name="name">view.contract.search</field>
+        <field name="model">amc.contract</field>
+        <field name="arch" type="xml">
+            <search string="Contracts">
+                <filter string="Active Contracts" name="active_contracts" domain="[('contract_state','!=','cancel')]"/>
+                <filter string="Cancelled" name="cancelled_contracts" domain="[('contract_state','=','cancel')]"/>
+                <field name="name"/>
+                <field name="contract_name"/>
+                <field name="partner_id"/>
+                <field name="sales_agent_id"/>
+                <field name="company_id"/>
+                <field name="start_date"/>
+                <field name="end_date"/>
+                <field name="total_amount"/>
+                <field name="contract_state"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_amc_contract" model="ir.actions.act_window">
+        <field name="name">Contracts</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">amc.contract</field>
+        <field name="view_mode">tree,form,pivot</field>
+        <field name="context">{'search_default_active_contracts': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create your first contract !
+            </p>
+        </field>
+    </record>
+
+    <menuitem id="menu_amc_contract_root"
+              web_icon="amc_contract_details,static/description/icon.png"
+              name="AMC"
+              action="action_amc_contract"
+              sequence="10"/>
+</odoo>

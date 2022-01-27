@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <report
+        id="report_amc_contract"
+        string="AMC Contract"
+        model="amc.contract"
+        report_type="qweb-pdf"
+        name="amc_contract_details.amc_contract_report"
+        file="amc_contract_details.amc_contract_report"/>
+</odoo>
