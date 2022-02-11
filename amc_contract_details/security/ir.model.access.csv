@@ -1,0 +1,5 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_amc_contract,access.amc.contract,model_amc_contract,base.group_user,1,1,1,1
+access_amc_contract_line,access_amc_contract_line,model_amc_contract_line,base.group_user,1,1,1,1
+access_callout_contract_line,access_callout_contract_line,model_callout_contract_line,base.group_user,1,1,1,1
+access_monthly_revenue_wizard,access_monthly_revenue_wizard,model_monthly_revenue_wizard,base.group_user,1,1,1,1

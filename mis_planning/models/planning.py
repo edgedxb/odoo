@@ -53,8 +53,9 @@ class MisPlanning(models.Model):
     job_closingdate = fields.Date(string='Job Closing Date')
     paid_amount = fields.Float(string='Amount', default=0.0)
     is_invoice = fields.Boolean(string='Is Invoice?', related='job_status_id.is_invoice')
-    payment_id = fields.Many2one('account.payment', string='Payment', readonly=True, store=True)
+
     color = fields.Integer("Color", related='job_status_id.color')
+
 
 
     def name_get(self):
@@ -130,7 +131,7 @@ class MisPlanning(models.Model):
                 objstate = self.env['crm.stage'].search([('is_closed', '=', True)])
                 for rec in objstate:
                     slot.crm_id.is_system = False
-                    slot.crm_id.stage_id = rec.id
+                    # slot.crm_id.stage_id = rec.id
 
 #            raise UserError('hi')
                 if slot.paid_amount < 0:
@@ -201,11 +202,12 @@ class MisPlanning(models.Model):
                                              }
                         objacmove = self.env['account.move'].create(move_vals)
 
-                        #self.invoice_id = objacmove.id
+                        # self.invoice_id = objacmove.id
                         #self.state = 'posted'
 
                         list_of_ids = []
                         postedinvoice = objacmove.post()
+                        payment_id = -1
 
                         if self.paid_amount>0:
                             payment_vals = {'payment_date': self.job_closingdate,
@@ -220,6 +222,7 @@ class MisPlanning(models.Model):
                                          }
                             objpayment = self.env['account.payment'].create(payment_vals)
                             objpayment.post()
+                            payment_id = objpayment.id
 
                         # objpayment = self.env['account.payment'].create({'invoice_ids':[objacmove.id,],
                         #                                                  'journal_id': self.journal_id.id,
@@ -234,6 +237,12 @@ class MisPlanning(models.Model):
                         # if objpayment:
                         #     self.payment_id=objpayment.id
                         list_of_ids.append(objacmove.id)
+                        for rec in objstate:
+                            slot.crm_id.invoice_id = objacmove.id
+                            if payment_id > 0:
+                                slot.crm_id.payment_id = payment_id
+                            slot.crm_id.stage_id = rec.id
+
                         if list_of_ids:
                             imd = self.env['ir.model.data']
                             action = imd.xmlid_to_object('account.action_move_out_invoice_type')

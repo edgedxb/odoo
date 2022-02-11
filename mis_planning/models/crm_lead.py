@@ -31,6 +31,8 @@ class MisCRMLead(models.Model):
     is_transfer = fields.Boolean('Is Transfer', default=False)
     is_system = fields.Boolean('Is System', default=True)
     won_date = fields.Datetime('Won Date')
+    payment_id = fields.Many2one('account.payment', string='Payment', readonly=True, store=True)
+    invoice_id = fields.Many2one('account.move', string='Invoice', readonly=True, store=True)
     cst_nextactivity_date = fields.Date(string="Next Activity Date")
 
 
