@@ -74,6 +74,7 @@ class AmcContract(models.Model):
                         'job_startdate': str(contract_lines_id.date) + ' 09:00:00',
                         'job_enddate': str(contract_lines_id.date) + ' 11:00:00',
                         'cst_nextactivity_date': contract_lines_id.date,
+                        'description' : 'AMC Contract '  + str(self.name),
                         'source_id': 40})
                         contract_lines_id.lead_id = lead_id.id
 
@@ -81,13 +82,17 @@ class AmcContract(models.Model):
                         'partner_id': contract_lines_id.contract_id.partner_id.id,
                         'opportunity_id': lead_id.id,
                         'date_order': fields.Datetime.now(),
-                        'order_line': [(0, 0, {'product_id': contract_lines_id.product_id.id, 
-                                               'price_unit': contract_lines_id.amount, 
-                                               'product_uom': contract_lines_id.product_id.uom_id.id,})],
+                        'order_line': [(0, 0, {'product_id': contract_lines_id.product_id.id,
+                                               'price_unit': contract_lines_id.amount,
+                                               'product_uom': contract_lines_id.product_id.uom_id.id,
+                                               })],
                         })
+
                         sale_order_id.action_confirm()
+
                         lead_id.action_set_won_rainbowman()
                         lead_id.action_transfer2planning()
+
 
 
 
@@ -263,7 +268,7 @@ class AmcContractLine(models.Model):
     _name = 'amc.contract.line'
 
 
-    product_id = fields.Many2one('product.template', string='Product', required=True, track_visibility='onchange',
+    product_id = fields.Many2one('product.product', string='Product', required=True, track_visibility='onchange',
         domain=[('type', '=', 'service')])
     amount = fields.Float(string='Amount', track_visibility='onchange')
     date = fields.Date(string='Date', track_visibility='onchange', required=True)
@@ -280,7 +285,7 @@ class CalloutContractLine(models.Model):
     _name = 'callout.contract.line'
 
 
-    product_id = fields.Many2one('product.template', string='Product', track_visibility='onchange', 
+    product_id = fields.Many2one('product.product', string='Product', track_visibility='onchange',
         domain=[('type', '=', 'service')])
     amount = fields.Float(string='Amount', track_visibility='onchange')
     date = fields.Datetime(string='Date', track_visibility='onchange', default=time.strftime('%Y-%m-%d 09:00:00'))
