@@ -53,7 +53,7 @@ class DashBoard(models.Model):
     def getdailytarget(self, chkdate):
         noofdays=self.getworkingdays(chkdate)
         if noofdays>0:
-            return 455000/(noofdays)
+            return 570000/(noofdays)
         else:
             0
 
@@ -1395,7 +1395,7 @@ class DashBoard(models.Model):
 #                from crm_lead where stage_id in (select id from crm_stage where is_revenue_stage=true)) t where DATE_TRUNC('month',datestr)=DATE_TRUNC('month',now()) and DATE_TRUNC('year',datestr)= DATE_TRUNC('year',now())
 #                group by thismonth
 #
-# 			   union select 'Balance',(455000-(select COALESCE(sum(planned_revenue),0.0) as totalamt  from
+# 			   union select 'Balance',(570000-(select COALESCE(sum(planned_revenue),0.0) as totalamt  from
 #                (select to_date(to_char(job_enddate, 'YYYY/MM/DD'), 'YYYY/MM/DD')  as datestr,planned_revenue
 #                from crm_lead where stage_id in (select id from crm_stage where is_revenue_stage=true)) t where DATE_TRUNC('month',datestr)=DATE_TRUNC('month',now()) and DATE_TRUNC('year',datestr)= DATE_TRUNC('year',now())
 #                ));'''
@@ -1405,7 +1405,7 @@ class DashBoard(models.Model):
                from crm_lead where stage_id in (select id from crm_stage where is_revenue_stage=true)) t where DATE_TRUNC('month',datestr)=DATE_TRUNC('month',now()) and DATE_TRUNC('year',datestr)= DATE_TRUNC('year',now())
                group by thismonth
 
-			   union select 'Balance',(455000-(select COALESCE(sum(planned_revenue),0.0) as totalamt  from
+			   union select 'Balance',(570000-(select COALESCE(sum(planned_revenue),0.0) as totalamt  from
                (select to_date(to_char(job_enddate, 'YYYY/MM/DD'), 'YYYY/MM/DD')  as datestr,planned_revenue
                from crm_lead where stage_id in (select id from crm_stage where is_revenue_stage=true)) t where DATE_TRUNC('month',datestr)=DATE_TRUNC('month',now()) and DATE_TRUNC('year',datestr)= DATE_TRUNC('year',now())
                ));'''
@@ -1421,7 +1421,7 @@ class DashBoard(models.Model):
             amt = record['totalamt']
             per = 0
             if amt:
-                per = round(((amt / 455000) * 100), 0)
+                per = round(((amt / 570000) * 100), 0)
             totalamount.append(amt)
             days.append(record['thismonth'] + ' ' + str(per) + '%')
 
@@ -1483,8 +1483,8 @@ DATE_TRUNC('month',date)=DATE_TRUNC('month',now()) and DATE_TRUNC('year',date)= 
 
         records = {
             'totalamt': '{0:,.2f}'.format(totalamt),
-            'balance': '{0:,.2f}'.format((455000 - totalamt)),
-            'targetamt': '{0:,.2f}'.format(455000.00)
+            'balance': '{0:,.2f}'.format((570000 - totalamt)),
+            'targetamt': '{0:,.2f}'.format(570000.00)
         }
         return records
 
@@ -1514,8 +1514,8 @@ DATE_TRUNC('month',date)=DATE_TRUNC('month',now()) and DATE_TRUNC('year',date)= 
 
         records = {
             'totalamt': '{0:,.2f}'.format(totalamt),
-            'balance': '{0:,.2f}'.format((455000 - totalamt)),
-            'targetamt': '{0:,.2f}'.format(455000.00)
+            'balance': '{0:,.2f}'.format((570000 - totalamt)),
+            'targetamt': '{0:,.2f}'.format(570000.00)
         }
         return records
 
