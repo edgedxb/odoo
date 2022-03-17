@@ -89,12 +89,8 @@ class AmcContract(models.Model):
                         })
 
                         sale_order_id.action_confirm()
-
                         lead_id.action_set_won_rainbowman()
                         lead_id.action_transfer2planning()
-
-
-
 
     def action_cancel(self):
         if self.contract_state in ('confirm', 'valid', 'done'):
@@ -116,8 +112,6 @@ class AmcContract(models.Model):
             'target': 'new',
             'type': 'ir.actions.act_window',
             }
-
-
 
     def action_send_by_email(self):
        self.ensure_one()
@@ -164,7 +158,6 @@ class AmcContract(models.Model):
                 else:
                     contract_id.contract_stage = 'to_expire'
 
-
     # def create_lead_cron_job(self):
     #     contract_lines_ids = self.env['amc.contract.line'].search([]).filtered(lambda o: \
     #         not o.lead_id and (o.date == fields.Date.today()) and (o.contract_id.contract_state not in ['cancel', 'draft']))
@@ -199,8 +192,6 @@ class AmcContract(models.Model):
     #             sale_order_id.action_confirm()
     #             lead_id.action_set_won_rainbowman()
     #             lead_id.action_transfer2planning()
-
-            
 
 
     @api.depends('contract_line_ids.amount')

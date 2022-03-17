@@ -16,11 +16,13 @@ class Monthly_Revenue_Report_Template(models.AbstractModel):
         query=("""
         select *,(mtotal_amount/totalmonth) as monthlyrev from  
 (select *,COALESCE(total_amount,0.00) as mtotal_amount,EXTRACT(month from start_date) as startmonth,start_date,(EXTRACT(year FROM age(end_date ,start_date))*12
- + EXTRACT(month FROM age(end_date,start_date))+1) as totalmonth from amc_contract 
+ + EXTRACT(month FROM age(end_date,start_date))+1) as totalmonth,
+  date_part('year', age('%s-01-01'::timestamp,start_date::timestamp))*12+date_part('month', age('%s-01-01'::timestamp,start_date::timestamp)) as month_byear
+  from amc_contract 
   where EXTRACT(year from start_date)=%s or  EXTRACT(year from end_date)=%s
             and contract_state not in ('draft','cancelled') and contract_stage not in  ('expired')) f1
     
-            """) % (stryear, stryear)
+            """) % (stryear, stryear ,stryear, stryear)
         self._cr.execute(query)
         dat = self._cr.dictfetchall()
 
@@ -83,9 +85,15 @@ class Monthly_Revenue_Report_Template(models.AbstractModel):
             worksheet.write(row, col, rec['totalmonth'], int_size_8)
             col += 1
             printitems=0
-            totprint =int(rec['totalmonth'])
+
+            stmonth =int(rec['startmonth'])
+            month_byear=int(rec['month_byear'])
+            totprint = int(rec['totalmonth'])
+            if month_byear>0:
+                totprint-=month_byear
+                stmonth=1
             for lint in range(12):
-                if int(rec['startmonth'])<=lint+1:
+                if stmonth<=lint+1:
                     if printitems<totprint:
                         worksheet.write(row, col, rec['monthlyrev'], num_size_8)
                         printitems+=1
