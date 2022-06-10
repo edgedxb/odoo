@@ -57,6 +57,10 @@
                             <field name="area_id" required='1' attrs="{'readonly': [('contract_state', 'not in', ['draft'])]}"/>
                             <field name="unit_no" required='1' attrs="{'readonly': [('contract_state', 'not in', ['draft'])]}"/>
                             <field name="building_name" required='1' attrs="{'readonly': [('contract_state', 'not in', ['draft'])]}"/>
+                            <field name="total_callout_no"/>
+                            <field name="used_callout"/>
+                            <field name="balance_callout"/>
+                            <field name="partner_mobile" invisible='1'/>
                             <field name="total_paid" invisible='1'/>
                             <field name="total_due" invisible='1'/>
                             <field name="subtotal_amount" invisible='1'/>
@@ -177,6 +181,7 @@
                 <field name="name"/>
                 <field name="contract_name"/>
                 <field name="partner_id"/>
+                <field name="partner_mobile"/>
                 <field name="sales_agent_id"/>
                 <field name="company_id"/>
                 <field name="start_date"/>

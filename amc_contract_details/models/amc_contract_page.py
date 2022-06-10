@@ -42,6 +42,21 @@ class AmcContract(models.Model):
     total_paid = fields.Float(compute='_get_total_invoice_details',string='Total Paid Amount', store=True)
     total_due = fields.Float(compute='_get_total_invoice_details',string='Total Due Amount', store=True)
     subtotal_amount = fields.Float(compute='_get_total_invoice_details',string='Subtotal Amount', store=True)
+    total_callout_no = fields.Integer(string='Assigned Callout')
+    used_callout = fields.Integer(compute='_get_callout_count', string='Used Callout', store=True)
+    balance_callout = fields.Integer(compute='_get_callout_count', string='Balance Callout', store=True)
+    partner_mobile = fields.Char(string='Partner Mobile', related='partner_id.mobile', store=True)
+
+
+    @api.depends('callout_line_ids')
+    def _get_callout_count(self):
+        for each in self:
+            if each.callout_line_ids and each.total_callout_no > 0:
+                each.used_callout = len(each.callout_line_ids)
+                each.balance_callout = each.total_callout_no - len(each.callout_line_ids)
+            else:
+                each.used_callout = 0
+                each.balance_callout = 0
 
     @api.model
     def create(self, vals):
@@ -261,7 +276,7 @@ class AmcContractLine(models.Model):
 
     product_id = fields.Many2one('product.product', string='Product', required=True, track_visibility='onchange',
         domain=[('type', '=', 'service')])
-    amount = fields.Float(string='Amount', track_visibility='onchange')
+    amount = fields.Float(string='Amount', track_visibility='onchange', compute='_compute_amc_amount', inverse='_inverse_amc_amount', store=True)
     date = fields.Date(string='Date', track_visibility='onchange', required=True)
     scope = fields.Text(string='Scope', track_visibility='onchange')
     contract_id = fields.Many2one('amc.contract')
@@ -270,6 +285,17 @@ class AmcContractLine(models.Model):
         related='lead_id.planning_id', store=True)
     # invoice_id = fields.Many2one('account.move', string='Invoice', compute='_get_invoice_id', store=True)
     payment_id = fields.Many2one('account.payment', string='Payment', related='lead_id.payment_id', store=True)
+
+    @api.depends('lead_id.planned_revenue')
+    def _compute_amc_amount(self):
+        for amc_line in self:
+            if amc_line.lead_id:
+                amc_line.amount = amc_line.lead_id.planned_revenue 
+
+    def _inverse_amc_amount(self):
+        for amc_line in self:
+            if amc_line.lead_id:
+                amc_line.amount = amc_line.lead_id.planned_revenue 
     
 
 class CalloutContractLine(models.Model):
@@ -278,7 +304,7 @@ class CalloutContractLine(models.Model):
 
     product_id = fields.Many2one('product.product', string='Product', track_visibility='onchange',
         domain=[('type', '=', 'service')])
-    amount = fields.Float(string='Amount', track_visibility='onchange')
+    amount = fields.Float(string='Amount', track_visibility='onchange', compute='_compute_callout_amount', inverse='_inverse_callout_amount', store=True)
     date = fields.Datetime(string='Date', track_visibility='onchange', default=time.strftime('%Y-%m-%d 09:00:00'))
     scope = fields.Text(string='Scope', track_visibility='onchange')
     contract_id = fields.Many2one('amc.contract', default=lambda self: self.id)
@@ -293,6 +319,16 @@ class CalloutContractLine(models.Model):
     # payment_id = fields.Many2one('account.payment', string='Payment', related='lead_id.payment_id', store=True)
 
 
+    @api.depends('lead_id.planned_revenue')
+    def _compute_callout_amount(self):
+        for callout_line in self:
+            if callout_line.lead_id:
+                callout_line.amount = callout_line.lead_id.planned_revenue 
+
+    def _inverse_callout_amount(self):
+        for callout_line in self:
+            if callout_line.lead_id:
+                callout_line.amount = callout_line.lead_id.planned_revenue 
 
     def action_create_crm_planning(self):
         if not self.lead_id:
