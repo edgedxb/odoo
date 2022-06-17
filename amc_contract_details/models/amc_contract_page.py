@@ -220,6 +220,17 @@ class AmcContract(models.Model):
                     total.append(value.amount)
                     self.total_amount = sum(total)
 
+    def _get_total_amount1(self):
+        for each in self:
+            total=[]
+            if not each.contract_line_ids:
+                each.total_amount = 0.00
+            else: 
+                for value in each.contract_line_ids:
+                    total.append(value.amount)
+                    each.total_amount = sum(total)
+
+
     @api.depends('contract_line_ids.planning_id','contract_line_ids', 'contract_line_ids.lead_id.invoice_id.amount_total','contract_line_ids.lead_id.invoice_id.amount_residual')
     def _get_total_invoice_details(self):
         total_paid=[]

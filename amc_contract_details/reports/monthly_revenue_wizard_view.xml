@@ -29,7 +29,6 @@
  <record id="action_monthly_revenue_report" model="ir.actions.act_window">
     <field name="name">Monthly Revenue Report</field>
     <field name="res_model">monthly.revenue.wizard</field>
-
     <field name="view_mode">form</field>
     <field name="target">new</field>
   </record>
