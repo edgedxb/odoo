@@ -45,7 +45,7 @@ class AmcContract(models.Model):
     total_callout_no = fields.Integer(string='Assigned Callout')
     used_callout = fields.Integer(compute='_get_callout_count', string='Used Callout', store=True)
     balance_callout = fields.Integer(compute='_get_callout_count', string='Balance Callout', store=True)
-    partner_mobile = fields.Char(string='Partner Mobile', related='partner_id.mobile', store=True)
+    partner_mobile = fields.Char(string='Contact', related='partner_id.mobile', store=True)
 
 
     @api.depends('callout_line_ids')
