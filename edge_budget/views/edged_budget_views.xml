@@ -194,7 +194,7 @@
     </record>
 
     <record model="ir.actions.act_window" id="act_edged_budget_view">
-        <field name="name">Edget Budgets</field>
+        <field name="name">Edge Budgets</field>
         <field name="res_model">edged.budget</field>
         <field name="view_mode">tree,kanban,form</field>
         <field name="view_id" ref="edged_budget_view_tree"/>
