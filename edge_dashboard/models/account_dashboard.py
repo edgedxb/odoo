@@ -1623,6 +1623,35 @@ t where datestr <(now()+ INTERVAL '+6 day')  group by datestr order by datestr '
         return records
 
     @api.model
+    def current_month_achievement_list(self, *post):
+
+        company_ids = self.get_current_multi_company_value()
+
+        states_arg = ""
+        if post != ('posted',):
+            states_arg = """ parent_state = 'posted'"""
+        else:
+            states_arg = """ parent_state in ('posted', 'draft')"""
+        currentDate = date.today()
+        firstDayOfMonth = date(currentDate.year, currentDate.month, 1)
+        lastDayOfMonth = date(currentDate.year, currentDate.month,
+                                       calendar.monthrange(currentDate.year, currentDate.month)[1])
+
+
+        objed_bd = self.env['edged.budget.lines'].search([('date_from', '>=', firstDayOfMonth),('date_to', '<=', lastDayOfMonth)])
+        account_name=tuple([rec.account_id.name for rec in objed_bd])
+        budget_amt = tuple([rec.budget_amount for rec in objed_bd])
+        arch_amt = tuple([rec.achieved_budget for rec in objed_bd])
+
+        records = {
+            'account_name': account_name,
+            'budget_amt': budget_amt,
+            'arch_amt': arch_amt,
+
+        }
+        return records
+
+    @api.model
     def crm_sales_list(self, *post):
 
         company_ids = self.get_current_multi_company_value()

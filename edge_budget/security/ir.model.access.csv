@@ -1,0 +1,5 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_edged_budget_post_accountant,edged.budget.post accountant,model_edged_budget_post,account.group_account_user,1,1,1,1
+access_edged_budget_accountant,edged.budget accountant,model_edged_budget,account.group_account_user,1,1,1,1
+
+access_edged_budget,edged.budget.lines manager,model_edged_budget_lines,base.group_user,1,1,1,0

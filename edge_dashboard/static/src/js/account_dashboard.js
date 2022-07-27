@@ -659,6 +659,27 @@ odoo.define('AccountingDashboard.AccountingDashboard', function (require) {
                         })
 
 
+                         rpc.query({
+                        model: "account.move",
+                        method: "current_month_achievement_list",
+                        args: [posted]
+                    })
+                        .then(function (result) {
+                            var account_name = result['account_name'];
+                            var budget_amt = result['budget_amt'];
+                            var arch_amt = result['arch_amt'];
+                            var budget_amt_thismonth;
+                            var arch_amt_thismonth;
+                            $('#current_month_achievement_list').append('<li><div>Account</div><div>Budget</div><div>/achieved</div></li>');
+                            for (var k = 0; k < budget_amt.length; k++) {
+                                budget_amt_thismonth = self.format_currency(currency, budget_amt[k]);
+                                arch_amt_thismonth = self.format_currency(currency, arch_amt[k]);
+                                $('#current_month_achievement_list').append('<li><div  align="left>' + account_name[k] + '</div><div align="right">' + budget_amt_thismonth + '</div><div align="right">' + arch_amt_thismonth + '</div></li>');
+                            }
+                        })
+
+
+
                     rpc.query({
                         model: "account.move",
                         method: "month_expense"
