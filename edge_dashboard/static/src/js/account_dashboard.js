@@ -670,7 +670,7 @@ odoo.define('AccountingDashboard.AccountingDashboard', function (require) {
                             var arch_amt = result['arch_amt'];
                             var budget_amt_thismonth;
                             var arch_amt_thismonth;
-                            $('#current_month_achievement_list').append('<li><div>Account</div><div>Budget</div><div>/achieved</div></li>');
+                            $('#current_month_achievement_list').append('<li><div>Account</div><div>Budget</div><div>Achieved</div></li>');
                             for (var k = 0; k < budget_amt.length; k++) {
                                 budget_amt_thismonth = self.format_currency(currency, budget_amt[k]);
                                 arch_amt_thismonth = self.format_currency(currency, arch_amt[k]);
