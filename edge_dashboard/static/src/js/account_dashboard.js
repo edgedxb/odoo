@@ -670,11 +670,17 @@ odoo.define('AccountingDashboard.AccountingDashboard', function (require) {
                             var arch_amt = result['arch_amt'];
                             var budget_amt_thismonth;
                             var arch_amt_thismonth;
-                            $('#current_month_achievement_list').append('<li><div>Account</div><div>Budget</div><div>Achieved</div></li>');
+                            var variation_amt_thismonth;
+//                            $('#current_month_achievement_list').append('<li><div>Account</div><div>Budget</div><div>Achieved</div></li>');
                             for (var k = 0; k < budget_amt.length; k++) {
                                 budget_amt_thismonth = self.format_currency(currency, budget_amt[k]);
                                 arch_amt_thismonth = self.format_currency(currency, arch_amt[k]);
-                                $('#current_month_achievement_list').append('<li><div>' + account_name[k] + '</div><div align="right">' + budget_amt_thismonth + '</div><div align="right">' + arch_amt_thismonth + '</div></li>');
+                                variation_amt_thismonth=self.format_currency(currency, (budget_amt[k]-arch_amt[k]));
+//                                $('#current_month_achievement_list').append('<li><div>' + account_name[k] + '</div><div align="right">' + budget_amt_thismonth + '</div><div align="right">' + arch_amt_thismonth + '</div></li>');
+                                $('#current_month_achievement_list').append('<li><div class="col-12" style="background: #843cf7;color: #fff;font-weight: 600;width:100%"><span>' + account_name[k] + '</span></div></li>');
+                                $('#current_month_achievement_list').append('<li><div>Budget</div><div align="right">' + budget_amt_thismonth + '</div></li>');
+                                $('#current_month_achievement_list').append('<li><div>Achieved</div><div align="right">' + arch_amt_thismonth + '</div></li>');
+                                $('#current_month_achievement_list').append('<li><div>Variation</div><div align="right">' + variation_amt_thismonth + '</div></li>');
                             }
                         })
 

@@ -43,6 +43,7 @@ class EdgedBudget(models.Model):
         states={'done': [('readonly', True)]}, copy=True)
     company_id = fields.Many2one('res.company', 'Company', required=True,
         default=lambda self: self.env.company)
+    monthly_sales_target = fields.Float('Monthly Sales Target', default=570000.00, required="1")
 
     def action_budget_confirm(self):
         self.write({'state': 'confirm'})
