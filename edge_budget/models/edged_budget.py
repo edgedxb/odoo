@@ -78,9 +78,11 @@ class EdgedBudgetLines(models.Model):
     edged_budget_state = fields.Selection(related='edged_budget_id.state', string='Edged Budget State', store=True, readonly=True)
 
     @api.depends("account_id", "date_from", "date_to")
-    @api.model
     def _compute_line_archived(self):
         for record in self:
+            amt=0.0
+            # raise UserError(record.achieved_budget)
+
             objinvln = self.env['account.move.line'].search(
                 [('account_id', '=', record.account_id.id), ('move_id.type', 'in', ('out_invoice','out_refund')),
                  ('move_id.state', 'in', ('posted','reconciled'))
@@ -88,4 +90,6 @@ class EdgedBudgetLines(models.Model):
                  ])
             if objinvln:
                 for salrec in objinvln:
-                    record.achieved_budget += salrec.price_total
+                    amt+=salrec.price_total
+            record.achieved_budget = amt
+        return
