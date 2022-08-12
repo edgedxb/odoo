@@ -75,7 +75,7 @@
                                     <td align="left" width="60%"><span t-field="o.date" t-options="{&quot;widget&quot;: &quot;date&quot;}"/></td>
                                 </tr>
                                  <tr>
-                                     <td align="left" width="25%"><strong>Journal Number</strong></td>
+                                     <td align="left" width="25%"><strong>Journal #</strong></td>
                                      <td align="left"  width="10%"><strong>:&amp;nbsp;</strong></td>
                                      <td align="left" width="60%"><span  t-field="o.name"/></td>
                                 </tr>
@@ -89,7 +89,7 @@
                                 <tr>
                                     <td align="left"  width="25%"><strong>Journal</strong></td>
                                     <td align="left"  width="10%"><strong>:&amp;nbsp;</strong></td>
-                                    <td align="right" width="60%"><span t-field="o.journal_id"/></td>
+                                    <td align="left" width="60%"><span t-field="o.journal_id"/></td>
                                 </tr>
                                 <tr>
                                      <td align="left"  width="25%"><strong>Reference</strong></td>
