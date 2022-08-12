@@ -106,12 +106,12 @@
                     <thead>
                         <tr>
                             <th name="th_description" class="text-left" width="7%"><strong>Sl No</strong></th>
-                            <th name="th_description" class="text-left"  width="20%"><strong>Account</strong></th>
-                            <th class="text-center"  width="20%"><strong>Partner</strong></th>
-                            <th class="text-right"  width="15%"><strong>Analytic Account</strong></th>
-                            <th class="text-right"  width="14%"><strong>Analytic Tags</strong></th>
-                            <th class="text-right"  width="13%"><strong>Debit</strong></th>
-                            <th class="text-right"  width="12%"><strong>Credit</strong></th>
+                            <th name="th_description" class="text-left"  width="33%"><strong>Account</strong></th>
+                            <th class="text-center"  width="30%"><strong>Partner</strong></th>
+<!--                            <th class="text-right"  width="15%"><strong>Analytic Account</strong></th>-->
+<!--                            <th class="text-right"  width="14%"><strong>Analytic Tags</strong></th>-->
+                            <th class="text-right"  width="15%"><strong>Debit</strong></th>
+                            <th class="text-right"  width="15%"><strong>Credit</strong></th>
                         </tr>
                     </thead>
                     <tbody class="invoice_tbody">
@@ -130,12 +130,12 @@
                                 <td class="text-left">
                                     <span t-field="line.partner_id"/>
                                 </td>
-                                <td class="text-left">
-                                    <span t-field="line.analytic_account_id"/>
-                                </td>
-                                <td class="text-left">
-                                  <span t-field="line.analytic_tag_ids"/>
-                                </td>
+<!--                                <td class="text-left">-->
+<!--                                    <span t-field="line.analytic_account_id"/>-->
+<!--                                </td>-->
+<!--                                <td class="text-left">-->
+<!--                                  <span t-field="line.analytic_tag_ids"/>-->
+<!--                                </td>-->
                                 <td  class="text-right">
                                     <span t-esc="'{0:,.2f}'.format(line.debit)"/>
                                     <t t-set="current_debit" t-value="current_debit+line.debit"/>
