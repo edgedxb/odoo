@@ -15,6 +15,7 @@
         'reports/payment_report_template.xml',
         'reports/sale_template.xml',
         'reports/journal_report_templates.xml',
+        'reports/report_list.xml',
         'data/mail_template_data_notpaid_invoice.xml',
         'data/mail_template_data_notpaid_invoice_summary.xml',
         'data/ir_cron.xml',
