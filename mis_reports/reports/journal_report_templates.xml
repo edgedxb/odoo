@@ -87,14 +87,14 @@
                         <td width="50%" valign="top" align="right">
                             <table width="100%" align="right">
                                 <tr>
-                                    <td align="left"><strong>Journal</strong></td>
-                                    <td align="left"><strong>:  </strong></td>
-                                    <td align="right"><span t-field="o.journal_id"/></td>
+                                    <td align="left"  width="35%"><strong>Journal</strong></td>
+                                    <td align="left"  width="5%"><strong>:  </strong></td>
+                                    <td align="right" width="60%"><span t-field="o.journal_id"/></td>
                                 </tr>
                                 <tr>
-                                     <td align="left"><strong>Reference</strong></td>
-                                     <td align="left" width="15px"><strong>:  </strong></td>
-                                     <td align="left"><span  t-field="o.ref"/></td>
+                                     <td align="left"  width="35%"><strong>Reference</strong></td>
+                                     <td align="left" width="5%"><strong>:</strong></td>
+                                     <td align="left"  width="60%"><span  t-field="o.ref"/></td>
                                 </tr>
 
                             </table>
