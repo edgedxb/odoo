@@ -1,5 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
+
+    <record id="mis_crm_lead_tree_opportunity_inherit" model="ir.ui.view">
+        <field name="name">mis.crm.lead.tree.opportunity.inherit</field>
+        <field name="model">crm.lead</field>
+         <field name="inherit_id" ref="crm.crm_case_tree_view_oppor"/>
+        <field name="arch" type="xml">
+            <field name="company_id" position="before">
+                <field name="unit_number" optional="hide"/>
+                <field name="building_name" optional="hide"/>
+             </field>
+        </field>
+    </record>
+
     <record id="mis_crm_lead_form_view" model="ir.ui.view">
         <field name="name">mis.crm.lead.form</field>
         <field name="model">crm.lead</field>
@@ -13,11 +26,7 @@
                             options="{'fold_field': 'fold'}"
                             domain="['|', ('team_id', '=', team_id), ('team_id', '=', False)]"
                             attrs="{'invisible': ['|', ('active', '=', False), ('type', '=', 'lead')]}"/>
-
             </field>
-
-
-
             <xpath expr="//button[@name='action_set_won_rainbowman']" position="replace">
                 <field name="planning_id" invisible="1"/>
                 <field name="is_won" invisible="1"/>
@@ -37,12 +46,12 @@
                             attrs="{'invisible': ['|', ('is_closed', '!=', False), ('is_won', '!=', False), ('is_planning','!=', False)]}"/>
                 <button class="oe_highlight" name="action_transfer2planning" type="object" string="Transferred to Planning" style="width: 200px;" attrs="{'invisible': [('is_won', '!=', True)]}"/>
             </xpath>
-
              <field name="phone" position="after">
-
                  <field name="job_startdate" attrs="{'invisible': [('stage_id', 'not in', (4,5))], 'required':[('is_won', '=', True), ('is_transfer', '=', True)], 'readonly':[('is_transfer', '=', True), ('uid', '!=', 2)]}"/>
                  <field name="job_enddate" attrs="{'invisible': [('stage_id', 'not in', (4,5))], 'required':[('is_won', '=', True), ('is_transfer', '=', True)], 'readonly':[('is_transfer', '=', True), ('uid', '!=', 2)]}"/>
                  <field name="job_totalhours" attrs="{'invisible': [('stage_id', 'not in', (4,5))]}"/>
+                 <field name="invoice_id" />
+                 <field name="payment_id"/>
              </field>
             <field name="date_deadline" position="replace"/>
              <field name="partner_id" position="replace">
@@ -64,7 +73,6 @@
                  <button name="previous_stage"  string="Previous"  class="oe_highlight" type="object"/>
                  <button name="next_stage"  string="Next"  class="oe_highlight" type="object"/>
                  <br/>
-
              </field-->
         </field>
     </record>

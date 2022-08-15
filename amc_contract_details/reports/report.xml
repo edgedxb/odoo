@@ -8,4 +8,40 @@
         report_type="qweb-pdf"
         name="amc_contract_details.amc_contract_report"
         file="amc_contract_details.amc_contract_report"/>
+
+    <report
+        id="report_callout_report"
+        string="Callout Report"
+        model="amc.contract"
+        report_type="qweb-pdf"
+        name="amc_contract_details.callout_contract_report"
+        file="amc_contract_details.callout_contract_report"/>
+
+    <report
+        id="report_invoice_report"
+        string="Invoice Report"
+        model="amc.contract"
+        report_type="qweb-pdf"
+        name="amc_contract_details.amc_invoice_report"
+        file="amc_contract_details.report_amc_invoice_report"/>
+
+    <report id="monthly_revenue_xls_report"
+      model="amc.contract"
+      string="Monthly Revenue XLS"
+      report_type="xlsx"
+      name="amc_contract_details.monthly_revenue_report_template"
+      file="amc_contract_details"
+      menu="False"
+      attachment_use="false"/>
+
+    <report id="monthly_invoice_xls_report"
+      model="amc.contract"
+      string="Monthly Income XLS"
+      report_type="xlsx"
+      name="amc_contract_details.monthly_invoice_report_template"
+      file="amc_contract_details"
+      menu="False"
+      attachment_use="false"/>
+
+
 </odoo>

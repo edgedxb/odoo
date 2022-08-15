@@ -52,10 +52,10 @@
                     <td width="100%"  colspan="2" valign="middle" align="center">
                         <br/><br/>
                         <h2>
-                            <t>
+                            <!-- <t>
                                 <span t-if="doc.contract_state not in ['draft']">AMC Contract </span>
                                 <span t-if="doc.contract_state in ['draft']">AMC Draft Contract</span>
-                            </t>
+                            </t> -->
                             <t>
                                 <span>AMC Contract</span>
                             </t>
@@ -129,23 +129,23 @@
 
                     <tr  style="color: white;background: #2E86C1;font-weight: bold;height: 30px;width: 100%;">
                         <th name="th_description" class="text-left"  width="35%" style="padding-top: 5px;padding-left: 10px;padding-top: 4px;"><strong>Product</strong></th>
-                        <th class="text-center"  width="5%" style="padding-top: 5px;padding-left: 10px;padding-top: 4px;"><strong>Amount</strong></th>
-                        <th class="text-right"  width="5%" style="padding-top: 5px;padding-left: 10px;padding-top: 4px;"><strong>Date</strong></th>
-                        <th class="text-right"  width="10%" style="padding-top: 5px;padding-left: 10px;padding-top: 4px;"> <strong>Scope</strong></th>
-                        <th class="text-right"  width="20%" style="padding-top: 5px;padding-left: 10px;padding-top: 4px;"><strong>CRM</strong></th>
-                        <th class="text-right"  width="20%" style="padding-top: 5px;padding-left: 10px;padding-top: 4px;"><strong>Planning</strong></th>
+                        <th class="text-left"  width="40%" style="padding-top: 5px;padding-left: 10px;padding-top: 4px;"> <strong>Scope</strong></th>
+                        <th class="text-left"  width="10%" style="padding-top: 5px;padding-left: 10px;padding-top: 4px;"><strong>Date</strong></th>
+                        <th class="text-right"  width="15%" style="padding-top: 5px;padding-left: 10px;padding-top: 4px;"><strong>Amount</strong></th>
+<!--                        <th class="text-right"  width="20%" style="padding-top: 5px;padding-left: 10px;padding-top: 4px;"><strong>CRM</strong></th>-->
+<!--                        <th class="text-right"  width="20%" style="padding-top: 5px;padding-left: 10px;padding-top: 4px;"><strong>Planning</strong></th>-->
                     </tr>
 
                 <tbody class="amc_contract_tbody">
                     <t t-foreach="doc.contract_line_ids" t-as="line">
                         <tr t-att-class="'bg-200 font-weight-bold o_line_section'">
                             <t>
-                                <td name="td_name"><span t-field="line.product_id.name"/></td>
-                                <td name="td_name"><span t-field="line.amount"/></td>
-                                <td name="td_name"><span t-field="line.date"/></td>
-                                <td name="td_name"><span t-field="line.scope"/></td>
-                                <td name="td_name"><span t-field="line.lead_id.name"/></td>
-                                <td name="td_name"><span t-field="line.planning_id.name"/></td>
+                                <td><span t-field="line.product_id.name"/></td>
+                                 <td class="text-left"><span t-field="line.scope"/></td>
+                                <td class="text-left"><span t-field="line.date"/></td>
+                                <td class="text-right"><span t-esc="'{0:,.2f}'.format(line.amount)"/></td>
+<!--                                <td name="td_name"><span t-field="line.lead_id.name"/></td>-->
+<!--                                <td name="td_name"><span t-field="line.planning_id.name"/></td>-->
                             </t>
                         </tr>
                     </t>

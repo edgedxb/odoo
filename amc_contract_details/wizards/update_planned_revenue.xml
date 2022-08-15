@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+     <record id="update_planned_revenue_form" model="ir.ui.view">
+         <field name="name">update.planned.revenue.form</field>
+         <field name="model">update.planned.revenue</field>
+         <field name="arch" type="xml">
+            <form string="Update Planned Revenue">
+                <p>Do you want to update the amount?</p>
+                <footer>
+                     <button name="update_planned_revenue" string="Update" type="object" class="btn-primary"/>
+                     <button string="Cancel" class="btn-default" special="cancel" />
+                </footer>
+            </form>
+         </field>
+     </record>
+
+    <record id="action_planned_revenue_form" model="ir.actions.act_window">
+        <field name="name">update.planned.revenue.form</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">update.planned.revenue</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <menuitem
+            id="menu_planned_revenue_form"
+            name="Update Planned Revenue"
+            action="amc_contract_details.action_planned_revenue_form"
+            parent="amc_contract_details.menu_amc_contract_root"
+            groups="base.group_no_one"
+            sequence='4'
+            />
+
+</odoo>

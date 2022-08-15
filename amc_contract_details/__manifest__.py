@@ -8,15 +8,21 @@
     'author': 'MindInfosys',
     'maintainer': 'MindInfosys',
     'license': 'AGPL-3',
-    'depends': ['crm','account','base', 'mail','product','mis_planning'],
+    'depends': ['base', 'report_xlsx','crm','account','mail','product','mis_planning'],
     'data': [
         'security/ir.model.access.csv',
         'data/data.xml',
         'data/mail_template.xml',
         'data/ir_cron.xml',
         'views/amc_contract_view.xml',
+        'views/res_partner_category.xml',
+        'wizards/update_planned_revenue.xml',
         'reports/report.xml',
-        'reports/amc_contract_report.xml'
+        'reports/monthly_revenue_wizard_view.xml',
+        'reports/amc_contract_report.xml',
+        'reports/callout_contract_report.xml',
+        'reports/amc_invoice_report.xml',
+        'reports/monthly_invoice_report_view.xml'
     ],
     'demo': [],
     'qweb': [],

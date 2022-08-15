@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <report
+        id="action_account_journal_print"
+        model="account.move"
+        string="Journal Print"
+        report_type="qweb-pdf"
+        name="mis_reports.report_account_journal"
+        file="mis_reports.report_account_journal"
+      />
+ </odoo>

@@ -8,7 +8,7 @@
                     """,
     'author': "Hafeel",
     'website': 'Mindifnosys.com',
-    'depends': ['base','crm', 'planning', 'sale'],
+    'depends': ['account','base','crm', 'planning', 'sale'],
     'data': [
         'views/area_views.xml',
         'views/crm_lead_views.xml',

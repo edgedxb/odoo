@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+  <record id="monthly_revenue_report_form_view" model="ir.ui.view">
+    <field name="name">Monthly Revenue Wizard Form</field>
+    <field name="model">monthly.revenue.wizard</field>
+    <field name="arch" type="xml">
+      <form string="Monthly Revenue XLS Report">
+        <group>
+          <group>
+             <field name="year"/>
+          </group>
+          <group>
+<!--            <field name="date_end"/>-->
+          </group>
+        </group>
+        <footer>
+          <button name="action_create_report"
+                  string="XLS Report"
+                  type="object"
+                  class="oe_highlight"/>
+          <button string="Cancel"
+                  class="btn btn-default"
+                  special="cancel"/>
+        </footer>
+      </form>
+    </field>
+  </record>
+
+ <record id="action_monthly_revenue_report" model="ir.actions.act_window">
+    <field name="name">Monthly Revenue Report</field>
+    <field name="res_model">monthly.revenue.wizard</field>
+    <field name="view_mode">form</field>
+    <field name="target">new</field>
+  </record>
+
+<!--  <act_window-->
+<!--        name="Monthly Revenue Report"-->
+<!--        res_model="monthly.revenue.wizard"-->
+<!--        binding_model="amc.contract"-->
+<!--        view_mode="form"-->
+<!--        target="new"-->
+<!--        view_id="monthly_revenue_report_form_view"-->
+<!--        id="action_monthly_revenue_eport"-->
+<!--    />-->
+
+  <menuitem
+            id="monthly_revenue_report_menu_id"
+            name="Monthly Revenue Report"
+            action="amc_contract_details.action_monthly_revenue_report"
+            parent="amc_contract_details.menu_amc_contract_root"
+            sequence='2'
+            />
+
+</odoo>

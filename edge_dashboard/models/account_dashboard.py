@@ -13,9 +13,20 @@ from math import pi
 class DashBoard(models.Model):
     _inherit = 'account.move'
 
-    # function to getting expenses
 
-    # function to getting income of this year
+    def get_monthly_target_amount(self):
+        currentDate = date.today()
+        firstDayOfMonth = date(currentDate.year, currentDate.month, 1)
+        lastDayOfMonth = date(currentDate.year, currentDate.month,
+                              calendar.monthrange(currentDate.year, currentDate.month)[1])
+
+        objed_bd = self.env['edged.budget'].search(
+            [('date_from', '>=', firstDayOfMonth), ('date_to', '<=', lastDayOfMonth)])
+        monthly_target_amt =1
+        for rec in objed_bd:
+            monthly_target_amt+=objed_bd.monthly_sales_target
+        return monthly_target_amt
+
     @api.model
     def getworkingdays(self, chkdate):
         todays_date = chkdate
@@ -52,8 +63,9 @@ class DashBoard(models.Model):
     @api.model
     def getdailytarget(self, chkdate):
         noofdays=self.getworkingdays(chkdate)
+        month_target =self.get_monthly_target_amount()
         if noofdays>0:
-            return 455000/(noofdays)
+            return month_target/(noofdays)
         else:
             0
 
@@ -1395,33 +1407,34 @@ class DashBoard(models.Model):
 #                from crm_lead where stage_id in (select id from crm_stage where is_revenue_stage=true)) t where DATE_TRUNC('month',datestr)=DATE_TRUNC('month',now()) and DATE_TRUNC('year',datestr)= DATE_TRUNC('year',now())
 #                group by thismonth
 #
-# 			   union select 'Balance',(455000-(select COALESCE(sum(planned_revenue),0.0) as totalamt  from
+# 			   union select 'Balance',(570000-(select COALESCE(sum(planned_revenue),0.0) as totalamt  from
 #                (select to_date(to_char(job_enddate, 'YYYY/MM/DD'), 'YYYY/MM/DD')  as datestr,planned_revenue
 #                from crm_lead where stage_id in (select id from crm_stage where is_revenue_stage=true)) t where DATE_TRUNC('month',datestr)=DATE_TRUNC('month',now()) and DATE_TRUNC('year',datestr)= DATE_TRUNC('year',now())
 #                ));'''
-
-        query = '''select 'This Month' as thismonth,COALESCE(sum(planned_revenue),0.0) as totalamt  from
+        month_target =self.get_monthly_target_amount()
+        query = """select 'This Month' as thismonth,COALESCE(sum(planned_revenue),0.0) as totalamt  from
                (select to_date(to_char(job_enddate, 'YYYY/MM/DD'), 'YYYY/MM/DD')  as datestr,planned_revenue
                from crm_lead where stage_id in (select id from crm_stage where is_revenue_stage=true)) t where DATE_TRUNC('month',datestr)=DATE_TRUNC('month',now()) and DATE_TRUNC('year',datestr)= DATE_TRUNC('year',now())
                group by thismonth
 
-			   union select 'Balance',(455000-(select COALESCE(sum(planned_revenue),0.0) as totalamt  from
+			   union select 'Balance',(%s-(select COALESCE(sum(planned_revenue),0.0) as totalamt  from
                (select to_date(to_char(job_enddate, 'YYYY/MM/DD'), 'YYYY/MM/DD')  as datestr,planned_revenue
                from crm_lead where stage_id in (select id from crm_stage where is_revenue_stage=true)) t where DATE_TRUNC('month',datestr)=DATE_TRUNC('month',now()) and DATE_TRUNC('year',datestr)= DATE_TRUNC('year',now())
-               ));'''
+               ));""" %(month_target)
 
        ## raise UserError(query)
         self._cr.execute(query)
         docs = self._cr.dictfetchall()
         #print(docs)
         totalamount = []
+        month_target =self.get_monthly_target_amount()
         totalamt = 0.0
         days = []
         for record in docs:
             amt = record['totalamt']
             per = 0
             if amt:
-                per = round(((amt / 455000) * 100), 0)
+                per = round(((amt / month_target) * 100), 0)
             totalamount.append(amt)
             days.append(record['thismonth'] + ' ' + str(per) + '%')
 
@@ -1446,6 +1459,7 @@ DATE_TRUNC('month',date)=DATE_TRUNC('month',now()) and DATE_TRUNC('year',date)= 
         datestr = date.today() + timedelta(days=0)
         asofnowdays = self.getworkingdaysasofnow(datestr)
         dailytarget =self.getdailytarget(datestr)
+
 
         #raise UserError(asofnowdays)
         targetasofnow = asofnowdays*dailytarget
@@ -1476,6 +1490,7 @@ DATE_TRUNC('month',date)=DATE_TRUNC('month',now()) and DATE_TRUNC('year',date)= 
 
 
         totalamt = 0.0
+        month_target = self.get_monthly_target_amount()
 
         for record in docs:
             #if record['totalamt']:
@@ -1483,8 +1498,8 @@ DATE_TRUNC('month',date)=DATE_TRUNC('month',now()) and DATE_TRUNC('year',date)= 
 
         records = {
             'totalamt': '{0:,.2f}'.format(totalamt),
-            'balance': '{0:,.2f}'.format((455000 - totalamt)),
-            'targetamt': '{0:,.2f}'.format(455000.00)
+            'balance': '{0:,.2f}'.format((month_target - totalamt)),
+            'targetamt': '{0:,.2f}'.format(month_target)
         }
         return records
 
@@ -1506,6 +1521,7 @@ DATE_TRUNC('month',date)=DATE_TRUNC('month',now()) and DATE_TRUNC('year',date)= 
         self._cr.execute(query)
         docs = self._cr.dictfetchall()
         # print(docs)
+        month_target = self.get_monthly_target_amount()
 
         totalamt = 0.0
 
@@ -1514,8 +1530,8 @@ DATE_TRUNC('month',date)=DATE_TRUNC('month',now()) and DATE_TRUNC('year',date)= 
 
         records = {
             'totalamt': '{0:,.2f}'.format(totalamt),
-            'balance': '{0:,.2f}'.format((455000 - totalamt)),
-            'targetamt': '{0:,.2f}'.format(455000.00)
+            'balance': '{0:,.2f}'.format((month_target - totalamt)),
+            'targetamt': '{0:,.2f}'.format(month_target)
         }
         return records
 
@@ -1618,6 +1634,35 @@ t where datestr <(now()+ INTERVAL '+6 day')  group by datestr order by datestr '
         records = {
             'depositname': depositname,
             'depositamount': depositamount,
+
+        }
+        return records
+
+    @api.model
+    def current_month_achievement_list(self, *post):
+
+        company_ids = self.get_current_multi_company_value()
+
+        states_arg = ""
+        if post != ('posted',):
+            states_arg = """ parent_state = 'posted'"""
+        else:
+            states_arg = """ parent_state in ('posted', 'draft')"""
+        currentDate = date.today()
+        firstDayOfMonth = date(currentDate.year, currentDate.month, 1)
+        lastDayOfMonth = date(currentDate.year, currentDate.month,
+                                       calendar.monthrange(currentDate.year, currentDate.month)[1])
+
+
+        objed_bd = self.env['edged.budget.lines'].search([('date_from', '>=', firstDayOfMonth),('date_to', '<=', lastDayOfMonth)])
+        account_name=tuple([rec.account_id.name for rec in objed_bd])
+        budget_amt = tuple([rec.budget_amount for rec in objed_bd])
+        arch_amt = tuple([rec.achieved_budget for rec in objed_bd])
+
+        records = {
+            'account_name': account_name,
+            'budget_amt': budget_amt,
+            'arch_amt': arch_amt,
 
         }
         return records
