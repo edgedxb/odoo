@@ -7,7 +7,7 @@
     'company': 'mindinfosys.com, UAE',
     'description': 'Report Customization',
     'website': 'www.mindinfosys.com',
-    'depends': ['base', 'account','sale', 'purchase'],
+    'depends': ['base', 'account','sale',],
     'data': [
         'reports/invoice_report_templates.xml',
 #        'reports/report_list.xml',
